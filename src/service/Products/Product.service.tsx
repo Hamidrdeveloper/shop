@@ -11,7 +11,7 @@ class ProductDataService {
     console.log(Address.PRODUCTS_ADDRESS, data);
 
     return http
-      .get(Address.PRODUCTS_ADDRESS, {params:data})
+      .get(Address.PRODUCTS_ADDRESS, {params: data})
       .then(res => {
         console.log(Address.PRODUCTS_ADDRESS, res);
         return res.data.data;
@@ -35,10 +35,10 @@ class ProductDataService {
   }
 
   async getVariationsByProduct(
-    productId: number
+    productId: number,
   ): Promise<Type.ProductVariation> {
     return http
-      .get(Address.PRODUCTS_BY_ID_ADDRESS, {params:{productId:productId}})
+      .get(Address.PRODUCTS_BY_ID_ADDRESS, {params: {productId: productId}})
       .then(res => {
         console.log(Address.PRODUCTS_BY_ID_ADDRESS, res.data.data[0]);
         return res.data.data[0];
@@ -48,21 +48,21 @@ class ProductDataService {
       });
   }
 
-//   async productComments (productVariationId: number): Promise<ProductComment[]>{
+  //   async productComments (productVariationId: number): Promise<ProductComment[]>{
 
-//     return await http
-//     .get(Address.PRODUCTS_BY_ID_ADDRESS,{
-//       params: {
-//         foo: 'bar'
-//       }}
-//     .then(res => {
-//       console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
-//       return res.data.data;
-//     })
-//     .catch(error => {
-//       console.log(Address.PRODUCTS_BY_ID_ADDRESS, error.response);
-//     });
-  
-// };
+  //     return await http
+  //     .get(Address.PRODUCTS_BY_ID_ADDRESS,{
+  //       params: {
+  //         foo: 'bar'
+  //       }}
+  //     .then(res => {
+  //       console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
+  //       return res.data.data;
+  //     })
+  //     .catch(error => {
+  //       console.log(Address.PRODUCTS_BY_ID_ADDRESS, error.response);
+  //     });
+
+  // };
 }
 export default new ProductDataService();

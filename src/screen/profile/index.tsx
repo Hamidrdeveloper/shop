@@ -6,9 +6,11 @@ import {
   EditSquare,
   Heart,
   Location,
+  Logout,
   Notification,
   User,
 } from 'react-native-iconly';
+import Storage from '../../utils/storeData';
 import Picker from '../../components/addFileImage';
 import Avatar from '../../components/avatar';
 import ButtonMenuProfile from '../../components/buttonMenuProfile';
@@ -31,9 +33,9 @@ export default function ProfileScreen({navigation}) {
     orderSale();
   }, []);
   function onResponse(res) {
-    if(res!=null){
+    if (res != null) {
       console.log(res);
-      uploadFileFn(res)
+      uploadFileFn(res);
     }
     setPicker(false);
   }
@@ -42,14 +44,14 @@ export default function ProfileScreen({navigation}) {
       <View
         style={{
           backgroundColor: Color.brand.white,
-          width: `100%`,
-          height: `100%`,
+          width: '100%',
+          height: '100%',
         }}>
         <ScrollView>
           <View
             style={{
               flexDirection: 'row',
-              width: `100%`,
+              width: '100%',
               height: 50,
               padding: 15,
               backgroundColor: Color.brand.white,
@@ -59,7 +61,7 @@ export default function ProfileScreen({navigation}) {
               resizeMode="contain"
               source={require('../../assets/image/arrow.png')}
             />
-            <Space lineW={`5%`} />
+            <Space lineW={'5%'} />
             <Text style={{color: Color.brand.black, fontSize: 18}}>
               {'Profile'}
             </Text>
@@ -87,7 +89,7 @@ export default function ProfileScreen({navigation}) {
             </Text>
             <Image
               resizeMode="stretch"
-              style={{width: `100%`, height: 130, bottom: 40}}
+              style={{width: '100%', height: 130, bottom: 40}}
               source={require('../../assets/image/theamPro.png')}
             />
             <View
@@ -175,6 +177,15 @@ export default function ProfileScreen({navigation}) {
                     text: '',
                   })
                 }
+              />
+              <Space lineH={10} />
+              <ButtonMenuProfile
+                icon={<Logout />}
+                text="Sign Out"
+                onClick={() => {
+                  Storage.removeData('TOKEN');
+                  navigation.navigate('SignInScreen');
+                }}
               />
             </View>
           </View>

@@ -1,4 +1,5 @@
-import React, {useContext, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Card, Rating, SearchBar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -47,7 +48,13 @@ import {
   ButtonCategory,
 } from './style/shop.style';
 import {Space} from '../../infrastructuer/theme/space.style';
-import {View, FlatList, TouchableOpacity, Linking} from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Linking,
+  Animated,
+} from 'react-native';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Text} from 'react-native';
 import {ProductContext} from '../../service/Products/Product.context';
@@ -60,8 +67,13 @@ import {TransitionView} from '../../components/transitionView';
 import Storage from '../../utils/storeData/index';
 import {KEY} from '../../utils/storeData/key';
 import {CheckSaveProduct} from '../../components/checkSaveProduct/index';
-import {goToScreenCategory, goToScreenDetails} from '../../service/Products/Product.action';
+import {
+  goToScreenCategory,
+  goToScreenDetails,
+} from '../../service/Products/Product.action';
 import {CommentContext} from '../../service/Comment/Comment.context';
+import SearchPageScreen from './searchScreen';
+import {Animations} from './animations';
 function ShopScreen({navigation}) {
   const {
     productsItem,
@@ -72,16 +84,56 @@ function ShopScreen({navigation}) {
     bestSellingItem,
     productByIdFn,
     relatedProductsFn,
-    searchProductsFn
+    searchProductsFn,
+    isProducts,
   } = useContext(ProductContext);
   const {getAllCommentIdFn} = useContext(CommentContext);
 
   const {addToBasket} = useContext(BasketContext);
   const [search, setSearch] = useState('');
-  const updateSearch = (search: React.SetStateAction<string>) => {
-    setSearch(search);
-  };
+  const [openPartner, setOpenPartner] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const debouncedSearchTerm = useDebounce(search, 500);
+  function useDebounce(value, delay) {
+    // State and setters for debounced value
+    const [debouncedValue, setDebouncedValue] = useState(value);
 
+    useEffect(
+      () => {
+        // Update debounced value after delay
+        const handler = setTimeout(() => {
+          setDebouncedValue(value);
+        }, delay);
+
+        // Cancel the timeout if value changes (also on delay change or unmount)
+        // This is how we prevent debounced value from updating if value is changed ...
+        // .. within the delay period. Timeout gets cleared and restarted.
+        return () => {
+          clearTimeout(handler);
+        };
+      },
+      [value, delay], // Only re-call effect if value or delay changes
+    );
+
+    return debouncedValue;
+  }
+  const updateSearch = (text: React.SetStateAction<string>) => {
+    setSearch(text);
+  };
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        if (debouncedSearchTerm == '') {
+          setIsSearching(false);
+        } else {
+          setIsSearching(true);
+          searchProductsFn(debouncedSearchTerm, '');
+        }
+      } else {
+      }
+    },
+    [debouncedSearchTerm], // Only call effect if debounced search term changes
+  );
   const ratingCompleted = (rating: number) => {
     console.log('Rating is: ' + rating);
   };
@@ -92,7 +144,7 @@ function ShopScreen({navigation}) {
   function brandItem() {
     return (
       <>
-        <Brand source={require('../../assets/image/sampelimag.png')}></Brand>
+        <Brand source={require('../../assets/image/sampelimag.png')} />
       </>
     );
   }
@@ -119,11 +171,16 @@ function ShopScreen({navigation}) {
     return (
       <>
         <ButtonCategory
-          onPress={()=>{goToScreenCategory(navigation,item,searchProductsFn)}}>
+          onPress={() => {
+            goToScreenCategory(navigation, item, searchProductsFn);
+          }}>
           <CategoryBrand source={require('../../assets/image/rectangle.png')}>
             <CategoryImageBrand
-               source={ item.file!=null?{uri: IMAGE_ADDRESS + item.file}:require('../../assets/image/cleafin_logo_star.png')}
-              
+              source={
+                item.file != null
+                  ? {uri: IMAGE_ADDRESS + item.file}
+                  : require('../../assets/image/cleafin_logo_star.png')
+              }
             />
           </CategoryBrand>
           <Space lineH={8} />
@@ -332,7 +389,7 @@ function ShopScreen({navigation}) {
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>
-        <ButtonAddTo style={{width:150}}onPress={() => addToBasket(item)}>
+        <ButtonAddTo style={{width: 150}} onPress={() => addToBasket(item)}>
           <LabelButton>{'Add to basket'}</LabelButton>
         </ButtonAddTo>
         <CheckSaveProduct item={item} />
@@ -345,102 +402,130 @@ function ShopScreen({navigation}) {
     console.log('====================================');
     return <FlatList data={item} renderItem={renderItemForSecondList} />;
   }
-
+  const [bounceValue, setBounceValue] = useState(100);
+  function _toggleSubview() {
+    setOpenPartner(!openPartner);
+  }
   return (
     <Background>
-      <Scroll>
-        <Space lineH={35} />
-        <SearchView
-          placeholder="Search On Cleaning"
-          onChangeText={(e: any) => updateSearch(e)}
+      <Animations open={openPartner} />
+      {!isSearching ? (
+        <Scroll
+          scrollEventThrottle={160}
+          onScrollEndDrag={event => {
+            if (event.nativeEvent.contentOffset.y > 293) {
+              _toggleSubview();
+            }
+            console.log(event.nativeEvent.contentOffset.y);
+          }}>
+          <Space lineH={35} />
+          <SearchView
+            placeholder="Search On Cleaning"
+            onChangeText={(e: any) => updateSearch(e)}
+            value={search}
+            searchIcon={() => (
+              <Icon
+                color={'gry'}
+                size={30}
+                name="search1"
+              />
+            )}
+          />
+          <Space lineH={25} />
+          <FlatListSlide
+            data={[1, 2, 3, 4, 5, 6]}
+            renderItem={brandItem}
+            snap={0}
+            height={210}
+          />
+          <Space lineH={25} />
+          <FlatListSlide
+            data={categoriesItem}
+            renderItem={categoryItem}
+            snap={5}
+            height={85}
+          />
+          <Space lineH={25} />
+          <TitleStep>{'Offers'}</TitleStep>
+          <Space lineH={25} />
+          <FlatListSlide
+            data={productsItem}
+            renderItem={offerItem}
+            snap={5}
+            height={330}
+            isLoading={isProducts}
+          />
+          <Space lineH={25} />
+          <TitleStep>{'Why Cleafin'}</TitleStep>
+          <Space lineH={25} />
+          <ViewWhyCleafin>
+            <ViewItemWhy
+              onPress={() => {
+                handleClickLink();
+              }}>
+              <ImageWhy source={require('../../assets/image/car.png')} />
+              <TextContact>{'Easy to use'}</TextContact>
+            </ViewItemWhy>
+            <ViewItemWhy
+              onPress={() => {
+                handleClickLink();
+              }}>
+              <ImageWhy source={require('../../assets/image/phone.png')} />
+              <TextContact>{'contact us'}</TextContact>
+            </ViewItemWhy>
+            <ViewItemWhy
+              onPress={() => {
+                handleClickLink();
+              }}>
+              <ImageWhy source={require('../../assets/image/private.png')} />
+              <TextContact>{'Online support'}</TextContact>
+            </ViewItemWhy>
+          </ViewWhyCleafin>
+          <Space lineH={45} />
+          <TitleStep>{'New arrival Products'}</TitleStep>
+          <Space lineH={25} />
+          <FlatListSlide
+            data={arrivalItem}
+            renderItem={offerItem}
+            snap={5}
+            height={330}
+          />
+          <Space lineH={25} />
+          <FlatListSlide
+            data={cardBottomArrivalItem}
+            renderItem={SuggestItem}
+            snap={5}
+            height={160}
+          />
+          <Space lineH={45} />
+          <TitleStep>{'Best selling Products'}</TitleStep>
+          <Space lineH={25} />
+          <FlatListSlide
+            data={bestSellingItem}
+            renderItem={renderItemProducts}
+            snap={5}
+            height={380}
+          />
+          <Advertisement />
+          <Space lineH={25} />
+          <TitleStep>{'Newest Products'}</TitleStep>
+          <Space lineH={25} />
+          <FlatList
+            data={newProductsItem}
+            renderItem={value => renderItemNewestProducts(value)}
+            numColumns={2}
+          />
+          <Space lineH={25} />
+        </Scroll>
+      ) : (
+        <SearchPageScreen
           value={search}
-          searchIcon={() => <Icon color={'gry'} size={30} name="search1" />}
+          onChange={value => updateSearch(value)}
+          onShow={() => {
+            setIsSearching(false);
+          }}
         />
-        <Space lineH={25} />
-        <FlatListSlide
-          data={[1, 2, 3, 4, 5, 6]}
-          renderItem={brandItem}
-          snap={0}
-          height={210}
-        />
-        <Space lineH={25} />
-        <FlatListSlide
-          data={categoriesItem}
-          renderItem={categoryItem}
-          snap={5}
-          height={85}
-        />
-        <Space lineH={25} />
-        <TitleStep>{'Offers'}</TitleStep>
-        <Space lineH={25} />
-        <FlatListSlide
-          data={productsItem}
-          renderItem={offerItem}
-          snap={5}
-          height={330}
-        />
-        <Space lineH={25} />
-        <TitleStep>{'Why Cleafin'}</TitleStep>
-        <Space lineH={25} />
-        <ViewWhyCleafin>
-          <ViewItemWhy
-            onPress={() => {
-              handleClickLink();
-            }}>
-            <ImageWhy source={require('../../assets/image/car.png')} />
-            <TextContact>{'Easy to use'}</TextContact>
-          </ViewItemWhy>
-          <ViewItemWhy
-            onPress={() => {
-              handleClickLink();
-            }}>
-            <ImageWhy source={require('../../assets/image/phone.png')} />
-            <TextContact>{'contact us'}</TextContact>
-          </ViewItemWhy>
-          <ViewItemWhy
-            onPress={() => {
-              handleClickLink();
-            }}>
-            <ImageWhy source={require('../../assets/image/private.png')} />
-            <TextContact>{'Online support'}</TextContact>
-          </ViewItemWhy>
-        </ViewWhyCleafin>
-        <Space lineH={45} />
-        <TitleStep>{'New arrival Products'}</TitleStep>
-        <Space lineH={25} />
-        <FlatListSlide
-          data={arrivalItem}
-          renderItem={offerItem}
-          snap={5}
-          height={330}
-        />
-        <Space lineH={25} />
-        <FlatListSlide
-          data={cardBottomArrivalItem}
-          renderItem={SuggestItem}
-          snap={5}
-          height={160}
-        />
-        <Space lineH={45} />
-        <TitleStep>{'Best selling Products'}</TitleStep>
-        <Space lineH={25} />
-        <FlatListSlide
-          data={bestSellingItem}
-          renderItem={renderItemProducts}
-          snap={5}
-          height={380}
-        />
-        <Advertisement />
-        <Space lineH={25} />
-        <TitleStep>{'Newest Products'}</TitleStep>
-        <Space lineH={25} />
-        <FlatList
-          data={newProductsItem}
-          renderItem={(value)=>renderItemNewestProducts(value)}
-          numColumns={2}
-        />
-        <Space lineH={25} />
-      </Scroll>
+      )}
     </Background>
   );
 }

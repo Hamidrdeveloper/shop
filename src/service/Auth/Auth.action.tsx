@@ -1,4 +1,4 @@
-import {Email, SignUp} from './types';
+import {Email, LinkForgetPassword, SignUp} from './types';
 import AuthDataService from './Auth.service';
 import React from 'react';
 import {ForgetPasswordModel, SignInModel, SignUpModel} from './model';
@@ -11,6 +11,9 @@ export function singInAc() {
 }
 export function forgetPasswordAc() {
   return AuthDataService.forgetPassword(ForgetPasswordModel);
+}
+export function linkForgetPasswordAc(value: LinkForgetPassword) {
+  return AuthDataService.linkForgetPassword(value);
 }
 export function countriesAc() {
   return AuthDataService.countries();

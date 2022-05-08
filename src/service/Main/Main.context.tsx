@@ -7,12 +7,13 @@ import React, {
 } from 'react';
 import {TOKEN} from '../../utils/main';
 import Storage from '../../utils/storeData';
-import { AuthContext } from '../Auth/Auth.context';
+import {AuthContext} from '../Auth/Auth.context';
 import {ProductsModel} from '../Products/model';
 import {ProductContext} from '../Products/Product.context';
 import http from '../../utils/http-common';
-import { ProfileContext } from '../Profile/Profile.context';
-import { BasketContext } from '../Basket/Basket.context';
+import {ProfileContext} from '../Profile/Profile.context';
+import {BasketContext} from '../Basket/Basket.context';
+import { PartnerContext } from '../Partner/Partner.context';
 
 interface IMainContext {
   token: string;
@@ -24,29 +25,39 @@ export default function MainContextProvider({
   children: ReactElement;
 }) {
   const [token, setToken] = useState('');
-  const {setLoginOpen,countriesFn,languageFn} = useContext(AuthContext);
-  const {profileFn,isLodUser} = useContext(ProfileContext);
+  const {setLoginOpen, countriesFn, languageFn} = useContext(AuthContext);
+  const {profileFn} = useContext(ProfileContext);
   const {orderSale} = useContext(BasketContext);
-  const {productsFn,newProductsFn,categoriesFn,arrivalFn,cardBottomArrivalFn,bestSellingFn} = useContext(ProductContext);
- 
+  const {PartnerFn} = useContext(PartnerContext);
+
+  const {
+    productsFn,
+    newProductsFn,
+    categoriesFn,
+    arrivalFn,
+    cardBottomArrivalFn,
+    bestSellingFn,
+  } = useContext(ProductContext);
+
   useEffect(() => {
     countriesFn();
     languageFn();
     productsFn();
     categoriesFn();
+   
     arrivalFn();
     cardBottomArrivalFn();
     bestSellingFn();
     newProductsFn();
     Storage.retrieveData('TOKEN').then(res => {
-      console.log("MainContext",res);
-      
-      http.defaults.headers.common['Authorization'] = `Bearer ${res}`;
+      console.log('MainContext', res);
 
+      http.defaults.headers.common['Authorization'] = `Bearer ${res}`;
+       PartnerFn();
       setLoginOpen(true);
       setToken(res);
       TOKEN.token = res;
-      
+
       ProductsModel.pagination = {
         page: 1,
         per_page: 12,

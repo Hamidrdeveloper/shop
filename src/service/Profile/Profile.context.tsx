@@ -1,11 +1,12 @@
 import React, {createContext, ReactElement, useContext, useState} from 'react';
-import Toast from '../../components/toast';
 import {AddressContext} from '../Address/Address.context';
 import {profileAc, updateUserProfileAc} from './Profile.action';
-import {Email, SignUp, UserProfile} from './types';
+import {User, UserProfile} from './types';
 
 interface IProfileContext {
   isLodUser: string;
+  isUpdate: boolean;
+  isLoading: boolean;
   user: any;
   profileFn: () => void;
   profileUpdateFn: (value: UserProfile) => void;
@@ -20,34 +21,46 @@ export default function ProfileContextProvider({
   children: ReactElement;
 }) {
   const [isLodUser, setLodUser] = useState('0');
-  const [user, setUser] = useState();
-  const [userUpdate, setUserUpdate] = useState();
+  const [isUpdate, setUpdate] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  const [user, setUser] = useState<User>();
+  const [userUpdate, setUserUpdate] = useState<UserProfile>();
 
   const {getAddressFn} = useContext(AddressContext);
-
+  function setDataUser(value: User) {
+    let formUser = {
+      email: value?.email,
+      birth_date: value?.birth_date,
+      people: {
+        first_name: value?.person?.first_name,
+        last_name: value?.person?.last_name,
+      },
+    };
+    setUser(value);
+    setLodUser('1');
+    setUserUpdate(formUser);
+  }
   function profileFn() {
     profileAc()
       .then(is => {
         getAddressFn();
-        setUser(is);
-        setLodUser('1');
-        setUserUpdate({
-          email: is?.email,
-          birth_date: is?.birth_date,
-          people: {
-            first_name: is?.person?.first_name,
-            last_name: is?.person?.last_name,
-          },
-        });
+        setDataUser(is);
       })
-      .catch(e => {
+      .catch(() => {
         setLodUser('2');
       });
   }
   function profileUpdateFn(value: UserProfile) {
+    setLoading(true);
+    setUpdate(false);
     updateUserProfileAc(value)
-      .then(is => {})
-      .catch(e => {});
+      .then(is => {
+        setDataUser(is);
+        setUpdate(true);
+        setLoading(false);
+      })
+      .catch(() => {});
   }
 
   return (
@@ -58,6 +71,8 @@ export default function ProfileContextProvider({
         isLodUser,
         userUpdate,
         profileUpdateFn,
+        isUpdate,
+        isLoading,
       }}>
       {children}
     </ProfileContext.Provider>

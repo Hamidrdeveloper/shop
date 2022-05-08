@@ -1,32 +1,46 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {BackgroundView, Padding} from '../../css/main.style';
 import HeaderScComponent from '../../components/header2';
-import {ArrowLeft} from 'react-native-iconly';
-import {TextInputSign} from '../signUp/style/signUp.style';
+import {ArrowLeft, Show} from 'react-native-iconly';
+import {
+  TextInputSign,
+  ViewIcon,
+  ViewRowTextInput,
+} from '../signUp/style/signUp.style';
 import {SignInModel} from '../../service/Auth/model';
-import { AuthContext } from '../../service/Auth/Auth.context';
+import {AuthContext} from '../../service/Auth/Auth.context';
+import {LoadingButton} from '../../components/buttonLoading';
 
 export default function SignInScreen({navigation}) {
   const [emailUser, setEmailUser] = useState();
   const [password, setPassword] = useState();
-  const {singInFn,isLoginOpen} = useContext(AuthContext);
-  // useEffect(() => {
-  //   if(isLoginOpen)
-  //     navigation.navigate("Bottom_SCREEN")
+  const {singInFn, isLoginOpen, isLoginApi} = useContext(AuthContext);
+  const [showPassOne, setShowPassOne] = useState(true);
 
-   
-  // }, [isLoginOpen])
+  function onNext() {
+    if (isLoginOpen) {
+      navigation.navigate('Bottom_SCREEN');
+    }
+  }
+  useEffect(() => {
+    if (isLoginApi) {
+      onNext();
+    }
+
+    return;
+  }, [isLoginOpen]);
+
   function HeaderScComponent() {
     return (
       <>
         <View
           style={{
             flexDirection: 'row',
-            width: `100%`,
+            width: '100%',
             height: 55,
             padding: 15,
             backgroundColor: Color.brand.white,
@@ -43,7 +57,7 @@ export default function SignInScreen({navigation}) {
               justifyContent: 'center',
               position: 'absolute',
               alignItems: 'center',
-              width: `100%`,
+              width: '100%',
             }}>
             <Image
               resizeMode="stretch"
@@ -83,15 +97,23 @@ export default function SignInScreen({navigation}) {
           <Space lineH={20} />
           <Text style={{color: Color.brand.black}}>{'Password'}</Text>
           <Space lineH={10} />
-          <TextInputSign
-            placeholder={'Abcd@1234'}
-            placeholderTextColor={'#000'}
-            value={password}
-            onChangeText={e => {
-              SignInModel.password = e;
-              setPassword(e);
-            }}
-          />
+          <ViewRowTextInput>
+            <TextInputSign
+              placeholder={'**********'}
+              placeholderTextColor={'#000'}
+              secureTextEntry={showPassOne}
+              onChangeText={e => {
+                setPassword(e);
+              }}
+            />
+            <ViewIcon>
+              <Show
+                onPress={() => setShowPassOne(!showPassOne)}
+                size={'medium'}
+                primaryColor={Color.brand.textGrey}
+              />
+            </ViewIcon>
+          </ViewRowTextInput>
           <Space lineH={30} />
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{flexDirection: 'row'}}>
@@ -130,45 +152,35 @@ export default function SignInScreen({navigation}) {
           <Space lineH={50} />
           <View
             style={{
-              width: `100%`,
+              width: '100%',
               alignSelf: 'center',
               justifyContent: 'center',
             }}>
-            <TouchableOpacity
-              onPress={() => {
-                singInFn();
+            <View
+              style={{
+                height: 50,
+                width: '100%',
               }}>
-              <View
-                style={{
-                  height: 50,
-                  width: `100%`,
-                  borderRadius: 10,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: Color.brand.colorButton,
-                }}>
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    fontSize: 18,
-                    color: Color.brand.white,
-                  }}>
-                  {'Submit'}
-                </Text>
-              </View>
-            </TouchableOpacity>
+              <LoadingButton
+                isActive={isLoginApi}
+                title={'Submit'}
+                onNext={() => singInFn()}
+                onClose={() => {}}
+              />
+            </View>
+
             <Space lineH={15} />
             <View
               style={{
                 flexDirection: 'row',
-                width: `100%`,
+                width: '100%',
                 alignItems: 'center',
               }}>
               <View
                 style={{
                   borderTopWidth: 1,
                   borderColor: Color.brand.textGry,
-                  width: `45%`,
+                  width: '45%',
                 }}
               />
               <Space lineW={5} />
@@ -185,7 +197,7 @@ export default function SignInScreen({navigation}) {
                 style={{
                   borderTopWidth: 1,
                   borderColor: Color.brand.textGry,
-                  width: `45%`,
+                  width: '45%',
                 }}
               />
             </View>
@@ -193,7 +205,7 @@ export default function SignInScreen({navigation}) {
             <View
               style={{
                 height: 50,
-                width: `100%`,
+                width: '100%',
                 borderRadius: 10,
                 alignSelf: 'center',
                 justifyContent: 'center',
@@ -222,7 +234,7 @@ export default function SignInScreen({navigation}) {
             <View
               style={{
                 flexDirection: 'row',
-                width: `100%`,
+                width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>

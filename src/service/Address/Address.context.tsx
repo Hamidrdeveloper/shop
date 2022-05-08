@@ -16,6 +16,7 @@ interface IAddressContext {
   deleteAddressFn: (product) => void;
   addressSelect:any;
   getAddressSelect:() => void
+  isAddToDataLoding:boolean;
 }
 export const AddressContext = createContext<IAddressContext>(
   {} as IAddressContext,
@@ -26,6 +27,8 @@ export default function AddressContextProvider({
   children: ReactElement;
 }) {
   const [addressSelect, setAddressSelect] = useState("");
+  
+  const [isAddToDataLoding, setAddToDataLoding] = useState(false);
 
   const [isAddToData, setAddToData] = useState(false);
   const [addresses, setAddresses] = useState([]);
@@ -71,11 +74,14 @@ export default function AddressContextProvider({
   }
   function addAddressFn(address: Type.ContactGroupsContext) {
     setAddToData(false);
-  
+    setAddToDataLoding(true)
     addAddressAc(address).then(is => {
       setAddresses(is);
       getAddressFn();
       if (is != null) setAddToData(true);
+    
+      setAddToDataLoding(false)
+
     });
   }
   function getAddressFn() {
@@ -104,6 +110,7 @@ export default function AddressContextProvider({
         deleteAddressFn,
         addressSelect,
         getAddressSelect,
+        isAddToDataLoding,
       }}>
       {children}
     </AddressContext.Provider>

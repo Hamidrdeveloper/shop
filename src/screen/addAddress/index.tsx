@@ -19,6 +19,9 @@ import {AddressContext} from '../../service/Address/Address.context';
 import {useContext} from 'react';
 import {TOKEN} from '../../utils/main';
 import DropdownAlert from 'react-native-dropdownalert';
+import CheckBox from '../../components/checkBox';
+import LineW from '../../components/lineW';
+import {LoadingButton} from '../../components/buttonLoading';
 type FormValues = {
   first_name: string;
   last_name: string;
@@ -27,22 +30,15 @@ type FormValues = {
   phone: string;
 };
 export default function AddAddressScreen({navigation}) {
-  let dropDownAlertRef = useRef();
   const {...methods} = useForm();
-  const {addAddressFn, isAddToData} = useContext(AddressContext);
+  const {addAddressFn, isAddToData, isAddToDataLoding} =
+    useContext(AddressContext);
+  let dropDownAlertRef = useRef();
 
   const [formError, setError] = useState<Boolean>(false);
-  
-  
-  const _fetchData = async (text, type) => {
-    const response = await fetch('https://httpbin.org/uuid');
-    const {uuid} = await response.json();
-    dropDownAlertRef.alertWithType(type, text);
-  };
 
   useEffect(() => {
     if (isAddToData) {
-      _fetchData('Add Address', 'success');
     }
   }, [isAddToData]);
 
@@ -85,6 +81,8 @@ export default function AddAddressScreen({navigation}) {
   }
 
   const onError: SubmitErrorHandler<FormValues> = errors => {
+    dropDownAlertRef.alertWithType('error', 'All fields must be filled');
+
     return console.log('errors', errors);
   };
   return (
@@ -95,6 +93,14 @@ export default function AddAddressScreen({navigation}) {
 
           <Padding>
             <FormProvider {...methods}>
+              <ControlledInput
+                name="cart_title"
+                label="Cart Title"
+                placeholder={'Abcd@1234'}
+                placeholderTextColor={'#000'}
+                rules={{required: 'Password is required!'}}
+                setFormError={setError}
+              />
               <ControlledInput
                 name="company_name"
                 label="Company Name"
@@ -114,14 +120,6 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="last_name"
                 label="Last Name"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
-                rules={{required: 'Password is required!'}}
-                setFormError={setError}
-              />
-              <ControlledInput
-                name="address1"
-                label="Address Line"
                 placeholder={'Abcd@1234'}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
@@ -176,39 +174,50 @@ export default function AddAddressScreen({navigation}) {
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
-            </FormProvider>
-            <TouchableOpacity onPress={methods.handleSubmit(onSubmit, onError)}>
-              <View
-                style={{
-                  height: 50,
-                  marginTop: 15,
-                  width: `100%`,
-                  borderRadius: 10,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: Color.brand.colorButton,
-                }}>
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    fontSize: 18,
-                    color: Color.brand.white,
-                  }}>
-                  {'Submit'}
-                </Text>
+              <View style={{flexDirection: 'row', paddingTop: 30}}>
+                <CheckBox isCheck={true} />
+                <Space lineW={10} />
+                <Text style={{fontSize: 15}}>{'Pack station'}</Text>
+                <Space lineW={50} />
+                <CheckBox isCheck={true} />
+                <Text style={{fontSize: 15}}>{'Post office'}</Text>
               </View>
-            </TouchableOpacity>
+
+              <ControlledInput
+                name="address1"
+                label="Address Line"
+                placeholder={'Abcd@1234'}
+                placeholderTextColor={'#000'}
+                rules={{required: 'Password is required!'}}
+                setFormError={setError}
+                style={{height: 130, textAlignVertical: 'top'}}
+              />
+            </FormProvider>
+
+            <View
+              style={{
+                height: 50,
+                marginTop: 15,
+                width: '100%',
+              }}>
+              <LoadingButton
+                isActive={isAddToDataLoding}
+                title={'Submit'}
+                onNext={methods.handleSubmit(onSubmit, onError)}
+                onClose={() => {}}
+              />
+            </View>
             <Space lineH={80} />
           </Padding>
         </ScrollView>
+        <DropdownAlert
+          ref={ref => {
+            if (ref) {
+              dropDownAlertRef = ref;
+            }
+          }}
+        />
       </BackgroundView>
-      <DropdownAlert
-        ref={ref => {
-          if (ref) {
-            dropDownAlertRef = ref;
-          }
-        }}
-      />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity} from 'react-native';
+import {Pressable, Text, TouchableOpacity} from 'react-native';
 import {View} from 'react-native';
 import {Dimensions, Image, ImageBackground, ScrollView} from 'react-native';
 import {SearchBar} from 'react-native-elements';
@@ -6,6 +6,7 @@ import {color} from 'react-native-elements/dist/helpers';
 import styled from 'styled-components';
 import {Color} from '../../../infrastructuer/theme/colors.style';
 import {Heart} from 'react-native-iconly';
+
 const width = Dimensions.get('screen').width;
 
 export const Brand = styled(ImageBackground).attrs(() => ({
@@ -43,7 +44,7 @@ export const CategoryImageBrand = styled(Image).attrs(() => ({
   width: 35px;
   tint-color: ${Color.brand.white};
 `;
-export const ButtonCategory = styled(TouchableOpacity).attrs(() => ({}))``;
+export const ButtonCategory = styled(Pressable).attrs(() => ({}))``;
 
 export const CategoryTextBrand = styled(Text).attrs(() => ({}))`
   
@@ -96,6 +97,7 @@ export const SearchView = styled(SearchBar).attrs(() => ({
 }))`
   
   width:100%;
+  height: 60;
   font-size:18;
   color:${Color.brand.black}
   text-align:left;
@@ -197,7 +199,7 @@ export const TextPriceUnitOffer = styled(Text).attrs(() => ({}))`
   font-size: 13;
   color: ${Color.brand.textGrey};
 `;
-export const ButtonAddTo = styled(TouchableOpacity).attrs(() => ({}))`
+export const ButtonAddTo = styled(Pressable).attrs(() => ({}))`
   border-width: 1;
   border-color: ${Color.brand.colorButton};
   border-radius: 10px;

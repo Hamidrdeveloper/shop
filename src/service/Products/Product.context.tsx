@@ -1,6 +1,6 @@
 import React, {createContext, ReactElement, useState} from 'react';
 import {ProductsArrivalModel, ProductsModel} from './model';
-import   * as Ac from './Product.action';
+import * as Ac from './Product.action';
 import {ProductItem} from './types';
 import * as Type from './types';
 interface IProductContext {
@@ -16,14 +16,14 @@ interface IProductContext {
   cardBottomArrivalFn: () => void;
   bestSellingFn: () => void;
   bestSellingItem: any;
-  productByIdFn: (productId: number,navigation:any) => void;
-  newProductsFn: () => void
+  productByIdFn: (productId: number, navigation: any) => void;
+  newProductsFn: () => void;
   newProductsItem: any;
-  relatedProductsFn: (id) => void
+  relatedProductsFn: (id) => void;
   relatedProductsItem: any;
-  searchProductsFn: (text: string,categoryId:number) => void;
+  searchProductsFn: (text: string, categoryId: number) => void;
   categoryProductsItem: Array<any>;
-  categoryLode:boolean;
+  categoryLode: boolean;
 }
 export const ProductContext = createContext<IProductContext>(
   {} as IProductContext,
@@ -46,19 +46,18 @@ export default function ProductContextProvider({
   const [categoryProductsItem, setCategoryProductsItem] = useState<any>();
   // We can access navigation object via context
   function productsFn() {
+    setProducts(true);
     Ac.productsAc(ProductsModel).then(res => {
       console.log('productsFn', res);
-      
+      setProducts(false);
       setProductsItem(res);
-    
-      
     });
   }
   function newProductsFn() {
     let dataPost = ProductsArrivalModel;
-    dataPost.page=1;
-    dataPost.per_page=100;
-    dataPost.productCategoryIds ="";
+    dataPost.page = 1;
+    dataPost.per_page = 100;
+    dataPost.productCategoryIds = '';
     Ac.productsAc(dataPost).then(res => {
       setNewProductsItem(res);
     });
@@ -71,9 +70,9 @@ export default function ProductContextProvider({
   }
   function arrivalFn() {
     let dataPost = ProductsArrivalModel;
-    dataPost.page=1;
-    dataPost.per_page=12;
-    dataPost.productCategoryIds ="76";
+    dataPost.page = 1;
+    dataPost.per_page = 12;
+    dataPost.productCategoryIds = '76';
     Ac.productsAc(dataPost).then(res => {
       console.log('arrivalFn', res);
       setArrivalFnItem(res);
@@ -81,9 +80,9 @@ export default function ProductContextProvider({
   }
   function cardBottomArrivalFn() {
     let dataPost = ProductsArrivalModel;
-    dataPost.page=1;
-    dataPost.per_page=12;
-    dataPost.productCategoryIds ="52";
+    dataPost.page = 1;
+    dataPost.per_page = 12;
+    dataPost.productCategoryIds = '52';
     Ac.productsAc(dataPost).then(res => {
       console.log('arrivalFn', res);
       setCardArrivalFnItem(res);
@@ -91,51 +90,42 @@ export default function ProductContextProvider({
   }
   function bestSellingFn() {
     let dataPost = ProductsArrivalModel;
-    dataPost.page=1;
-    dataPost.per_page=12;
-    dataPost.productCategoryIds ="75";
+    dataPost.page = 1;
+    dataPost.per_page = 12;
+    dataPost.productCategoryIds = '75';
     Ac.productsAc(dataPost).then(res => {
-      
-      const n = 3
+      const n = 3;
       const result = new Array(Math.ceil(res.length / n))
-      .fill()
-      .map(_ => res.splice(0, n))
-      console.log("=====>check",result);
-      
+        .fill()
+        .map(_ => res.splice(0, n));
+      console.log('=====>check', result);
+
       setBestSellingFnItem(result);
     });
   }
-  function productByIdFn(productId:number,navigation) {
-    
+  function productByIdFn(productId: number, navigation) {
     Ac.productByIdAc(productId).then(res => {
-      setProductByID(res)
-     
-      
+      setProductByID(res);
     });
   }
-  function relatedProductsFn(categoryId:number) {
+  function relatedProductsFn(categoryId: number) {
     let dataPost = ProductsArrivalModel;
-    dataPost.page=1;
-    dataPost.per_page=12;
-    dataPost.productCategoryIds =categoryId.toString();
+    dataPost.page = 1;
+    dataPost.per_page = 12;
+    dataPost.productCategoryIds = categoryId.toString();
     Ac.productsAc(dataPost).then(res => {
-      setRelatedProductsItem(res)
-     
-      
+      setRelatedProductsItem(res);
     });
   }
-  function searchProductsFn(text:string,categoryId:number) {
+  function searchProductsFn(text: string, categoryId: number) {
     setCategoryProductsItem([]);
-    setCategoryLode(true)
+    setCategoryLode(true);
     let dataPost = ProductsArrivalModel;
-    dataPost.search=text
-    dataPost.productCategoryIds =categoryId.toString();
+    dataPost.search = text;
+    dataPost.productCategoryIds = categoryId.toString();
     Ac.productsAc(dataPost).then(res => {
-     
-      setCategoryLode(false)
-      setCategoryProductsItem(res)
-     
-      
+      setCategoryLode(false);
+      setCategoryProductsItem(res);
     });
   }
 

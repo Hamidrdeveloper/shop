@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Image, View} from 'react-native';
-import Indicator from '../../components/loding';
-import IndicatorBottom from '../../components/loding/indicatorBottom';
+
+import IndicatorBottom from '../../components/lodging/indicatorBottom';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 
 export default function SplashScreen({navigation}) {

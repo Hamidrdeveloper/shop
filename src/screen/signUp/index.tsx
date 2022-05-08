@@ -6,6 +6,7 @@ import {
   View,
   KeyboardAvoidingView,
   Dimensions,
+  Animated,
 } from 'react-native';
 import {ArrowLeft} from 'react-native-iconly';
 import {
@@ -32,53 +33,22 @@ import {
   ViewButtonBottom,
   ViewRowPart,
 } from './style/signUp.style';
+import IndicatorStep from '../../components/stepIndicator';
 const heightFull = Dimensions.get('screen').height;
 export default function SignUpScreen({navigation}) {
-  const [index, setIndex] = useState(2);
+  const [index, setIndex] = useState(1);
   const [active, setActive] = useState(false);
-  const {singUpFn} = useContext(AuthContext);
+  const {singUpFn, isForm, activeForm} = useContext(AuthContext);
+  const [animation, setAnimation] = useState(new Animated.Value(0));
 
   function ProcessView() {
     return (
-      <View style={{flexDirection: 'row', width: '100%', alignItems: 'center'}}>
-        {[1, 2, 3, 4, 5].map((id, i) => {
-          return (
-            <>
-              <View style={{width: 35}}>
-                <View
-                  style={{
-                    borderWidth: 8,
-                    borderColor:
-                      index >= id ? Color.brand.green : Color.brand.c4,
-                    width: 30,
-                    height: 30,
-                    borderRadius: 30,
-                  }}
-                />
-                <Space lineH={8} />
-                <Text
-                  style={{
-                    color: Color.brand.black,
-                    fontSize: 12,
-                  }}>{`Step ${id}`}</Text>
-              </View>
-
-              <View style={{height: 30}}>
-                <View
-                  style={{
-                    width: 65,
-                    height: 2,
-                    borderStyle: 'dashed',
-                    borderColor:
-                      index > id ? Color.brand.green : Color.brand.c4,
-                    borderBottomWidth: 1.8,
-                  }}
-                />
-              </View>
-              <Space lineW={5} />
-            </>
-          );
-        })}
+      <View style={{width: '100%'}}>
+        <IndicatorStep
+          labels={['Information', 'BithDay', 'Password', 'Location', 'Partner']}
+          stepCount={5}
+          currentPosition={index - 1}
+        />
       </View>
     );
   }
@@ -86,15 +56,20 @@ export default function SignUpScreen({navigation}) {
   function RenderPart() {
     switch (index) {
       case 1:
-        return <PartOne onChangeValue={value => setActive(!value)} />;
+        return <PartOne onChangeValue={value => onSignUpButton()} />;
       case 2:
-        return <PartTwo onChangeValue={value => setActive(!value)} />;
+        return <PartTwo onChangeValue={value => onSignUpButton()} />;
       case 3:
-        return <PartThree onChangeValue={value => setActive(!value)} />;
+        return <PartThree onChangeValue={value => onSignUpButton()} />;
       case 4:
-        return <PartFour />;
+        return <PartFour onChangeValue={value => onSignUpButton()} />;
       case 5:
-        return <PartFive navigation={navigation} />;
+        return (
+          <PartFive
+            navigation={navigation}
+            onChangeValue={value => onSignUpButton()}
+          />
+        );
     }
   }
   function onSignUpButton() {
@@ -106,7 +81,6 @@ export default function SignUpScreen({navigation}) {
           SignUpModel.email.length > 5
         ) {
           setIndex(index + 1);
-          setActive(true);
         }
         break;
       case 2:
@@ -116,20 +90,15 @@ export default function SignUpScreen({navigation}) {
           SignUpModel.gender.length > 2
         ) {
           setIndex(index + 1);
-          setActive(true);
         }
         break;
       case 3:
         if (SignUpModel.password.length > 5) {
-          singUpFn();
           setIndex(index + 1);
-          setActive(false);
         }
         break;
       case 4:
         setIndex(index + 1);
-        setActive(false);
-        singUpFn();
         break;
       case 5:
         navigation.navigate('Bottom_SCREEN');
@@ -140,7 +109,9 @@ export default function SignUpScreen({navigation}) {
   return (
     <>
       <BackgroundView>
-        <KeyboardAwareScrollView style={{width: '100%', height: '100%'}}>
+        <KeyboardAwareScrollView
+          scrollEnabled={false}
+          style={{width: '100%', height: '100%'}}>
           <Header
             onBack={() => {
               if (index != 1) {
@@ -160,23 +131,10 @@ export default function SignUpScreen({navigation}) {
             <ProcessView />
             <Space lineH={30} />
             <ViewRowPart
-              height={index >= 4 ? heightFull - 220 : heightFull - 420}>
-              {RenderPart()}
+              height={index >= 4 ? heightFull - 220 : heightFull - 400}>
+              <RenderPart />
             </ViewRowPart>
             <ViewButtonBottom>
-              <View>
-                <ButtonColor>
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      fontSize: 18,
-                      color: Color.brand.white,
-                    }}>
-                    {index < 4 ? 'Next' : 'Submit'}
-                  </Text>
-                </ButtonColor>
-                {active ? <ShadowButton /> : null}
-              </View>
               {index >= 4 ? null : (
                 <>
                   <Space lineH={10} />

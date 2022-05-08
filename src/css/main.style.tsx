@@ -7,6 +7,11 @@ export const BackgroundView = styled(View).attrs(() => ({
   height: '100%',
   backgroundColor: Color.brand.white,
 }))``;
+export const BackgroundForm = styled(View).attrs(() => ({
+  width: '100%',
+  height: 320,
+  backgroundColor: Color.brand.white,
+}))``;
 export const Padding = styled(View).attrs(() => ({
   width: '100%',
   height: '100%',

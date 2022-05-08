@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Email, SignIn, SignUp} from './types';
+import {Email, LinkForgetPassword, SignIn, SignUp} from './types';
 import http from '../../utils/http-common';
 import {TOKEN} from '../../utils/main';
 import {
   COUNTRIES_ADDRESS,
   EMAIL_ADDRESS,
   LANGUAGE_ADDRESS,
+  LINK_FORGET_PASSWORD,
   SIGNIN_ADDRESS,
   SIGNUP_ADDRESS,
 } from '../../utils/adress.api';
@@ -32,7 +33,7 @@ class AuthDataService {
   }
   signIn(data: SignIn) {
     console.log(data);
-
+    http.defaults.headers.common['Authorization'] = ``;
     return http
       .post(SIGNIN_ADDRESS, data)
       .then(res => {
@@ -60,6 +61,21 @@ class AuthDataService {
       .catch(error => {
         console.log(EMAIL_ADDRESS, error.response);
         return 'Error';
+      });
+  }
+  linkForgetPassword(data: LinkForgetPassword) {
+    console.log(data);
+
+    return http
+      .post(LINK_FORGET_PASSWORD, data)
+      .then(res => {
+        console.log(LINK_FORGET_PASSWORD, res.data.data.message);
+
+        return true;
+      })
+      .catch(error => {
+        console.log(LINK_FORGET_PASSWORD, error.response);
+        return false;
       });
   }
 

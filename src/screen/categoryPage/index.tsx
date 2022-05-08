@@ -1,17 +1,25 @@
 import React, {useContext, useState} from 'react';
-import {ActivityIndicator, Dimensions, FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native';
 import {Card, Rating} from 'react-native-elements';
 import {ArrowLeft, Filter, Heart, Search, Swap} from 'react-native-iconly';
 import NumberFormat from 'react-number-format';
-import { CheckSaveProduct } from '../../components/checkSaveProduct';
+import {CheckSaveProduct} from '../../components/checkSaveProduct';
+import FlatListCustom from '../../components/flatListCoustom';
 import LineH from '../../components/lineH';
 import LineW from '../../components/lineW';
-import Indicator from '../../components/loding';
+import Indicator from '../../components/lodging/indicator';
 import {Padding} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
-import { BasketContext } from '../../service/Basket/Basket.context';
+import {BasketContext} from '../../service/Basket/Basket.context';
 import {ProductContext} from '../../service/Products/Product.context';
 import {IMAGE_ADDRESS} from '../../utils/adress.api';
 import {
@@ -29,9 +37,9 @@ import {
   ViewOffer,
 } from '../shop/style/shop.style';
 const widthFull = Dimensions.get('screen').width;
-export default function CategoryPageScreen({navigation,route}) {
+export default function CategoryPageScreen({navigation, route}) {
   const [name, setName] = useState(route.params.data.name);
-  const {categoryProductsItem,categoryLode} = useContext(ProductContext);
+  const {categoryProductsItem, categoryLode} = useContext(ProductContext);
   const {addToBasket} = useContext(BasketContext);
 
   const [dataCategory, setDataCategory] = useState([
@@ -102,13 +110,13 @@ export default function CategoryPageScreen({navigation,route}) {
                 />
                 <ViewOffer
                   style={{
-                    backgroundColor:  Color.brand.red,
+                    backgroundColor: Color.brand.red,
                     width: 35,
                     height: 21,
                     borderBottomRightRadius: 4,
                     borderTopRightRadius: 4,
                     borderTopLeftRadius: 4,
-                    left:10,
+                    left: 10,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
@@ -116,25 +124,25 @@ export default function CategoryPageScreen({navigation,route}) {
                     {'30%'}
                   </Text>
                 </ViewOffer>
-              
               </View>
 
               <Space lineH={5} />
               <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
               <Space lineH={5} />
-             
             </View>
           </TouchableOpacity>
           <LineW />
 
           <View style={{position: 'absolute', right: 10}}>
-           <CheckSaveProduct item={item} />
-        </View>
-       
-        <ButtonCategoryAddTo
-        onPress={()=>{addToBasket(item)}}>
-                <LabelButton>{'Add to basket'}</LabelButton>
-              </ButtonCategoryAddTo>
+            <CheckSaveProduct item={item} />
+          </View>
+
+          <ButtonCategoryAddTo
+            onPress={() => {
+              addToBasket(item);
+            }}>
+            <LabelButton>{'Add to basket'}</LabelButton>
+          </ButtonCategoryAddTo>
         </View>
       </>
     );
@@ -172,27 +180,27 @@ export default function CategoryPageScreen({navigation,route}) {
               {`${categoryProductsItem?.length} Products`}
             </Text>
           </View>
-          <FlatList
-            keyExtractor={index => index}
+          <FlatListCustom
             data={categoryProductsItem}
             renderItem={CategoryProductItem}
             numColumns={2}
+            isLoading={categoryLode}
           />
           {/* {[1,2,3,4,5,6,7,8,9,10,11].map(()=>{
-            return 
+            return
         })} */}
           <View
             style={{
               position: 'absolute',
-              width: `100%`,
-              height: `100%`,
+              width: '100%',
+              height: '100%',
               top: 90,
               alignSelf: 'center',
             }}>
             <LineH />
           </View>
         </Padding>
-              <Indicator isVisible={categoryLode}/>
+        {/* <Indicator isVisible={categoryLode} /> */}
       </ScrollView>
     </Background>
   );

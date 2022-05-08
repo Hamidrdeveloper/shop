@@ -15,22 +15,22 @@ import {FormProvider, SubmitErrorHandler, useForm} from 'react-hook-form';
 import {User, UserProfile} from '../../service/Profile/types';
 import {HandleEvent} from '../../css/main.style';
 import {ProfileContext} from '../../service/Profile/Profile.context';
+import DownAlertToast from '../../components/dropDownAlertRef';
+import Indicator from '../../components/lodging/indicator';
 
 export default function ProfileInformation({route, navigation}) {
   const {typeInformation, title, text} = route.params;
   const {...methods} = useForm();
   const [formError, setError] = useState<Boolean>(false);
-  const {userUpdate, profileUpdateFn} = useContext(ProfileContext);
+  const {userUpdate, profileUpdateFn, isLoading, isUpdate} =
+    useContext(ProfileContext);
 
   function onSubmit(user: UserProfile) {
     let params: UserProfile = {...userUpdate, ...user};
     profileUpdateFn(params);
+    
   }
-  const Component = () => (
-    <View>
-      Hello World!
-    </View>
-   );
+
   const onError: SubmitErrorHandler<UserProfile> = errors => {
     return console.log('errors', errors);
   };
@@ -117,6 +117,8 @@ export default function ProfileInformation({route, navigation}) {
             </Text>
           </HandleEvent>
         </View>
+        <DownAlertToast visible={isUpdate} text={'Test'} type={'success'} />
+        <Indicator isVisible={isLoading} />
       </View>
     </>
   );

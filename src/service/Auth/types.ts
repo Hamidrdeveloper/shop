@@ -1,7 +1,7 @@
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export interface SignUp{
+export interface SignUp {
   first_name: string;
   last_name: string;
   email: string;
@@ -10,11 +10,18 @@ export interface SignUp{
   gender: string;
   password: string;
 }
-export interface SignIn{
+export interface SignIn {
   username: string;
   password: string;
 }
-export interface Email{
+export interface Email {
   email: string;
 }
-
+export interface ForgetPassword {
+  current_password: string;
+  password: string;
+  password_confirmation: string;
+}
+export interface LinkForgetPassword {
+  email: string;
+}

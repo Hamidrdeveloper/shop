@@ -1,31 +1,47 @@
 export interface User {
   id: number;
-  avatar: string;
-  created_at: Date;
-  birth_date: string;
-  credit_limit: number;
-  default_payment_terms_id: number;
-  default_shipping_method_id: number;
-  discount_ratio: number;
-  email: string;
-  eori_number: string;
-  file_id: number;
-  invoice_contact_group_id: number | null;
-  is_vat_valid: number;
-  payment_method_id: number;
-  sponsor: string;
-  tax_number: string;
-  updated_at: Date;
-  use_gln_indocuments: boolean;
+  avatar?: any;
   username: string;
-  // basket: UserBasket;
-  // person: UserPerson;
-  // language: Language;
-  // roles: UserRole[];
-  // country: Country;
-  // paymentTerm: PaymentTerm;
-  // shippingMethod: ShippingMethod;
-  // paymentMethod: PaymentMethodType;
+  email: string;
+  discount_ratio: number;
+  payment_method_id?: any;
+  is_vat_valid?: any;
+  communication_by_letter: boolean;
+  vat_number?: any;
+  tax_number?: any;
+  credit_limit?: any;
+  eori_number?: any;
+  use_gln_indocuments?: any;
+  default_shipping_method_id?: any;
+  default_payment_terms_id?: any;
+  file_id?: any;
+  point?: any;
+  is_active: boolean;
+  _data?: any;
+  birth_date: string;
+  created_at: string;
+  updated_at: string;
+  invoice_contact_group_id: number;
+  person: Person;
+  roles: Role[];
+  userType?: any;
+}
+
+export interface Role {
+  id: number;
+  title: string;
+  company_visibility: boolean;
+  owner_visibility: boolean;
+  slug: string;
+}
+
+export interface Person {
+  id: number;
+  first_name: string;
+  last_name: string;
+  gender: string;
+  company_name?: any;
+  created_by?: any;
 }
 export interface UserProfile {
   email: string;

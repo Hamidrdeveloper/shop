@@ -35,6 +35,8 @@ import BasketContextProvider from './src/service/Basket/Basket.context';
 import AddressContextProvider from './src/service/Address/Address.context';
 import CommentContextProvider from './src/service/Comment/Comment.context';
 import FileContextProvider from './src/service/File/File.context';
+import './src/core/i18n/config';
+import PartnerContextProvider from './src/service/Partner/Partner.context';
 
 const App = () => {
   console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
@@ -42,21 +44,23 @@ const App = () => {
   return (
     <>
       <BasketContextProvider>
-        <AuthContextProvider>
-          <AddressContextProvider>
-            <CommentContextProvider>
-              <FileContextProvider>
-                <ProductContextProvider>
-                  <ProfileContextProvider>
-                    <MainContextProvider>
-                      <NavigationStart />
-                    </MainContextProvider>
-                  </ProfileContextProvider>
-                </ProductContextProvider>
-              </FileContextProvider>
-            </CommentContextProvider>
-          </AddressContextProvider>
-        </AuthContextProvider>
+        <PartnerContextProvider>
+          <AuthContextProvider>
+            <AddressContextProvider>
+              <CommentContextProvider>
+                <FileContextProvider>
+                  <ProductContextProvider>
+                    <ProfileContextProvider>
+                      <MainContextProvider>
+                        <NavigationStart />
+                      </MainContextProvider>
+                    </ProfileContextProvider>
+                  </ProductContextProvider>
+                </FileContextProvider>
+              </CommentContextProvider>
+            </AddressContextProvider>
+          </AuthContextProvider>
+        </PartnerContextProvider>
       </BasketContextProvider>
     </>
   );
