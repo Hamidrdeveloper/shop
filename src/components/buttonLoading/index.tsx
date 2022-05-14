@@ -35,7 +35,7 @@ export const LoadingButton = ({onClose, onNext, isActive,title}) => {
       }}>
       <AnimateLoadingButton
         ref={loadingButton}
-        width={330}
+        width={350}
         height={50}
         title={title}
         borderRadius={10}

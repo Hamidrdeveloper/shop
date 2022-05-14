@@ -505,6 +505,7 @@ function ShopScreen({navigation}) {
             renderItem={renderItemProducts}
             snap={5}
             height={380}
+            
           />
           <Advertisement />
           <Space lineH={25} />
@@ -514,6 +515,8 @@ function ShopScreen({navigation}) {
             data={newProductsItem}
             renderItem={value => renderItemNewestProducts(value)}
             numColumns={2}
+            initialNumToRender={5}
+            windowSize={5}
           />
           <Space lineH={25} />
         </Scroll>

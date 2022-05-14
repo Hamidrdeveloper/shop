@@ -44,16 +44,14 @@ const NavigationStart = () => {
       <Slack.Navigator screenOptions={{headerShown: false}}>
       <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
 
-      <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
-      <Slack.Screen name={'SignInScreen'} component={SignInScreen} />
-  
-      <Slack.Screen name={'SignUpScreen'} component={SignUpScreen} />
+        <Slack.Screen name={'SignInScreen'} component={SignInScreen} />
+
+        <Slack.Screen name={'SignUpScreen'} component={SignUpScreen} />
 
 
+        <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
 
-      
-
-      <Slack.Screen name={'ResetPassword'} component={ResetPassword} />
+        <Slack.Screen name={'ResetPassword'} component={ResetPassword} />
         <Slack.Screen name={'Profile_SCREEN'} component={ProfileScreen} />
 
         <Slack.Screen name={'WELCOME_SCREEN'} component={WelcomeScreen} />
@@ -67,7 +65,6 @@ const NavigationStart = () => {
           component={DeliveryAddressScreen}
         />
 
-
         <Slack.Screen name={'ReturnBackForm'} component={ReturnBackForm} />
         <Slack.Screen
           name={'ReturnBackProduct'}
@@ -76,7 +73,6 @@ const NavigationStart = () => {
 
         <Slack.Screen name={'TrackOrder'} component={TrackOrder} />
         <Slack.Screen name={'OrderDetails'} component={OrderDetails} />
-  
 
         <Slack.Screen name={'VerifyCode'} component={VerifyCode} />
         <Slack.Screen name={'ForgetPassword'} component={ForgetPassword} />

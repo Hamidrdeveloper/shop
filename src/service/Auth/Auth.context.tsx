@@ -64,7 +64,6 @@ export default function AuthContextProvider({
     singInAc().then(is => {
       setLoginOpen(is);
       setLoginApi(false);
-      alert(is);
     });
   }
   function linkForgetPasswordFn(value: LinkForgetPassword) {

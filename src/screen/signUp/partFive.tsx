@@ -14,19 +14,20 @@ import {BackgroundForm, ButtonColor} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {PartnerContext} from '../../service/Partner/Partner.context';
+import {Partners} from '../../service/Partner/type';
 
 export default function PartFive({navigation, onChangeValue}) {
-  const {partner} = useContext(PartnerContext);
-
-  function renderItemPartner({item}) {
+  const {partner, partnerIdFn} = useContext(PartnerContext);
+  function onPressPartner(item: Partners) {
+    partnerIdFn(item.user_id);
+    navigation.navigate('PartnerDetailScreen');
+  }
+  function renderItemPartner({item}): JSX.Element {
     console.log(item);
 
     return (
       <>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('PartnerDetailScreen');
-          }}>
+        <TouchableOpacity onPress={onPressPartner}>
           <View style={{flexDirection: 'row'}}>
             <Avatar
               onClick={() => setPicker(true)}

@@ -1,21 +1,29 @@
 import http from '../../utils/http-common';
 import * as Url from '../../utils/adress.api';
-import { TOKEN } from '../../utils/main';
+import {TOKEN} from '../../utils/main';
 
 class PartnerDataService {
-  partner() {
-    return http
-      .get(Url.Partner_ADDRESS)
-      .then(res => {
-        console.log(Url.Partner_ADDRESS, res.data.data);
+  async partner() {
+    try {
+      const res = await http.get(Url.Partner_ADDRESS);
+      console.log(Url.Partner_ADDRESS, res.data.data);
+      return res.data.data;
+    } catch (error) {
+      console.log(Url.Partner_ADDRESS, error.response);
 
-        return res.data.data;
-      })
-      .catch(error => {
-        console.log(Url.Partner_ADDRESS, error.response);
+      throw new Error(error);
+    }
+  }
+  async partnerId(id: number) {
+    try {
+      const res = await http.get(Url.Partner_ADDRESS + id);
+      console.log(Url.Partner_ADDRESS, res.data.data);
+      return res.data.data;
+    } catch (error) {
+      console.log(Url.Partner_ADDRESS, error.response);
 
-        throw new Error(error);
-      });
+      throw new Error(error);
+    }
   }
 }
 

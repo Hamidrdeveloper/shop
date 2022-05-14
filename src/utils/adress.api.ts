@@ -17,5 +17,9 @@ export const UPLOAD_FILE = 'files';
 export const LINK_FORGET_PASSWORD = 'reset-password/change-password';
 export const PRODUCTS_CATEGORIES_ADDRESS = 'product-categories';
 export const EMAIL_ADDRESS = 'reset-password';
+export const MAP_ADDRESS =
+  'http://api.mapbox.com/geocoding/v5/mapbox.places/';
+
 export const IMAGE_ADDRESS = 'https://sale-system.solutions-apps.com';
-export const Partner_ADDRESS = 'partners?per_page=100&isActive=true&userIsActive=true';
+export const Partner_ADDRESS =
+  'partners/';

@@ -183,6 +183,8 @@ export default function SearchPageScreen({value, onChange,onShow}) {
             data={categoryProductsItem}
             renderItem={CategoryProductItem}
             numColumns={2}
+             initialNumToRender={5}
+          windowSize={5}
           />
           {/* {[1,2,3,4,5,6,7,8,9,10,11].map(()=>{
             return

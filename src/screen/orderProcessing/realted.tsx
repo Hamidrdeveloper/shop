@@ -133,6 +133,8 @@ export function RelatedProductItem({navigation}) {
             data={productsItem}
             renderItem={_renderItem}
             numColumns={2}
+            initialNumToRender={5}
+            windowSize={5}
           />
     </>
   );

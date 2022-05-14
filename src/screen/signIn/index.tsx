@@ -20,15 +20,9 @@ export default function SignInScreen({navigation}) {
   const [password, setPassword] = useState();
   const {singInFn, isLoginOpen, isLoginApi} = useContext(AuthContext);
   const [showPassOne, setShowPassOne] = useState(true);
-
-  function onNext() {
+  useEffect(() => {
     if (isLoginOpen) {
       navigation.navigate('Bottom_SCREEN');
-    }
-  }
-  useEffect(() => {
-    if (isLoginApi) {
-      onNext();
     }
 
     return;
@@ -103,6 +97,7 @@ export default function SignInScreen({navigation}) {
               placeholderTextColor={'#000'}
               secureTextEntry={showPassOne}
               onChangeText={e => {
+                SignInModel.password = e;
                 setPassword(e);
               }}
             />

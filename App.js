@@ -37,6 +37,7 @@ import CommentContextProvider from './src/service/Comment/Comment.context';
 import FileContextProvider from './src/service/File/File.context';
 import './src/core/i18n/config';
 import PartnerContextProvider from './src/service/Partner/Partner.context';
+import MapContextProvider from './src/service/map/Map.context';
 
 const App = () => {
   console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
@@ -51,9 +52,11 @@ const App = () => {
                 <FileContextProvider>
                   <ProductContextProvider>
                     <ProfileContextProvider>
-                      <MainContextProvider>
-                        <NavigationStart />
-                      </MainContextProvider>
+                      <MapContextProvider>
+                        <MainContextProvider>
+                          <NavigationStart />
+                        </MainContextProvider>
+                      </MapContextProvider>
                     </ProfileContextProvider>
                   </ProductContextProvider>
                 </FileContextProvider>

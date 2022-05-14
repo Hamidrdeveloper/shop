@@ -36,11 +36,7 @@ import {
 import IndicatorStep from '../../components/stepIndicator';
 const heightFull = Dimensions.get('screen').height;
 export default function SignUpScreen({navigation}) {
-  const [index, setIndex] = useState(1);
-  const [active, setActive] = useState(false);
-  const {singUpFn, isForm, activeForm} = useContext(AuthContext);
-  const [animation, setAnimation] = useState(new Animated.Value(0));
-
+  const [index, setIndex] = useState(4);
   function ProcessView() {
     return (
       <View style={{width: '100%'}}>
