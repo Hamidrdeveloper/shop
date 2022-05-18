@@ -56,7 +56,7 @@ export default function MySave({navigation}) {
             <Space lineH={10} />
             <View style={{flexDirection: 'row'}}>
               <NumberFormat
-                value={parseInt(item.prices[0].value).toFixed(2)}
+                value={parseInt(item?.prices[0].value).toFixed(2)}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
@@ -68,7 +68,7 @@ export default function MySave({navigation}) {
                         fontSize: 20,
                         width: 100,
                       }}>
-                      {value + ' ' + item.prices[0].currency.symbol}
+                      {value + ' ' + item?.prices[0].currency.symbol}
                     </Text>
                   );
                 }}

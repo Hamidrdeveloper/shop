@@ -1755,7 +1755,8 @@ function Picker({
 const styles = StyleSheet.create({
     flex: {
         flex: 1,
-        opacity:1,
+        zIndex: 100,
+        opacity:10,
     }
 });
 

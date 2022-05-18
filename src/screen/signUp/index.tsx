@@ -36,7 +36,7 @@ import {
 import IndicatorStep from '../../components/stepIndicator';
 const heightFull = Dimensions.get('screen').height;
 export default function SignUpScreen({navigation}) {
-  const [index, setIndex] = useState(4);
+  const [index, setIndex] = useState(5);
   function ProcessView() {
     return (
       <View style={{width: '100%'}}>
@@ -63,7 +63,7 @@ export default function SignUpScreen({navigation}) {
         return (
           <PartFive
             navigation={navigation}
-            onChangeValue={value => onSignUpButton()}
+            onChangeValue={() => onSignUpButton()}
           />
         );
     }
@@ -127,7 +127,7 @@ export default function SignUpScreen({navigation}) {
             <ProcessView />
             <Space lineH={30} />
             <ViewRowPart
-              height={index >= 4 ? heightFull - 220 : heightFull - 400}>
+              height={index >= 4 ? heightFull - 200 : heightFull - 400}>
               <RenderPart />
             </ViewRowPart>
             <ViewButtonBottom>
@@ -145,6 +145,7 @@ export default function SignUpScreen({navigation}) {
                       borderColor: Color.brand.border,
                       borderWidth: 1,
                       flexDirection: 'row',
+                      zIndex:-10,
                     }}>
                     <Image
                       style={{width: 30, height: 30, alignSelf: 'center'}}

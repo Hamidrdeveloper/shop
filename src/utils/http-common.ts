@@ -6,8 +6,8 @@ export default axios.create({
   headers: {
     'Accept': 'application/json', 
     'HTTP_ACCEPT_LANGUAGE':'en',
-    'referer': 'https://tobeclean.de',  
-    'Origin': 'https://tobeclean.de',
+    'referer': 'https://nslag.com',  
+    'Origin': 'https://nslag.com',
     'Content-Type': 'application/json'
   }
 });

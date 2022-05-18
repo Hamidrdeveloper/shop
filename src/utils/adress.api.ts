@@ -12,14 +12,16 @@ export const COUNTRIES_ADDRESS = '/countries';
 export const LANGUAGE_ADDRESS = '/languages';
 export const Basket_CREATE_ORDER_ADDRESS = '/order-sales/basket';
 export const PRODUCTS_ADDRESS = 'products';
+export const PRODUCTS_VARIATIONS_ADDRESS = 'shop/product-variations';
+
+export const PRODUCTS_CATEGORIES_TREE_ADDRESS = 'product-categories/tree';
+
 export const PRODUCTS_COMMENT = 'comments';
 export const UPLOAD_FILE = 'files';
 export const LINK_FORGET_PASSWORD = 'reset-password/change-password';
 export const PRODUCTS_CATEGORIES_ADDRESS = 'product-categories';
 export const EMAIL_ADDRESS = 'reset-password';
-export const MAP_ADDRESS =
-  'http://api.mapbox.com/geocoding/v5/mapbox.places/';
+export const MAP_ADDRESS = 'http://api.mapbox.com/geocoding/v5/mapbox.places/';
 
-export const IMAGE_ADDRESS = 'https://sale-system.solutions-apps.com';
-export const Partner_ADDRESS =
-  'partners/';
+export const IMAGE_ADDRESS = 'https://api.solutionsapps.shop';
+export const Partner_ADDRESS = 'shop/partners';

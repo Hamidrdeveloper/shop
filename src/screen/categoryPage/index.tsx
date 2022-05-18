@@ -16,7 +16,7 @@ import FlatListCustom from '../../components/flatListCoustom';
 import LineH from '../../components/lineH';
 import LineW from '../../components/lineW';
 import Indicator from '../../components/lodging/indicator';
-import {Padding} from '../../css/main.style';
+import {HandleEvent, Padding} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {BasketContext} from '../../service/Basket/Basket.context';
@@ -71,7 +71,10 @@ export default function CategoryPageScreen({navigation, route}) {
                 borderRadius: 8,
                 padding: 5,
               }}>
-              <ImageOffer source={{uri: IMAGE_ADDRESS + item.file}} />
+              <ImageOffer
+               
+                source={{uri: IMAGE_ADDRESS + item.product.file}}
+              />
               <ViewOffer>
                 <Rating imageSize={12} style={{paddingVertical: 10}} />
                 <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
@@ -80,14 +83,18 @@ export default function CategoryPageScreen({navigation, route}) {
               <TextProductOffer>{item.name}</TextProductOffer>
               <Space lineH={5} />
               <NumberFormat
-                value={parseInt(item.prices[0].value).toFixed(2)}
+                value={parseInt(item?.productVariationPrices[0].value).toFixed(
+                  2,
+                )}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
                 renderText={(value, props) => {
                   return (
                     <TextPriceOffer>
-                      {value + ' ' + item.prices[0].currency.symbol}
+                      {value +
+                        ' ' +
+                        item?.productVariationPrices[0].price.currency.symbol}
                     </TextPriceOffer>
                   );
                 }}
@@ -96,14 +103,18 @@ export default function CategoryPageScreen({navigation, route}) {
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <NumberFormat
-                  value={parseInt(item.prices[0].value).toFixed(2)}
+                  value={parseInt(
+                    item?.productVariationPrices[0].value,
+                  ).toFixed(2)}
                   displayType={'text'}
                   thousandSeparator={true}
                   prefix={''}
                   renderText={(value, props) => {
                     return (
                       <TextPriceThroughOffer>
-                        {value + ' ' + item.prices[0].currency.symbol}
+                        {value +
+                          ' ' +
+                          item?.productVariationPrices[0].price.symbol}
                       </TextPriceThroughOffer>
                     );
                   }}
@@ -159,17 +170,39 @@ export default function CategoryPageScreen({navigation, route}) {
         />
         <Padding>
           <View style={{flexDirection: 'row'}}>
-            <Filter size={'medium'} primaryColor={Color.brand.black} />
+            <Filter
+              size={'medium'}
+              onPress={() => {
+                navigation.navigate('FilterScreen');
+              }}
+              primaryColor={Color.brand.black}
+            />
             <Space lineW={10} />
-            <Text style={{color: Color.brand.black, fontSize: 14}}>
-              {'Filter'}
-            </Text>
+            <HandleEvent
+              onPress={() => {
+                navigation.navigate('FilterScreen');
+              }}>
+              <Text style={{color: Color.brand.black, fontSize: 14}}>
+                {'Filter'}
+              </Text>
+            </HandleEvent>
             <Space lineW={30} />
-            <Swap size={'medium'} primaryColor={Color.brand.black} />
+            <Swap
+              size={'medium'}
+              onPress={() => {
+                navigation.navigate('SortScreen');
+              }}
+              primaryColor={Color.brand.black}
+            />
             <Space lineW={10} />
-            <Text style={{color: Color.brand.black, fontSize: 14}}>
-              {'Popular'}
-            </Text>
+            <HandleEvent
+              onPress={() => {
+                navigation.navigate('SortScreen');
+              }}>
+              <Text style={{color: Color.brand.black, fontSize: 14}}>
+                {'Popular'}
+              </Text>
+            </HandleEvent>
           </View>
           <Space lineH={30} />
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -185,8 +218,8 @@ export default function CategoryPageScreen({navigation, route}) {
             renderItem={CategoryProductItem}
             numColumns={2}
             isLoading={categoryLode}
-             initialNumToRender={5}
-          windowSize={5}
+            initialNumToRender={5}
+            windowSize={5}
           />
           {/* {[1,2,3,4,5,6,7,8,9,10,11].map(()=>{
             return

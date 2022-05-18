@@ -7,11 +7,13 @@ export const BackgroundView = styled(View).attrs(() => ({
   height: '100%',
   backgroundColor: Color.brand.white,
 }))``;
-export const BackgroundForm = styled(View).attrs(() => ({
-  width: '100%',
-  height: 320,
-  backgroundColor: Color.brand.white,
-}))``;
+export const BackgroundForm = styled(View).attrs(
+  ({height = 320}: {height: number}) => ({
+    width: '100%',
+    height: height,
+    backgroundColor: Color.brand.white,
+  }),
+)``;
 export const Padding = styled(View).attrs(() => ({
   width: '100%',
   height: '100%',
@@ -45,7 +47,11 @@ export const ViewRowBetween = styled(View)`
   align-items: space-between;
   justify-content: space-between;
 `;
-export const ButtonColor = styled(Pressable)`
+export const ButtonColor = styled(Pressable).attrs(
+  ({zIndex = 0}: {zIndex: number}) => ({
+    zIndex: zIndex,
+  }),
+)`
   height: 50;
   width: 100%;
   border-radius: 10;
@@ -58,4 +64,5 @@ export const ShadowButton = styled(View)`
   width: 100%;
   background-color: rgba(209, 209, 209, 0.5);
   position: absolute;
+  border-radius: 10;
 `;

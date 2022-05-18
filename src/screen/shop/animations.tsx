@@ -38,6 +38,7 @@ export const Animations = ({open}) => {
       Animated.timing(animation, {
         toValue: 2,
         duration: 950,
+        useNativeDriver: false,
       }),
     ]).start(() => {});
   };
@@ -47,6 +48,7 @@ export const Animations = ({open}) => {
       Animated.timing(animation, {
         toValue: 1,
         duration: 950,
+        useNativeDriver: false,
       }),
     ]).start(() => {});
   };

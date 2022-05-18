@@ -69,7 +69,7 @@ export default function SearchPageScreen({value, onChange,onShow}) {
                 borderRadius: 8,
                 padding: 5,
               }}>
-              <ImageOffer source={{uri: IMAGE_ADDRESS + item.file}} />
+              <ImageOffer source={{uri: IMAGE_ADDRESS + item?.product?.file}} />
               <ViewOffer>
                 <Rating imageSize={12} style={{paddingVertical: 10}} />
                 <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
@@ -78,14 +78,14 @@ export default function SearchPageScreen({value, onChange,onShow}) {
               <TextProductOffer>{item.name}</TextProductOffer>
               <Space lineH={5} />
               <NumberFormat
-                value={parseInt(item.prices[0].value).toFixed(2)}
+                value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
-                renderText={(value, props) => {
+                renderText={(value, props) => { 
                   return (
                     <TextPriceOffer>
-                      {value + ' ' + item.prices[0].currency.symbol}
+                      {value + ' ' + item?.productVariationPrices[0].price.currency.symbol}
                     </TextPriceOffer>
                   );
                 }}
@@ -94,14 +94,14 @@ export default function SearchPageScreen({value, onChange,onShow}) {
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <NumberFormat
-                  value={parseInt(item.prices[0].value).toFixed(2)}
+                  value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
                   displayType={'text'}
                   thousandSeparator={true}
                   prefix={''}
                   renderText={(value, props) => {
                     return (
                       <TextPriceThroughOffer>
-                        {value + ' ' + item.prices[0].currency.symbol}
+                        {value + ' ' + item?.productVariationPrices[0].price.symbol}
                       </TextPriceThroughOffer>
                     );
                   }}

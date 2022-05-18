@@ -13,10 +13,12 @@ export const ViewItemAddress = styled(View).attrs(props => ({
     flexDirection: 'row', justifyContent: 'space-between'
 }))``;
 export const TitleAddress = styled(Text).attrs(props => ({
-    numberOfLines:2,
+    numberOfLines:3,
+  
 }))`
   font-size: 16;
   color: ${Color.brand.black};
+  width:85%;
 `;
 export const DetailsAddress = styled(Text).attrs(props => ({
     numberOfLines:1,

@@ -1,9 +1,13 @@
-import React from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
+import React, {useContext} from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
+import { HandleEvent } from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
+import {BasketContext} from '../../service/Basket/Basket.context';
 
 export default function HeaderComponent({navigation}) {
+  const {numberBasket} = useContext(BasketContext);
+
   return (
     <>
       <View
@@ -14,18 +18,40 @@ export default function HeaderComponent({navigation}) {
           padding: 15,
           backgroundColor: Color.brand.white,
         }}>
+          <HandleEvent onPress={()=>{navigation.goBack()}}>
         <Image
           style={{width: 30, height: 30}}
           resizeMode="contain"
           source={require('../../assets/image/arrow.png')}
         />
+         </HandleEvent>
         <Space lineW={`70%`} />
-        <TouchableOpacity onPress={()=>{navigation.navigate("Basket_SCREEN");}}>
-        <Image
-          style={{width: 28, height: 28}}
-          resizeMode="contain"
-          source={require('../../assets/image/Iconly-Light-Buy.png')}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Basket_SCREEN');
+          }}>
+          <Image
+            style={{width: 28, height: 28}}
+            resizeMode="contain"
+            source={require('../../assets/image/Iconly-Light-Buy.png')}
+          />
+          {numberBasket > 0 ? (
+            <Text
+              style={{
+                position: 'absolute',
+                left: 23,
+                top: 2,
+                backgroundColor: Color.brand.colorButton,
+                borderRadius: 100,
+                width: 18,
+                height: 18,
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                color: Color.brand.white,
+              }}>
+              {numberBasket}
+            </Text>
+          ) : null}
         </TouchableOpacity>
         <Space lineW={25} />
 

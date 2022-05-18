@@ -1,4 +1,11 @@
-import React, {useCallback, useContext, useEffect, useMemo, useReducer, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import {BottomSheet} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -16,11 +23,11 @@ import ButtonCircle from '../../components/circleButton';
 import HeaderScComponent from '../../components/header2';
 import LineW from '../../components/lineW';
 import RadioButtonSingle from '../../components/radioButton/radioSingle';
-import {Absolute, BackgroundView, Padding} from '../../css/main.style';
+import {Absolute, BackgroundView, HandleEvent, Padding} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {AddressContext} from '../../service/Address/Address.context';
-import { ACTIONS } from '../../utils/actionsType';
+import {ACTIONS} from '../../utils/actionsType';
 import {
   DetailsAddress,
   Menu,
@@ -31,7 +38,7 @@ import {
 const height = Dimensions.get('screen').height;
 export default function MyAddressScreen({navigation, route}) {
   //Context
-  const {getAddressFn, addToMainAddressFn, addresses,getAddressSelect} =
+  const {getAddressFn, addToMainAddressFn, addresses, getAddressSelect} =
     useContext(AddressContext);
   //============
 
@@ -39,36 +46,26 @@ export default function MyAddressScreen({navigation, route}) {
   const [typeScreen, setTypeScreen] = useState(route.params.type);
   const [addressList, setAddressList] = useState([]);
   const [select, setSelect] = useState();
+  const [selectMore, setSelectMore] = useState();
   //===============
-  useEffect(()=>{
-    getAddressFn()
-  },[])
   useEffect(() => {
-    console.log('==============addressList======================');
-    console.log(addressList);
-  
-    console.log('==================addressList==================');
-   
-  }, [addressList]);
- 
-
+    getAddressFn();
+  }, []);
 
   useEffect(() => {
-    if(addresses!=null){
+    if (addresses != null) {
       console.log('==============addresses======================');
       console.log(addresses);
       setAddressList([]);
       setAddressList(addresses);
-      
+
       console.log('==================addresses==================');
     }
- 
   }, [addresses]);
-   //===============
-   useEffect(()=>{
-     console.log(select);
-     
-   },[select])
+  //===============
+  useEffect(() => {
+    console.log(select);
+  }, [select]);
   function _onAddAddress(value) {
     setSelect(value);
     let add = addresses.map(res => {
@@ -84,7 +81,7 @@ export default function MyAddressScreen({navigation, route}) {
     setAddressList(add);
   }
   function _passSelectAddress() {
-    getAddressSelect();
+   
     navigation.goBack();
     addToMainAddressFn(select);
   }
@@ -94,13 +91,13 @@ export default function MyAddressScreen({navigation, route}) {
         <View
           style={{
             height: height - 150,
-            width: `100%`,
+            width: '100%',
           }}
         />
       </TouchableOpacity>
 
       <ViewPopUp>
-        <View style={{flexDirection: 'row'}}>
+        <HandleEvent onPress={()=>navigation.navigate("EditAddress_SCREEN",{address:selectMore})}style={{flexDirection: 'row'}}>
           <IconlyProvider
             set="broken"
             size={'medium'}
@@ -112,7 +109,7 @@ export default function MyAddressScreen({navigation, route}) {
           <Text style={{color: Color.brand.black, fontSize: 16}}>
             {'Edit address'}
           </Text>
-        </View>
+        </HandleEvent>
         <Space lineH={10} />
         <LineW />
         <Space lineH={10} />
@@ -122,10 +119,10 @@ export default function MyAddressScreen({navigation, route}) {
             size={'medium'}
             primaryColor={Color.brand.textGrey}
             secondaryColor={Color.brand.textGrey}>
-            <Delete primaryColor={`red`} />
+            <Delete primaryColor={'red'} />
           </IconlyProvider>
           <Space lineW={10} />
-          <Text style={{color: `red`, fontSize: 16}}>{'Delete address'}</Text>
+          <Text style={{color: 'red', fontSize: 16}}>{'Delete address'}</Text>
         </View>
       </ViewPopUp>
     </>
@@ -133,7 +130,7 @@ export default function MyAddressScreen({navigation, route}) {
 
   function _renderItemAddress(value) {
     console.log(value.isSelected);
-
+    const regex = /(<([^>]+)>)/gi;
     return (
       <View>
         <Space lineH={10} />
@@ -147,8 +144,11 @@ export default function MyAddressScreen({navigation, route}) {
               }}
             />
           ) : null}
-          <TitleAddress>{`${value.address.address_complete}`}</TitleAddress>
-          <TouchableOpacity onPress={() => setIsVisible(true)}>
+          <TitleAddress>{`${value?.address?.address_complete.replace(
+            regex,
+            ', ',
+          )}`}</TitleAddress>
+          <TouchableOpacity onPress={() =>{setSelectMore(value); setIsVisible(true)}}>
             <Menu source={require('../../assets/image/menu.png')} />
           </TouchableOpacity>
         </ViewItemAddress>
@@ -157,21 +157,23 @@ export default function MyAddressScreen({navigation, route}) {
           <User size={'medium'} primaryColor={`${Color.brand.textGrey}`} />
 
           <Space lineW={10} />
-          <DetailsAddress>{'Mr John Smit'}</DetailsAddress>
+          <DetailsAddress>
+            {value?.people[0]?.first_name + '' + value?.people[0]?.last_name}
+          </DetailsAddress>
         </View>
         <Space lineH={10} />
         <View style={{flexDirection: 'row'}}>
           <Call size={'medium'} primaryColor={`${Color.brand.textGrey}`} />
 
           <Space lineW={10} />
-          <DetailsAddress>{'08825364256'}</DetailsAddress>
+          <DetailsAddress> {value?.phones[0]?.number}</DetailsAddress>
         </View>
         <Space lineH={10} />
         <View style={{flexDirection: 'row'}}>
           <Discovery size={'medium'} primaryColor={`${Color.brand.textGrey}`} />
 
           <Space lineW={10} />
-          <DetailsAddress>{'United kingdom , Hampshire'}</DetailsAddress>
+          <DetailsAddress>{value?.title}</DetailsAddress>
         </View>
         <Space lineH={10} />
         <LineW />
@@ -186,19 +188,23 @@ export default function MyAddressScreen({navigation, route}) {
 
           <Padding>
             <Space lineH={15} />
-            <TouchableOpacity onPress={()=>{navigation.navigate("AddAddress_SCREEN")}}>
-            <View style={{flexDirection: 'row'}}>
-              <Location size={'large'} primaryColor={Color.brand.blue} />
-              <Space lineW={10} />
-              <Text style={{color: Color.brand.blue, fontSize: 18}}>
-                {'Add new address'}
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AddAddress_SCREEN');
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <Location size={'large'} primaryColor={Color.brand.blue} />
+                <Space lineW={10} />
+                <Text style={{color: Color.brand.blue, fontSize: 18}}>
+                  {'Add new address'}
+                </Text>
+              </View>
             </TouchableOpacity>
             <Space lineH={15} />
             {addressList?.map(value => {
               return _renderItemAddress(value);
             })}
+            <Space lineH={65}/>
           </Padding>
           <BottomSheet modalProps={{}} isVisible={isVisible}>
             {renderContent()}
@@ -206,9 +212,7 @@ export default function MyAddressScreen({navigation, route}) {
         </ScrollView>
         {typeScreen == 'Basket' ? (
           <Absolute left={15} bottom={30}>
-            <ButtonCircle
-              onClick={_passSelectAddress}
-            />
+            <ButtonCircle onClick={_passSelectAddress} />
           </Absolute>
         ) : null}
       </BackgroundView>

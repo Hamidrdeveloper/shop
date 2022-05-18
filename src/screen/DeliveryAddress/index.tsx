@@ -38,13 +38,22 @@ import Storage from '../../utils/storeData/index';
 import {KEY} from '../../utils/storeData/key';
 import {AddressContext} from '../../service/Address/Address.context';
 import DropdownAlert from 'react-native-dropdownalert';
-import { BasketContext } from '../../service/Basket/Basket.context';
+import {BasketContext} from '../../service/Basket/Basket.context';
 export default function DeliveryAddressScreen({navigation, route}) {
   const [isVisible, setIsVisible] = useState(false);
-  const {getAddressFn, addressSelect} = useContext(AddressContext);
-  const {bulkAdd} = useContext(BasketContext);
+  const {getAddressFn, addressSelect, getAddressSelect} =
+    useContext(AddressContext);
+  const {
+    bulkAdd,
+    basketsExited,
+    resultPrice,
+    resultSymbol,
+    addToBasket,
+    removeToBasket,
+  } = useContext(BasketContext);
   let dropDownAlertRef = useRef();
   useEffect(() => {
+    getAddressSelect();
     getAddressFn();
   }, []);
 
@@ -54,7 +63,7 @@ export default function DeliveryAddressScreen({navigation, route}) {
         <View
           style={{
             height: height - 150,
-            width: `100%`,
+            width: '100%',
           }}
         />
       </TouchableOpacity>
@@ -82,23 +91,26 @@ export default function DeliveryAddressScreen({navigation, route}) {
             size={'medium'}
             primaryColor={Color.brand.textGrey}
             secondaryColor={Color.brand.textGrey}>
-            <Delete primaryColor={`red`} />
+            <Delete primaryColor={'red'} />
           </IconlyProvider>
           <Space lineW={10} />
-          <Text style={{color: `red`, fontSize: 16}}>{'Delete address'}</Text>
+          <Text style={{color: 'red', fontSize: 16}}>{'Delete address'}</Text>
         </View>
       </ViewPopUp>
     </>
   );
   //   const sheetRef = React.useRef(null);
-
+  const regex = /(<([^>]+)>)/gi;
   function _renderItemAddress({title}) {
     return (
       <View>
         <Space lineH={10} />
         <TitleAddressTitle>{title}</TitleAddressTitle>
         <Space lineH={10} />
-        <TitleAddress>{addressSelect?.address?.address1}</TitleAddress>
+        <TitleAddress>{addressSelect?.address?.address_complete.replace(
+            regex,
+            ', ',
+          )}</TitleAddress>
         <Space lineH={15} />
         <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
         <Space lineH={10} />
@@ -112,7 +124,7 @@ export default function DeliveryAddressScreen({navigation, route}) {
     dropDownAlertRef.alertWithType(type, text);
   };
   function nextStep() {
-    if (addressSelect.address!=null) {
+    if (addressSelect.address != null) {
       navigation.navigate('PaymentScreen_SCREEN');
       bulkAdd(addressSelect.id);
     } else {
@@ -148,12 +160,14 @@ export default function DeliveryAddressScreen({navigation, route}) {
               items={[
                 {
                   title: 'Reguler Delivery',
-                  description: `Order will be delivered between 3 - 5 business days`,
+                  description:
+                    'Order will be delivered between 3 - 5 business days',
                   id: 0,
                 },
                 {
                   title: 'Express Delivery',
-                  description: `Place your order before 6 pm and your items will be delivered`,
+                  description:
+                    'Place your order before 6 pm and your items will be delivered',
                   id: 1,
                 },
               ]}
@@ -164,24 +178,28 @@ export default function DeliveryAddressScreen({navigation, route}) {
             <Space lineH={30} />
             <ViewRow>
               <TextBlack>{'Total'}</TextBlack>
-              <TextBlack>{'999 €'}</TextBlack>
+              <TextBlack>{resultPrice + '' + resultSymbol}</TextBlack>
             </ViewRow>
             <Space lineH={10} />
             <LineW />
             <Space lineH={10} />
             <ViewRow>
               <TextGray>{'Shipping'}</TextGray>
-              <TextBlack>{'29 €'}</TextBlack>
+              <TextBlack>{resultPrice + '' + resultSymbol}</TextBlack>
             </ViewRow>
             <Space lineH={10} />
             <ViewRow>
               <TextBlack>{'Bag Total'}</TextBlack>
-              <TextBlack>{'155,50 €'}</TextBlack>
+              <TextBlack>{resultPrice + '' + resultSymbol}</TextBlack>
             </ViewRow>
             <Space lineH={100} />
           </Padding>
         </ScrollView>
-        <BottomViewBasket navigation={navigation} onClick={nextStep} />
+        <BottomViewBasket
+          resultPrice={resultPrice + '' + resultSymbol}
+          navigation={navigation}
+          onClick={nextStep}
+        />
         <DropdownAlert
           ref={ref => {
             if (ref) {

@@ -16,7 +16,7 @@ import {
 import {TextInputSign} from '../../screen/signUp/style/signUp.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
-import { TextInputInform } from '../../css/main.style';
+import {TextInputInform} from '../../css/main.style';
 
 interface TextInputProps extends RNTextInputProps, UseControllerProps {
   label: string;
@@ -25,11 +25,10 @@ interface TextInputProps extends RNTextInputProps, UseControllerProps {
   setFormError: Function;
 }
 export const ControlledInput = (props: TextInputProps) => {
-
   const {name, label, rules, defaultValue, ...inputProps} = props;
 
   const {field} = useController({name, rules, defaultValue});
-
+  
   return (
     <>
       <Space lineH={10} />

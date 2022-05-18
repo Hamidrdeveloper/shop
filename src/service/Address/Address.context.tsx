@@ -1,6 +1,6 @@
 import React, {createContext, ReactElement, useState} from 'react';
 import Toast from '../../components/toast';
-import {addAddressAc, getAddressAc, removeAddressAc} from './Address.action';
+import {addAddressAc, editAddressAc, getAddressAc, removeAddressAc} from './Address.action';
 import * as Type from './types';
 import Storage from '../../utils/storeData/index';
 import {KEY} from '../../utils/storeData/key';
@@ -11,6 +11,7 @@ interface IAddressContext {
   getAddressFn: () => void;
   loadedSaveAddressFn: () => void;
   addAddressFn: (address: Type.ContactGroupsContext) => void;
+  editAddressFn: (address: Type.ContactGroupsContext,id:number) => void;
   removeAddressFn: (address: Type.ContactGroupsContext) => void;
   addToMainAddressFn: (address: Type.ContactGroupsContext) => void;
   deleteAddressFn: (product) => void;
@@ -70,19 +71,34 @@ export default function AddressContextProvider({
     console.log('===================JSON.stringify(address)=================');
     console.log(JSON.stringify(address));
     console.log('====================JSON.stringify(address)================');
+    setAddressSelect(address)
     Storage.storeData(KEY.AddressSelect, JSON.stringify(address));
   }
   function addAddressFn(address: Type.ContactGroupsContext) {
     setAddToData(false);
     setAddToDataLoding(true)
     addAddressAc(address).then(is => {
-      setAddresses(is);
+      
       getAddressFn();
       if (is != null) setAddToData(true);
     
-      setAddToDataLoding(false)
+     
 
     });
+    setAddToDataLoding(false)
+  }
+  function editAddressFn(address: Type.ContactGroupsContext,id:number) {
+    setAddToData(false);
+    setAddToDataLoding(true)
+    editAddressAc(address,id).then(is => {
+      
+      getAddressFn();
+      if (is != null) setAddToData(true);
+    
+ 
+
+    });
+    setAddToDataLoding(false)
   }
   function getAddressFn() {
     getAddressAc().then(is => {
@@ -101,6 +117,7 @@ export default function AddressContextProvider({
       value={{
         addToMainAddressFn,
         addAddressFn,
+        editAddressFn,
         getAddressFn,
         removeAddressFn,
         addresses,

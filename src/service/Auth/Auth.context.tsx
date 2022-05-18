@@ -12,7 +12,6 @@ import {LinkForgetPassword} from './types';
 
 interface IAuthContext {
   isLoginOpen: boolean;
-  isRegisterOpen: boolean;
   isRegister: boolean;
   isForgotPasswordOpen: boolean;
   linkForgetPasswordFn: (value: LinkForgetPassword) => void;
@@ -29,6 +28,7 @@ interface IAuthContext {
   countries: any;
   isForm: boolean;
   isLoginApi: boolean;
+  isRegisterOpen: boolean;
 }
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 export default function AuthContextProvider({
@@ -37,25 +37,24 @@ export default function AuthContextProvider({
   children: ReactElement;
 }) {
   const [isLoginOpen, setLoginOpen] = useState(false);
-  const [isRegister, setRegister] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
+
+  const [isRegister, setRegister] = useState(false);
   const [isForgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [countries, setCountries] = useState([]);
   const [language, setLanguage] = useState([]);
   const [isForm, setForm] = useState(false);
   const [isLoginApi, setLoginApi] = useState(false);
   function activeForm(value: boolean) {
-   
     setForm(value);
   }
-  
+
   function singUpFn() {
     setRegister(true);
-    setLoginOpen(false);
+    setRegisterOpen(false);
     singUpAc().then(is => {
       setRegister(false);
-      setLoginOpen(is);
-  
+      setRegisterOpen(is);
     });
   }
   function singInFn() {
@@ -110,7 +109,7 @@ export default function AuthContextProvider({
         linkForgetPasswordFn,
         isForm,
         activeForm,
-        isLoginApi
+        isLoginApi,
       }}>
       {children}
     </AuthContext.Provider>

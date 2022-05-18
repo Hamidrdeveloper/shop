@@ -8,10 +8,9 @@ import Storage from '../../utils/storeData';
 import axios from 'axios';
 
 class AddressDataService {
-  async addAddress(address:Type.ContactGroupsContext) {
+  async addAddress(address: Type.ContactGroupsContext) {
     try {
-      const res = await http
-        .post(Url.Contact_Groups_ADDRESS,address);
+      const res = await http.post(Url.Contact_Groups_ADDRESS, address);
       console.log(Url.Contact_Groups_ADDRESS, res.data.data);
       return res.data.data;
     } catch (error) {
@@ -20,10 +19,23 @@ class AddressDataService {
       throw new Error(error);
     }
   }
-  async removeAddress(address:Type.ContactGroupsContext) {
+  async editAddress(address: Type.ContactGroupsContext, id: number) {
     try {
-      const res = await http
-        .post(Url.Contact_Groups_ADDRESS);
+      const res = await http.put(
+        Url.Contact_Groups_ADDRESS + `/${id}`,
+        address,
+      );
+      console.log(Url.Contact_Groups_ADDRESS, res.data.data);
+      return res.data.data;
+    } catch (error) {
+      console.log(Url.Contact_Groups_ADDRESS, error.response);
+
+      throw new Error(error);
+    }
+  }
+  async removeAddress(address: Type.ContactGroupsContext) {
+    try {
+      const res = await http.post(Url.Contact_Groups_ADDRESS);
       console.log(Url.Contact_Groups_ADDRESS, res.data.data);
       return res.data.data;
     } catch (error) {
@@ -34,8 +46,7 @@ class AddressDataService {
   }
   async getAddress() {
     try {
-      const res = await http
-        .get(Url.Contact_Groups_ADDRESS);
+      const res = await http.get(Url.Contact_Groups_ADDRESS);
       console.log(Url.Contact_Groups_ADDRESS, res.data.data);
       return res.data.data;
     } catch (error) {
@@ -44,7 +55,6 @@ class AddressDataService {
       throw new Error(error);
     }
   }
-  
 }
 
 export default new AddressDataService();

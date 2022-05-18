@@ -73,7 +73,7 @@ export default function PartTwo({onChangeValue}) {
         <TitleInput>{'Language'}</TitleInput>
         <Space lineH={10} />
         <Picker
-          containerStyle={{width: '100%'}}
+          containerStyle={{width: '100%',zIndex: 100}}
           style={{
             borderColor: Color.brand.border,
             backgroundColor: Color.brand.f9,
@@ -111,6 +111,7 @@ export default function PartTwo({onChangeValue}) {
       </BackgroundForm>
       <View>
         <ButtonColor
+          zIndex={-10}
           onPress={() => {
             onChangeValue();
           }}>

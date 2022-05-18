@@ -31,10 +31,17 @@ type FormValues = {
   phone: string;
   cart_title: string;
 };
-export default function AddAddressScreen({navigation}) {
-  const {...methods} = useForm();
-  const {addAddressFn, isAddToData, isAddToDataLoding} =
-    useContext(AddressContext);
+export default function EditAddressScreen({navigation, route}) {
+  const defaultValues = route.params.address;
+  const {...methods} = useForm({
+    defaultValues,
+  });
+
+  const {
+    editAddressFn,
+    isAddToData,
+    isAddToDataLoding: isAddToDataLodging,
+  } = useContext(AddressContext);
   let dropDownAlertRef = useRef();
 
   const [formError, setError] = useState<Boolean>(false);
@@ -76,7 +83,7 @@ export default function AddAddressScreen({navigation}) {
             ]
           : undefined,
     };
-    addAddressFn(finalData);
+    editAddressFn(finalData, defaultValues.id);
   }
   useEffect(() => {
     if (isAddToDataLodging) {
@@ -86,7 +93,8 @@ export default function AddAddressScreen({navigation}) {
     }
 
     return;
-  }, [isAddToDataLoding]);
+  }, [isAddToDataLodging]);
+
   const onError: SubmitErrorHandler<FormValues> = errors => {
     dropDownAlertRef.alertWithType('error', 'All fields must be filled');
 
@@ -103,7 +111,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="cart_title"
                 label="Cart Title"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues.title}
+                placeholder={defaultValues.title}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -111,15 +120,17 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="company_name"
                 label="Company Name"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.people[0]?.company_name}
+                placeholder={defaultValues?.people[0]?.company_name}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
+                defaultValue={defaultValues?.people[0]?.first_name}
+                placeholder={defaultValues?.people[0]?.first_name}
                 name="first_name"
                 label="First Name"
-                placeholder={'Abcd@1234'}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -127,7 +138,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="last_name"
                 label="Last Name"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.people[0]?.last_name}
+                placeholder={defaultValues?.people[0]?.last_name}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -135,15 +147,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="address2"
                 label="Street"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
-                rules={{required: 'Password is required!'}}
-                setFormError={setError}
-              />
-              <ControlledInput
-                name="house_number"
-                label="House Number"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.address?.address2}
+                placeholder={defaultValues?.address?.address2}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -151,7 +156,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="postal_code"
                 label="Post Code"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.address?.postal_code}
+                placeholder={defaultValues?.address?.postal_code}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -159,7 +165,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="city"
                 label="City"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.address?.city}
+                placeholder={defaultValues?.address?.city}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -167,7 +174,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="state"
                 label="State"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.address?.state}
+                placeholder={defaultValues?.address?.state}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -176,14 +184,15 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="phone"
                 label="Phone"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.phones[0]?.number}
+                placeholder={defaultValues?.phones[0]?.number}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <View style={{flexDirection: 'row', paddingTop: 30}}>
                 <ControlledCheckBox
-                  defaultValue={true}
+                  defaultValue={defaultValues.address.is_pack_station}
                   name="is_pack_station"
                   isCheck={true}
                 />
@@ -191,7 +200,7 @@ export default function AddAddressScreen({navigation}) {
                 <Text style={{fontSize: 15}}>{'Pack station'}</Text>
                 <Space lineW={50} />
                 <ControlledCheckBox
-                  defaultValue={true}
+                  defaultValue={defaultValues.address.is_post_office}
                   name="is_post_office"
                   isCheck={true}
                 />
@@ -201,7 +210,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="address1"
                 label="Address Line"
-                placeholder={'Abcd@1234'}
+                defaultValue={defaultValues?.address?.address1}
+                placeholder={defaultValues?.address?.address1}
                 placeholderTextColor={'#000'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
@@ -216,7 +226,7 @@ export default function AddAddressScreen({navigation}) {
                 width: '100%',
               }}>
               <LoadingButton
-                isActive={isAddToDataLoding}
+                isActive={isAddToDataLodging}
                 title={'Submit'}
                 onNext={methods.handleSubmit(onSubmit, onError)}
                 onClose={() => {}}

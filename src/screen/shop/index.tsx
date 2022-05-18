@@ -227,34 +227,34 @@ function ShopScreen({navigation}) {
             <TextProductOffer>{item.name}</TextProductOffer>
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item.prices[0].value).toFixed(2)}
+              value={parseInt(item?.prices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceThroughOffer>
-                    {value + ' ' + item.prices[0].currency.symbol}
+                    {value + ' ' + item?.prices[0].currency.symbol}
                   </TextPriceThroughOffer>
                 );
               }}
             />
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item.prices[0].value).toFixed(2)}
+              value={parseInt(item?.prices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value + ' ' + item.prices[0].currency.symbol}
+                    {value + ' ' + item?.prices[0].currency.symbol}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item.prices[0].unit_price}`}</TextPriceUnitOffer>
+            <TextPriceUnitOffer>{`Price  unit : ${item?.prices[0].unit_price}`}</TextPriceUnitOffer>
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>
@@ -358,34 +358,34 @@ function ShopScreen({navigation}) {
             <TextProductOffer>{item.name}</TextProductOffer>
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item.prices[0].value).toFixed(2)}
+              value={parseInt(item?.prices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceThroughOffer>
-                    {value + ' ' + item.prices[0].currency.symbol}
+                    {value + ' ' + item?.prices[0].currency.symbol}
                   </TextPriceThroughOffer>
                 );
               }}
             />
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item.prices[0].value).toFixed(2)}
+              value={parseInt(item?.prices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value + ' ' + item.prices[0].currency.symbol}
+                    {value + ' ' + item?.prices[0].currency.symbol}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item.prices[0].unit_price}`}</TextPriceUnitOffer>
+            <TextPriceUnitOffer>{`Price  unit : ${item?.prices[0].unit_price}`}</TextPriceUnitOffer>
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>

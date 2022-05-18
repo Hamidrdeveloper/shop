@@ -31,6 +31,7 @@ export default function PartnerContextProvider({
       .catch(() => {});
   }
   async function partnerIdFn(id: number) {
+   
     const res = await PartnerIdAc(id);
     setPartnerId(res);
     setLoading(true);

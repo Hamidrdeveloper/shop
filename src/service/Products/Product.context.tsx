@@ -8,8 +8,10 @@ interface IProductContext {
   productsItem: ProductItem;
   productsFn: () => void;
   categoriesItem: any;
+  categoriesTreeItem: any;
   productByID: Type.ProductVariation;
   categoriesFn: () => void;
+  categoriesTreeFn: () => void;
   arrivalItem: any;
   arrivalFn: () => void;
   cardBottomArrivalItem: any;
@@ -21,7 +23,11 @@ interface IProductContext {
   newProductsItem: any;
   relatedProductsFn: (id) => void;
   relatedProductsItem: any;
-  searchProductsFn: (text: string, categoryId: number) => void;
+  searchProductsFn: (
+    text?: string,
+    categoryId?: number | Array<number>,
+    sort?: string,
+  ) => void;
   categoryProductsItem: Array<any>;
   categoryLode: boolean;
 }
@@ -44,6 +50,8 @@ export default function ProductContextProvider({
   const [newProductsItem, setNewProductsItem] = useState<ProductItem>();
   const [relatedProductsItem, setRelatedProductsItem] = useState<ProductItem>();
   const [categoryProductsItem, setCategoryProductsItem] = useState<any>();
+  const [categoriesTreeItem, setCategoriesTreeItem] = useState<any>();
+
   // We can access navigation object via context
   function productsFn() {
     setProducts(true);
@@ -56,7 +64,7 @@ export default function ProductContextProvider({
   function newProductsFn() {
     let dataPost = ProductsArrivalModel;
     dataPost.page = 1;
-    dataPost.per_page = 100;
+    dataPost.per_page = 40;
     dataPost.productCategoryIds = '';
     Ac.productsAc(dataPost).then(res => {
       setNewProductsItem(res);
@@ -68,11 +76,17 @@ export default function ProductContextProvider({
       setCategoriesItem(res);
     });
   }
+  function categoriesTreeFn() {
+    Ac.categoriesTreeAc().then(res => {
+      console.log('categoriesFn', res);
+      setCategoriesTreeItem(res);
+    });
+  }
   function arrivalFn() {
     let dataPost = ProductsArrivalModel;
     dataPost.page = 1;
     dataPost.per_page = 12;
-    dataPost.productCategoryIds = '76';
+    dataPost.productCategoryIds = '30';
     Ac.productsAc(dataPost).then(res => {
       console.log('arrivalFn', res);
       setArrivalFnItem(res);
@@ -82,7 +96,7 @@ export default function ProductContextProvider({
     let dataPost = ProductsArrivalModel;
     dataPost.page = 1;
     dataPost.per_page = 12;
-    dataPost.productCategoryIds = '52';
+    dataPost.productCategoryIds = '29';
     Ac.productsAc(dataPost).then(res => {
       console.log('arrivalFn', res);
       setCardArrivalFnItem(res);
@@ -92,7 +106,7 @@ export default function ProductContextProvider({
     let dataPost = ProductsArrivalModel;
     dataPost.page = 1;
     dataPost.per_page = 12;
-    dataPost.productCategoryIds = '75';
+    dataPost.productCategoryIds = '28';
     Ac.productsAc(dataPost).then(res => {
       const n = 3;
       const result = new Array(Math.ceil(res.length / n))
@@ -104,6 +118,7 @@ export default function ProductContextProvider({
     });
   }
   function productByIdFn(productId: number, navigation) {
+    setProductByID(null);
     Ac.productByIdAc(productId).then(res => {
       setProductByID(res);
     });
@@ -117,13 +132,25 @@ export default function ProductContextProvider({
       setRelatedProductsItem(res);
     });
   }
-  function searchProductsFn(text: string, categoryId: number) {
+  function searchProductsFn(
+    text?: string,
+    categoryId?: number | Array<number>,
+    sort?: string,
+  ) {
     setCategoryProductsItem([]);
     setCategoryLode(true);
     let dataPost = ProductsArrivalModel;
-    dataPost.search = text;
-    dataPost.productCategoryIds = categoryId.toString();
-    Ac.productsAc(dataPost).then(res => {
+    if (text != null) {
+      dataPost.search = text;
+    }
+    if (categoryId != null) {
+      dataPost.productCategoryIds = categoryId.toString();
+    }
+    if (sort != null) {
+      dataPost.orderBy = sort;
+    }
+
+    Ac.productsSearchAc(dataPost).then(res => {
       setCategoryLode(false);
       setCategoryProductsItem(res);
     });
@@ -150,6 +177,8 @@ export default function ProductContextProvider({
         relatedProductsFn,
         relatedProductsItem,
         searchProductsFn,
+        categoriesTreeFn,
+        categoriesTreeItem,
         categoryProductsItem,
         categoryLode,
       }}>

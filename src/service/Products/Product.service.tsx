@@ -7,6 +7,19 @@ import * as Type from './types';
 import * as Address from '../../utils/adress.api';
 
 class ProductDataService {
+  productsSearch(data: Type.Products) {
+    console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, data);
+
+    return http
+      .get(Address.PRODUCTS_VARIATIONS_ADDRESS, {params: data})
+      .then(res => {
+        console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, error.response);
+      });
+  }
   products(data: Type.Products) {
     console.log(Address.PRODUCTS_ADDRESS, data);
 
@@ -31,6 +44,19 @@ class ProductDataService {
       })
       .catch(error => {
         console.log(Address.PRODUCTS_CATEGORIES_ADDRESS, error.response);
+      });
+  }
+  categoriesTree() {
+    console.log(Address.PRODUCTS_CATEGORIES_TREE_ADDRESS, TOKEN.token);
+
+    return http
+      .get(Address.PRODUCTS_CATEGORIES_TREE_ADDRESS)
+      .then(res => {
+        console.log(Address.PRODUCTS_CATEGORIES_TREE_ADDRESS, res.data.data);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.PRODUCTS_CATEGORIES_TREE_ADDRESS, error.response);
       });
   }
 

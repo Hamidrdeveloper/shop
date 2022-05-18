@@ -11,15 +11,17 @@ import {BackgroundForm, ButtonColor, ShadowButton} from '../../css/main.style';
 import {BackgroundImage} from 'react-native-elements/dist/config';
 import {LoadingButton} from '../../components/buttonLoading';
 import {AuthContext} from '../../service/Auth/Auth.context';
+import {MainContext} from '../../service/Main/Main.context';
 
-export default function PartThree({onChangeValue = value => {}}) {
+export default function PartThree({onChangeValue}) {
   const [passOne, setPassOne] = useState(SignUpModel.password);
   const [passTwo, setPassTwo] = useState(SignUpModel.password);
   const [showPassOne, setShowPassOne] = useState(true);
   const [showPassTwo, setShowPassTwo] = useState(true);
   const [isForm, setForm] = useState(false);
-  const {isRegister, singUpFn, isLoginOpen} = useContext(AuthContext);
-
+  const {isRegister, singUpFn, isLoginOpen, isRegisterOpen} =
+    useContext(AuthContext);
+  const {onGetUser} = useContext(MainContext);
   function setPassword() {
     if (passOne == passTwo) {
       SignUpModel.password = passOne;
@@ -27,6 +29,12 @@ export default function PartThree({onChangeValue = value => {}}) {
       // alert("Not")2
     }
   }
+  useEffect(() => {
+    if (isRegisterOpen) {
+      onGetUser();
+      onChangeValue();
+    }
+  }, [isRegisterOpen]);
   useEffect(() => {
     if (passOne.length > 5) {
       setPassword();
@@ -36,6 +44,10 @@ export default function PartThree({onChangeValue = value => {}}) {
     }
   }, [passOne, passTwo]);
 
+  function onSign() {
+    
+    singUpFn();
+  }
   return (
     <>
       <BackgroundForm>
@@ -117,13 +129,9 @@ export default function PartThree({onChangeValue = value => {}}) {
       <View>
         <LoadingButton
           isActive={isRegister}
-          onNext={() => singUpFn()}
-          title={"Next"}
-          onClose={() => {
-            if (isLoginOpen) {
-              onChangeValue();
-            }
-          }}
+          onNext={() => onSign()}
+          title={'Next'}
+          onClose={() => {}}
         />
 
         {!isForm ? <ShadowButton /> : null}

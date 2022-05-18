@@ -13,16 +13,25 @@ import {
 import {Card} from 'react-native-elements';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {BasketContext} from '../../service/Basket/Basket.context';
+import NumberFormat from 'react-number-format';
 
 function BottomDetails({item}) {
-  const {addToBasket,removeToBasket} = useContext(BasketContext);
-
+  const {addToBasket, removeToBasket} = useContext(BasketContext);
+  console.log('====================================');
+  console.log('BottomDetails', item);
+  console.log('====================================');
   const [isAdd, setIsAdd] = useState(false);
   const [number, setNumber] = useState(1);
   function Plus() {
     return (
       <>
-        <View style={{flexDirection: 'row', alignItems: 'center', width: 200}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: 200,
+            height: 40,
+          }}>
           <TouchableOpacity
             onPress={() => {
               removeToBasket(item);
@@ -45,10 +54,10 @@ function BottomDetails({item}) {
           </TouchableOpacity>
           <Text
             style={{
-              fontSize: 22,
+              fontSize: 24,
               color: Color.brand.black,
-              textAlignVertical: 'center',
-              height: `100%`,
+              textAlignVertical: 'bottom',
+              height: 40,
             }}>
             {number}
           </Text>
@@ -98,7 +107,19 @@ function BottomDetails({item}) {
 
         <ViewDataOffer>
           <View>
-            <TextItem>{'28,50 €'}</TextItem>
+            <NumberFormat
+              value={parseInt(item?.prices[0].value).toFixed(2)}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={''}
+              renderText={(value, props) => {
+                return (
+                  <TextItem>
+                    {value + ' ' + item?.prices[0].currency.symbol}
+                  </TextItem>
+                );
+              }}
+            />
             <TextItemOffer>{'38,50 €'}</TextItemOffer>
           </View>
           <Space lineW={10} />
@@ -117,4 +138,3 @@ export default BottomDetails;
 function removeToBasket(item: any) {
   throw new Error('Function not implemented.');
 }
-

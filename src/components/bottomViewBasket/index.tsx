@@ -10,6 +10,7 @@ export default function BottomViewBasket({
   navigation,
   title = 'Next',
   onClick,
+  resultPrice,
 }) {
   return (
     <View
@@ -27,15 +28,15 @@ export default function BottomViewBasket({
 
         elevation: 16,
       }}>
-          <View
-      style={{
-        position: 'absolute',
-        bottom: 0,
-        width: `100%`,
-        height:92,
-        backgroundColor:`rgba(0,0,0,0.1)`
-        
-      }}/>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: `100%`,
+          height: 92,
+          backgroundColor: `rgba(0,0,0,0.1)`,
+        }}
+      />
       <ViewBottomDetails>
         <TouchableOpacity
           onPress={() => {
@@ -46,7 +47,7 @@ export default function BottomViewBasket({
           </ViewBasket>
         </TouchableOpacity>
 
-        <TextItem>{'28,50 €'}</TextItem>
+        <TextItem>{resultPrice}</TextItem>
       </ViewBottomDetails>
     </View>
   );

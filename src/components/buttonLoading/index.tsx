@@ -30,12 +30,12 @@ export const LoadingButton = ({onClose, onNext, isActive,title}) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: 'rgb(255,255,255)',
+        backgroundColor: '#fff',
         justifyContent: 'center',
       }}>
       <AnimateLoadingButton
         ref={loadingButton}
-        width={350}
+        width={332}
         height={50}
         title={title}
         borderRadius={10}

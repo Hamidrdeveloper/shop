@@ -2,21 +2,18 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Image, View} from 'react-native';
 
 import IndicatorBottom from '../../components/lodging/indicatorBottom';
+import {MainContext} from '../../service/Main/Main.context';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 
 export default function SplashScreen({navigation}) {
-  const {isLodUser} = useContext(ProfileContext);
-  const [login, setLogin] = useState(true)
+  const {onRunAllApi} = useContext(MainContext);
+  const [login, setLogin] = useState(true);
   useEffect(() => {
-    if (isLodUser=="1") {
-      setLogin(false)
+    onRunAllApi();
+    setTimeout(() => {
       navigation.navigate('Bottom_SCREEN');
-    }
-    if(isLodUser=="2"){
-      setLogin(false)
-      navigation.navigate('WELCOME_SCREEN');
-    }
-  }, [isLodUser]);
+    }, 2000);
+  }, []);
 
   return (
     <>
@@ -55,7 +52,7 @@ export default function SplashScreen({navigation}) {
             left: 0,
           }}
         />
-        <IndicatorBottom  isVisible={login} />
+        <IndicatorBottom isVisible={login} />
       </View>
     </>
   );

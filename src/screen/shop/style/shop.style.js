@@ -103,7 +103,9 @@ export const SearchView = styled(SearchBar).attrs(() => ({
   text-align:left;
   
 `;
-export const ImageOffer = styled(Image).attrs(() => ({}))`
+export const ImageOffer = styled(Image).attrs(() => ({
+  resizeMode: 'center'
+}))`
   width: 100%;
   height: 110;
 `;

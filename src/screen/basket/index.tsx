@@ -145,14 +145,14 @@ export default function BasketScreen({navigation}) {
             </TextDetailBasket>
           </View>
           <NumberFormat
-            value={parseInt(data.prices[0].value).toFixed(2)}
+            value={parseInt(data?.prices[0].value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
             renderText={(value, props) => {
               return (
                 <TextPriceBasket>
-                  {value + ' ' + data.prices[0].currency.symbol}
+                  {value + ' ' + data?.prices[0].currency.symbol}
                 </TextPriceBasket>
               );
             }}
