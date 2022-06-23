@@ -16,15 +16,24 @@ export function categoriesAc() {
 export function categoriesTreeAc() {
   return ProductDataService.categoriesTree();
 }
+export function productByAttributeIdAc(productId: number) {
+  return ProductDataService.getVariationsByID(productId);
+}
 export function productByIdAc(productId: number) {
   return ProductDataService.getVariationsByProduct(productId);
 }
 export function goToScreenDetails(navigation, product, prFn, cmFn, reFn) {
   navigation.navigate('Details_SCREEN', {data: product});
-  prFn(product.id, navigation);
+  // prFn(product.id, navigation);
+
   cmFn(product.id);
   cmFn(product.id);
-  reFn(product.productCategories[0].id);
+  
+  if (product?.productVariationCategories.length > 0) {
+    reFn(product.productVariationCategories[0].id);
+  } else {
+    reFn('');
+  }
 }
 export function goToScreenCategory(navigation, product, prFn) {
   navigation.navigate('CategoryPageScreen_SCREEN', {data: product});

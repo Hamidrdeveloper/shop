@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -16,9 +16,12 @@ import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {PartnerContext} from '../../service/Partner/Partner.context';
 import {Partners} from '../../service/Partner/type';
+import {LocationPartner} from '../loactionPartner';
 const height = Dimensions.get('screen').height;
 export default function PartFive({navigation, onChangeValue}) {
   const {partner, partnerIdFn} = useContext(PartnerContext);
+  const [openLocation, setOpenLocation] = useState(true);
+  const [selectLocation, setSelectLocation] = useState('German');
   function onPressPartner(item: Partners) {
     console.log(item.id);
 
@@ -65,7 +68,7 @@ export default function PartFive({navigation, onChangeValue}) {
   }
   return (
     <>
-      <BackgroundForm height={height - 300}>
+      <BackgroundForm height={height - 350}>
         <View style={{height: '100%'}}>
           {/* <ScrollView showsVerticalScrollIndicator={false}> */}
           <View
@@ -75,25 +78,40 @@ export default function PartFive({navigation, onChangeValue}) {
               width: '100%',
             }}>
             <Text style={{fontSize: 14, color: Color.brand.black}}>
-              {'Your Location : England , London'}
+              {selectLocation}
             </Text>
-            <View
+            <HandleEvent
+              onPress={() => {
+                setOpenLocation(!openLocation);
+              }}
               style={{
                 flexDirection: 'row',
               }}>
-              <Edit size={20} primaryColor={Color.brand.blue} />
+              <Edit
+                size={20}
+                primaryColor={Color.brand.blue}
+                onPress={() => {
+                  setOpenLocation(!openLocation);
+                }}
+              />
               <Space lineW={5} />
               <Text style={{fontSize: 14, color: Color.brand.blue}}>
                 {'Edit'}
               </Text>
-            </View>
+            </HandleEvent>
           </View>
-          <Space lineH={20} />
+          <LocationPartner
+            open={openLocation}
+            onChange={item => {
+              setSelectLocation('Location : ' + item.label);
+              setOpenLocation(!openLocation);
+            }}
+          />
+          <Space lineH={5}/>
           <FlatList
             keyExtractor={item => item.id}
             data={partner}
             renderItem={renderItemPartner}
-            style={{height: 400, flexGrow: 0}}
           />
           {/* </ScrollView> */}
         </View>

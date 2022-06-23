@@ -39,66 +39,35 @@ import {KEY} from '../../utils/storeData/key';
 import {AddressContext} from '../../service/Address/Address.context';
 import DropdownAlert from 'react-native-dropdownalert';
 import {BasketContext} from '../../service/Basket/Basket.context';
-export default function DeliveryAddressScreen({navigation, route}) {
+import styled from 'styled-components';
+
+const TextBlue18 = styled(Text)`
+  font-size: 18;
+`;
+
+const TextRed16 = styled(Text)`
+  color: red;
+  font-size: 16;
+`;
+
+const ViewRowJust = styled(View)`
+  flex-direction: row;
+`;
+
+const TextBlack16 = styled(Text)`
+  font-size: 16;
+`;
+export default function DeliveryAddressScreen({navigation}) {
   const [isVisible, setIsVisible] = useState(false);
   const {getAddressFn, addressSelect, getAddressSelect} =
     useContext(AddressContext);
-  const {
-    bulkAdd,
-    basketsExited,
-    resultPrice,
-    resultSymbol,
-    addToBasket,
-    removeToBasket,
-  } = useContext(BasketContext);
+  const {bulkAdd, resultPrice, resultSymbol} = useContext(BasketContext);
   let dropDownAlertRef = useRef();
   useEffect(() => {
     getAddressSelect();
     getAddressFn();
   }, []);
 
-  const renderContent = () => (
-    <>
-      <TouchableOpacity onPress={() => setIsVisible(false)}>
-        <View
-          style={{
-            height: height - 150,
-            width: '100%',
-          }}
-        />
-      </TouchableOpacity>
-
-      <ViewPopUp>
-        <View style={{flexDirection: 'row'}}>
-          <IconlyProvider
-            set="broken"
-            size={'medium'}
-            primaryColor={Color.brand.black}
-            secondaryColor={Color.brand.black}>
-            <User primaryColor={`${Color.brand.black}`} />
-          </IconlyProvider>
-          <Space lineW={10} />
-          <Text style={{color: Color.brand.black, fontSize: 16}}>
-            {'Edit address'}
-          </Text>
-        </View>
-        <Space lineH={10} />
-        <LineW />
-        <Space lineH={10} />
-        <View style={{flexDirection: 'row'}}>
-          <IconlyProvider
-            set="broken"
-            size={'medium'}
-            primaryColor={Color.brand.textGrey}
-            secondaryColor={Color.brand.textGrey}>
-            <Delete primaryColor={'red'} />
-          </IconlyProvider>
-          <Space lineW={10} />
-          <Text style={{color: 'red', fontSize: 16}}>{'Delete address'}</Text>
-        </View>
-      </ViewPopUp>
-    </>
-  );
   //   const sheetRef = React.useRef(null);
   const regex = /(<([^>]+)>)/gi;
   function _renderItemAddress({title}) {
@@ -107,10 +76,9 @@ export default function DeliveryAddressScreen({navigation, route}) {
         <Space lineH={10} />
         <TitleAddressTitle>{title}</TitleAddressTitle>
         <Space lineH={10} />
-        <TitleAddress>{addressSelect?.address?.address_complete.replace(
-            regex,
-            ', ',
-          )}</TitleAddress>
+        <TitleAddress>
+          {addressSelect?.address?.address_complete.replace(regex, ', ')}
+        </TitleAddress>
         <Space lineH={15} />
         <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
         <Space lineH={10} />
@@ -143,13 +111,11 @@ export default function DeliveryAddressScreen({navigation, route}) {
               onPress={() => {
                 navigation.navigate('MyAddress_SCREEN', {type: 'Basket'});
               }}>
-              <View style={{flexDirection: 'row'}}>
+              <ViewRowJust>
                 <Location size={'medium'} primaryColor={Color.brand.blue} />
                 <Space lineW={10} />
-                <Text style={{color: Color.brand.blue, fontSize: 18}}>
-                  {'Add new address'}
-                </Text>
-              </View>
+                <TextBlue18>{'Add new address'}</TextBlue18>
+              </ViewRowJust>
             </TouchableOpacity>
             <Space lineH={30} />
             <_renderItemAddress title={'Invoice address'} />

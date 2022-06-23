@@ -33,9 +33,14 @@ export const NumberPlus = styled(Text).attrs(props => ({}))`
   text-align-vertical: center;
   height: 100%;
 `;
-export const TextDetailBasket = styled(Text).attrs(props => ({}))`
+export const TextDetailBasketBlack = styled(Text).attrs(props => ({}))`
   font-size: 18;
   color: ${Color.brand.black};
+  width: 100%;
+`;
+export const TextDetailBasket = styled(Text).attrs(props => ({}))`
+  font-size: 18;
+  color: ${Color.brand.textGrey};
   width: 100%;
 `;
 export const TextPriceBasketAbsolute = styled(Text).attrs(props => ({}))`

@@ -11,6 +11,9 @@ export const TitleStep = styled(Text).attrs(() => ({}))`
   text-align:left;
 
 `;
+export const TextBlack18 = styled(Text)`
+  font-size: 18;
+`;
 export const ViewRate = styled(View).attrs(() => ({}))`
   flex-direction: row;
   align-items: center;

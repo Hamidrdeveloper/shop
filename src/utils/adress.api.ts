@@ -25,3 +25,4 @@ export const MAP_ADDRESS = 'http://api.mapbox.com/geocoding/v5/mapbox.places/';
 
 export const IMAGE_ADDRESS = 'https://api.solutionsapps.shop';
 export const Partner_ADDRESS = 'shop/partners';
+export const Partner_ADDRESS_ID = 'shop/partner';

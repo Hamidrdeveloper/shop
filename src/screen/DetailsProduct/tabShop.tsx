@@ -5,7 +5,7 @@ import {Tab} from 'react-native-elements/dist/tab/Tab';
 import FlatListSlide from '../../components/slideList';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
-import { CommentContext } from '../../service/Comment/Comment.context';
+import {CommentContext} from '../../service/Comment/Comment.context';
 import {TextReviewOffer} from '../shop/style/shop.style';
 import {
   CommentView,
@@ -16,9 +16,24 @@ import {
   TextNameComment,
   TextProduct,
 } from './style/DetailsProduct.styles';
+import styled from 'styled-components';
+
+const TextReViewPlus = styled(TextReviewOffer)`
+  font-size: 16;
+`;
+
+const Imag25 = styled(Image)`
+  width: 25;
+  height: 25;
+`;
+
+const ViewCenterRow = styled(View)`
+  flex-direction: row;
+  align-items: center;
+`;
 
 export function TabShop({product}) {
-  const {listComment} = useContext(CommentContext)
+  const {listComment} = useContext(CommentContext);
 
   function CommentReview() {
     return (
@@ -84,15 +99,14 @@ export function TabShop({product}) {
               data={listComment}
               renderItem={CommentReview}
               snap={5}
-              height={listComment.length>0?250:10}
+              height={listComment.length > 0 ? 250 : 10}
             />
-            <TextReviewOffer style={{color: Color.brand.blue, fontSize: 16}}>
+            <TextReViewPlus>
               {`View all ${listComment.length} Reviews`}
-            </TextReviewOffer>
+            </TextReViewPlus>
             <Space lineH={25} />
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                style={{width: 25, height: 25}}
+            <ViewCenterRow>
+              <Imag25
                 source={require('../../assets/image/Iconly-Light-Chat.png')}
               />
               <Space lineW={15} />
@@ -103,7 +117,7 @@ export function TabShop({product}) {
                 resizeMode="contain"
                 source={require('../../assets/image/iconly_right.png')}
               />
-            </View>
+            </ViewCenterRow>
           </View>
         </TabView.Item>
         <TabView.Item style={{width: '100%'}}>

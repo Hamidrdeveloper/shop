@@ -54,6 +54,7 @@ import {
   TouchableOpacity,
   Linking,
   Animated,
+  Dimensions,
 } from 'react-native';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Text} from 'react-native';
@@ -191,6 +192,8 @@ function ShopScreen({navigation}) {
   }
 
   function offerItem({item, index}: any) {
+    console.log('offerItem', item);
+
     return (
       <View style={{alignItems: 'center'}}>
         <Card
@@ -203,6 +206,7 @@ function ShopScreen({navigation}) {
           }}>
           <TouchableOpacity
             onPress={() => {
+              productByIdFn(item?.product?.id, navigation);
               goToScreenDetails(
                 navigation,
                 item,
@@ -213,7 +217,7 @@ function ShopScreen({navigation}) {
             }}>
             <ImageOffer
               resizeMode={'stretch'}
-              source={{uri: IMAGE_ADDRESS + item.file}}
+              source={{uri: IMAGE_ADDRESS + item.product.file}}
             />
             <ViewOffer>
               <Rating
@@ -227,34 +231,38 @@ function ShopScreen({navigation}) {
             <TextProductOffer>{item.name}</TextProductOffer>
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.prices[0].value).toFixed(2)}
+              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceThroughOffer>
-                    {value + ' ' + item?.prices[0].currency.symbol}
+                    {value +
+                      ' ' +
+                      item?.productVariationPrices[0].price.currency.symbol}
                   </TextPriceThroughOffer>
                 );
               }}
             />
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.prices[0].value).toFixed(2)}
+              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value + ' ' + item?.prices[0].currency.symbol}
+                    {value +
+                      ' ' +
+                      item?.productVariationPrices[0].price.currency.symbol}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item?.prices[0].unit_price}`}</TextPriceUnitOffer>
+            <TextPriceUnitOffer>{`Price  unit : ${item?.productVariationPrices[0].unit_price}`}</TextPriceUnitOffer>
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>
@@ -275,7 +283,7 @@ function ShopScreen({navigation}) {
               productByIdFn(item.id, navigation);
             }}>
             <ViewSuggest>
-              <ImageSuggest source={{uri: IMAGE_ADDRESS + item.file}} />
+              <ImageSuggest source={{uri: IMAGE_ADDRESS + item.product.file}} />
               <ViewCenter>
                 <TextReviewSuggest>{item.name}</TextReviewSuggest>
 
@@ -303,7 +311,7 @@ function ShopScreen({navigation}) {
             productByIdFn(item.id, navigation);
           }}>
           <ViewSuggest>
-            <ImageSuggest source={{uri: IMAGE_ADDRESS + item.file}} />
+            <ImageSuggest source={{uri: IMAGE_ADDRESS + item.product.file}} />
             <ViewCenter>
               <TextReviewProducts>{item.name}</TextReviewProducts>
               <Space lineH={10} />
@@ -326,7 +334,7 @@ function ShopScreen({navigation}) {
       <View style={{alignItems: 'center'}}>
         <Card
           containerStyle={{
-            width: 165,
+            width: (Dimensions.get('screen').width - 30) / 2,
             height: 320,
             margin: 8,
             borderRadius: 8,
@@ -344,7 +352,7 @@ function ShopScreen({navigation}) {
             }}>
             <ImageOffer
               resizeMode={'stretch'}
-              source={{uri: IMAGE_ADDRESS + item.file}}
+              source={{uri: IMAGE_ADDRESS + item.product.file}}
             />
             <ViewOffer>
               <Rating
@@ -358,34 +366,38 @@ function ShopScreen({navigation}) {
             <TextProductOffer>{item.name}</TextProductOffer>
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.prices[0].value).toFixed(2)}
+              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceThroughOffer>
-                    {value + ' ' + item?.prices[0].currency.symbol}
+                    {value +
+                      ' ' +
+                      item?.productVariationPrices[0].price.currency.symbol}
                   </TextPriceThroughOffer>
                 );
               }}
             />
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.prices[0].value).toFixed(2)}
+              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value + ' ' + item?.prices[0].currency.symbol}
+                    {value +
+                      ' ' +
+                      item?.productVariationPrices[0].price.currency.symbol}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item?.prices[0].unit_price}`}</TextPriceUnitOffer>
+            <TextPriceUnitOffer>{`Price  unit : ${item?.productVariationPrices[0].unit_price}`}</TextPriceUnitOffer>
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>
@@ -423,13 +435,7 @@ function ShopScreen({navigation}) {
             placeholder="Search On Cleaning"
             onChangeText={(e: any) => updateSearch(e)}
             value={search}
-            searchIcon={() => (
-              <Icon
-                color={'gry'}
-                size={30}
-                name="search1"
-              />
-            )}
+            searchIcon={() => <Icon color={'gry'} size={30} name="search1" />}
           />
           <Space lineH={25} />
           <FlatListSlide
@@ -505,7 +511,6 @@ function ShopScreen({navigation}) {
             renderItem={renderItemProducts}
             snap={5}
             height={380}
-            
           />
           <Advertisement />
           <Space lineH={25} />

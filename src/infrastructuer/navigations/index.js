@@ -43,15 +43,19 @@ const NavigationStart = () => {
   return (
     <NavigationContainer>
       <Slack.Navigator screenOptions={{headerShown: false}}>
-        <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
+      <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
 
-        <Slack.Screen name={'SignUpScreen'} component={SignUpScreen} />
+      <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
+
+      <Slack.Screen name={'SignUpScreen'} component={SignUpScreen} />
+
+       
+        <Slack.Screen name={'MyAddress_SCREEN'} component={MyAddressScreen} />
         <Slack.Screen
           name={'EditAddress_SCREEN'}
           component={EditAddressScreen}
         />
 
-        <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
 
         <Slack.Screen name={'SignInScreen'} component={SignInScreen} />
 
@@ -103,7 +107,6 @@ const NavigationStart = () => {
           component={CategoryPageScreen}
         />
 
-        <Slack.Screen name={'MyAddress_SCREEN'} component={MyAddressScreen} />
         <Slack.Screen
           name={'Information_SCREEN'}
           component={InformationScreen}

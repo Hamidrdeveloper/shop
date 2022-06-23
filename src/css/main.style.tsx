@@ -1,8 +1,9 @@
-import {Pressable, View, TextInput} from 'react-native';
+import {Pressable, View, TextInput, Platform} from 'react-native';
 import styled from 'styled-components';
 import {Color} from '../infrastructuer/theme/colors.style';
 
 export const BackgroundView = styled(View).attrs(() => ({
+  paddingTop: Platform.OS === 'ios' ? 25 : 0,
   width: '100%',
   height: '100%',
   backgroundColor: Color.brand.white,

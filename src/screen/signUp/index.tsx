@@ -127,7 +127,7 @@ export default function SignUpScreen({navigation}) {
             <ProcessView />
             <Space lineH={30} />
             <ViewRowPart
-              height={index >= 4 ? heightFull - 200 : heightFull - 400}>
+              height={index >= 4 ? heightFull - 50 : heightFull - 400}>
               <RenderPart />
             </ViewRowPart>
             <ViewButtonBottom>

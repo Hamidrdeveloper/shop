@@ -9,7 +9,7 @@ import {AppIntroSlider} from '../../components/introSlide';
 import LineW from '../../components/lineW';
 import Picker from '../../components/picker/components/Picker';
 import FlatListSlide from '../../components/slideList';
-import {BackgroundView} from '../../css/main.style';
+import {BackgroundView, Padding} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {CommentContext} from '../../service/Comment/Comment.context';
@@ -31,11 +31,22 @@ import {
   ViewRate,
 } from './style/DetailsProduct.styles';
 import {TabShop} from './tabShop';
+import styled from 'styled-components';
+import AttributeItem from './attribute';
+
+const TextBlack18 = styled(Text)`
+  font-size: 18;
+`;
+
+const ViewRowCenter = styled(View)`
+  flex-direction: row;
+  justify-content: center;
+`;
 
 export default function DetailsProduct({navigation, route}) {
-  const [product, setProduct] = useState(route.params.data);
-  const imageConst = [{file: product.file}];
-  const {productByID, relatedProductsItem} = useContext(ProductContext);
+  const [productByID, setProduct] = useState(route.params.data);
+  const imageConst = [{file: productByID.product.file}];
+  const {relatedProductsItem, attributeType} = useContext(ProductContext);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -53,7 +64,7 @@ export default function DetailsProduct({navigation, route}) {
             borderRadius: 8,
             padding: 5,
           }}>
-          <ImageOffer source={{uri: IMAGE_ADDRESS + item.file}} />
+          <ImageOffer source={{uri: IMAGE_ADDRESS + item.product.file}} />
           <ViewOffer>
             <Rating imageSize={12} style={{paddingVertical: 10}} />
             <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
@@ -62,28 +73,32 @@ export default function DetailsProduct({navigation, route}) {
           <TextProductOffer>{item.name}</TextProductOffer>
           <Space lineH={5} />
           <NumberFormat
-            value={parseInt(item?.prices[0].value).toFixed(2)}
+            value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
             renderText={(value, props) => {
               return (
                 <TextPriceThroughOffer>
-                  {value + ' ' + item?.prices[0].currency.symbol}
+                  {value +
+                    ' ' +
+                    item?.productVariationPrices[0].price.currency.symbol}
                 </TextPriceThroughOffer>
               );
             }}
           />
           <Space lineH={5} />
           <NumberFormat
-            value={parseInt(item?.prices[0].value).toFixed(2)}
+            value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
             renderText={(value, props) => {
               return (
                 <TextPriceOffer>
-                  {value + ' ' + item?.prices[0].currency.symbol}
+                  {value +
+                    ' ' +
+                    item?.productVariationPrices[0].price.currency.symbol}
                 </TextPriceOffer>
               );
             }}
@@ -98,7 +113,7 @@ export default function DetailsProduct({navigation, route}) {
   function paginationCostume(i: number) {
     return (
       <>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <ViewRowCenter>
           {productByID?.productVariationFiles?.map((t, index) => {
             if (index != productByID?.productVariationFiles?.length) {
               return (
@@ -122,7 +137,7 @@ export default function DetailsProduct({navigation, route}) {
               );
             }
           })}
-        </View>
+        </ViewRowCenter>
       </>
     );
   }
@@ -134,24 +149,22 @@ export default function DetailsProduct({navigation, route}) {
           <HeaderComponent navigation={navigation} />
           <AppIntroSlider
             containerStyle={{
-              width: `100%`,
+              width: '100%',
               height: 280,
               backgroundColor: Color.brand.white,
             }}
             onSlideChange={newIndex => {
-              //   console.log('newIndex', newIndex);
+              console.log('newIndex', newIndex);
               //   setSlideIndex(newIndex);
             }}
             renderPagination={paginationCostume}
-            renderItem={({item}) => ItemImage(item)}
-            data={
-              productByID?.productVariationFiles.length == 0
-                ? imageConst
-                : productByID?.productVariationFiles
-            }
+            renderItem={({item}) => {
+              return ItemImage(item);
+            }}
+            data={productByID?.productVariationFiles}
           />
-          <View style={{height: '100%', paddingLeft: 15, paddingRight: 15}}>
-            <TitleStep>{product.name}</TitleStep>
+          <Padding>
+            <TitleStep>{productByID.name}</TitleStep>
             <ViewRate>
               <Rating imageSize={18} style={{paddingVertical: 10}} />
               <Space lineW={10} />
@@ -162,43 +175,13 @@ export default function DetailsProduct({navigation, route}) {
             <Space lineH={10} />
             <LineW />
             <Space lineH={15} />
-            <ViewRate>
-              <Text style={{fontSize: 18, color: Color.brand.black}}>
-                {'Size :'}
-              </Text>
-              <Space lineW={40} />
-              <InputSymbol
-                containerStyle={{width: 100}}
-                symbol={'CC'}
-                onChange={() => {}}
-              />
-              <Space lineW={20} />
-              <InputSymbol
-                containerStyle={{width: 100}}
-                symbol={'CC'}
-                onChange={() => {}}
-              />
-            </ViewRate>
             <Space lineH={15} />
-            <ViewRate>
-              <Text style={{fontSize: 18, color: Color.brand.black}}>
-                {'Option :'}
-              </Text>
-              <Space lineW={20} />
-              <Picker
-                containerStyle={{width: 220}}
-                style={{borderColor: Color.brand.border}}
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-              />
-            </ViewRate>
+           
+              <AttributeItem setProduct={setProduct} data={attributeType} />
+         
             <Space lineH={15} />
             <View style={{height: 400}}>
-              <TabShop product={product} />
+              <TabShop product={productByID} />
             </View>
             <TitleStep>{'Related Products'}</TitleStep>
             <Space lineH={15} />
@@ -208,10 +191,10 @@ export default function DetailsProduct({navigation, route}) {
               snap={5}
               height={400}
             />
-          </View>
+          </Padding>
         </BackgroundView>
       </ScrollView>
-      <BottomDetails item={product} />
+      <BottomDetails item={productByID} />
     </>
   );
 }

@@ -11,6 +11,7 @@ export interface ContactGroups {
   translate: GeneralTranslate[];
 }
 export interface ContactGroupsContext {
+  id: number;
   country_id: number;
   translate: { de: { locale: string; title: string } };
 

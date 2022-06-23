@@ -1,6 +1,11 @@
 import React, {createContext, ReactElement, useState} from 'react';
 import Toast from '../../components/toast';
-import {addAddressAc, editAddressAc, getAddressAc, removeAddressAc} from './Address.action';
+import {
+  addAddressAc,
+  editAddressAc,
+  getAddressAc,
+  removeAddressAc,
+} from './Address.action';
 import * as Type from './types';
 import Storage from '../../utils/storeData/index';
 import {KEY} from '../../utils/storeData/key';
@@ -11,13 +16,13 @@ interface IAddressContext {
   getAddressFn: () => void;
   loadedSaveAddressFn: () => void;
   addAddressFn: (address: Type.ContactGroupsContext) => void;
-  editAddressFn: (address: Type.ContactGroupsContext,id:number) => void;
+  editAddressFn: (address: Type.ContactGroupsContext, id: number) => void;
   removeAddressFn: (address: Type.ContactGroupsContext) => void;
   addToMainAddressFn: (address: Type.ContactGroupsContext) => void;
   deleteAddressFn: (product) => void;
-  addressSelect:any;
-  getAddressSelect:() => void
-  isAddToDataLoding:boolean;
+  addressSelect: any;
+  getAddressSelect: () => void;
+  isAddToDataLodging: boolean;
 }
 export const AddressContext = createContext<IAddressContext>(
   {} as IAddressContext,
@@ -27,43 +32,42 @@ export default function AddressContextProvider({
 }: {
   children: ReactElement;
 }) {
-  const [addressSelect, setAddressSelect] = useState("");
-  
-  const [isAddToDataLoding, setAddToDataLoding] = useState(false);
+  const [addressSelect, setAddressSelect] = useState('');
+
+  const [isAddToDataLodging, setAddToDataLoding] = useState(false);
 
   const [isAddToData, setAddToData] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [saveAddresses, setSaveAddresses] = useState([]);
 
-  function getAddressSelect(){
+  function getAddressSelect() {
     Storage.retrieveData(KEY.AddressSelect).then(res => {
       console.log('==============retrieveData======================');
       console.log(JSON.parse(res));
       console.log('===============retrieveData=====================');
-      setAddressSelect(JSON.parse(res))
-    })
+      setAddressSelect(JSON.parse(res));
+    });
   }
-  function deleteAddressFn(product){
+  function deleteAddressFn(product) {
     Storage.removeData(product.name);
     Storage.retrieveData(KEY.MySave).then(res => {
-       
-      let productsSave=JSON.parse(res);
-      let setData= productsSave?.filter(function(value) { 
-        return value.id !== product.id
-    });
+      let productsSave = JSON.parse(res);
+      let setData = productsSave?.filter(function (value) {
+        return value.id !== product.id;
+      });
 
-      console.log("setData",setData);
-      Storage.storeData(KEY.MySave, JSON.stringify(setData)).then(()=>{
-        loadedSaveAddressFn()
+      console.log('setData', setData);
+      Storage.storeData(KEY.MySave, JSON.stringify(setData)).then(() => {
+        loadedSaveAddressFn();
       });
     });
   }
   function loadedSaveAddressFn() {
-    console.log(KEY.MySave,KEY.MySave);
+    console.log(KEY.MySave, KEY.MySave);
 
     Storage.retrieveData(KEY.MySave).then(res => {
-      console.log(KEY.MySave,JSON.parse(res));
-      
+      console.log(KEY.MySave, JSON.parse(res));
+
       setSaveAddresses(JSON.parse(res));
     });
   }
@@ -71,34 +75,26 @@ export default function AddressContextProvider({
     console.log('===================JSON.stringify(address)=================');
     console.log(JSON.stringify(address));
     console.log('====================JSON.stringify(address)================');
-    setAddressSelect(address)
+    setAddressSelect(address);
     Storage.storeData(KEY.AddressSelect, JSON.stringify(address));
   }
   function addAddressFn(address: Type.ContactGroupsContext) {
     setAddToData(false);
-    setAddToDataLoding(true)
+    setAddToDataLoding(true);
     addAddressAc(address).then(is => {
-      
       getAddressFn();
       if (is != null) setAddToData(true);
-    
-     
-
     });
-    setAddToDataLoding(false)
+    setAddToDataLoding(false);
   }
-  function editAddressFn(address: Type.ContactGroupsContext,id:number) {
+  function editAddressFn(address: Type.ContactGroupsContext, id: number) {
     setAddToData(false);
-    setAddToDataLoding(true)
-    editAddressAc(address,id).then(is => {
-      
+    setAddToDataLoding(true);
+    editAddressAc(address, id).then(is => {
       getAddressFn();
       if (is != null) setAddToData(true);
-    
- 
-
     });
-    setAddToDataLoding(false)
+    setAddToDataLoding(false);
   }
   function getAddressFn() {
     getAddressAc().then(is => {
@@ -109,6 +105,7 @@ export default function AddressContextProvider({
     removeAddressAc(address).then(is => {
       getAddressFn();
       setAddresses(is);
+      deleteAddressFn(address);
     });
   }
 
@@ -127,7 +124,7 @@ export default function AddressContextProvider({
         deleteAddressFn,
         addressSelect,
         getAddressSelect,
-        isAddToDataLoding,
+        isAddToDataLodging,
       }}>
       {children}
     </AddressContext.Provider>

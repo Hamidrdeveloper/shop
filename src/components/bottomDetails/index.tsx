@@ -108,14 +108,14 @@ function BottomDetails({item}) {
         <ViewDataOffer>
           <View>
             <NumberFormat
-              value={parseInt(item?.prices[0].value).toFixed(2)}
+              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextItem>
-                    {value + ' ' + item?.prices[0].currency.symbol}
+                    {value + ' ' + item?.productVariationPrices[0].price.currency.symbol}
                   </TextItem>
                 );
               }}

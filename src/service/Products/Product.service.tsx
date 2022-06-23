@@ -5,6 +5,7 @@ import {TOKEN} from '../../utils/main';
 import Storage from '../../utils/storeData';
 import * as Type from './types';
 import * as Address from '../../utils/adress.api';
+import {User} from 'react-native-iconly';
 
 class ProductDataService {
   productsSearch(data: Type.Products) {
@@ -21,12 +22,12 @@ class ProductDataService {
       });
   }
   products(data: Type.Products) {
-    console.log(Address.PRODUCTS_ADDRESS, data);
+    console.log(Address.PRODUCTS_BY_ID_ADDRESS, data);
 
     return http
-      .get(Address.PRODUCTS_ADDRESS, {params: data})
+      .get(Address.PRODUCTS_BY_ID_ADDRESS, {params: data})
       .then(res => {
-        console.log(Address.PRODUCTS_ADDRESS, res);
+        console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
         return res.data.data;
       })
       .catch(error => {
@@ -60,14 +61,44 @@ class ProductDataService {
       });
   }
 
+  async getVariationsByID(productId: number): Promise<Type.ProductVariation> {
+    console.log(
+      Address.PRODUCTS_BY_ID_ADDRESS,
+      Address.PRODUCTS_BY_ID_ADDRESS + 'id' + productId,
+    );
+    return http
+      .get(Address.PRODUCTS_BY_ID_ADDRESS + '/' + productId)
+      .then(res => {
+        console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.PRODUCTS_BY_ID_ADDRESS, error.response);
+      });
+  }
   async getVariationsByProduct(
     productId: number,
   ): Promise<Type.ProductVariation> {
+    console.log(
+      Address.PRODUCTS_BY_ID_ADDRESS,
+      Address.PRODUCTS_BY_ID_ADDRESS + 'id' + productId,
+    );
     return http
-      .get(Address.PRODUCTS_BY_ID_ADDRESS, {params: {productId: productId}})
+      .get(Address.PRODUCTS_BY_ID_ADDRESS, {
+        params: {productVariationId: productId, page: 1, per_page: 10},
+        headers: {
+          Host: 'api.solutionsapps.shop',
+          'X-PANEL': true,
+          Accept: 'application/json, text/plain, */*',
+          Referer: 'https://admin.solutionsapps.shop/',
+          Origin: 'https://admin.solutionsapps.shop/',
+          Authorization:
+            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODU1NDExYWU1MWMxNTU5MDVkOTI2ZDk1Nzk0YWJhMTQ3YmU1OWNmYjVhZTZiNDM0ZTNhNWIxZDVjYzQwM2RhNTNhNWZiMTcwOWIxZjE4M2MiLCJpYXQiOjE2NTM4MjMyNTAuNjEzNzQ5LCJuYmYiOjE2NTM4MjMyNTAuNjEzNzUzLCJleHAiOjE2ODUzNTkyNTAuNjExNzM1LCJzdWIiOiIyMCIsInNjb3BlcyI6W119.CGzCgaKEirdya_FCD856I-E5xMWWed4UZ9GJmIbsgNsr5COTz0KEL8OOXLlz9yb9_ZtkYG1aNyW580FL_Fp-m5CIqE_EzOUTuEaBMWnm8h2-K9lzTOMFP2-r0rDsuy7mZwvnvJ9YKyzDBn1oTWN2mObtAuwANXZeMUMkarf-V7OIriHdKUuwy2zxiz3-DUUsMUcy6r61CaznRnnY0Xno_D2saTgws90RMSi_oGBXArSdcAh2W6X5NRJFb9Luy09VDlX9z3chVu9u1qRg-Ja5Vq1fOcAEKvU0GdtMyG_FMXHVALyzmqfqSYsUZYgLfeGFnxZZHhC_nq7T0hvydKWrHEMn9y2yUlUu54orxHQL7eD6DU3zwtXk3meyE19I03GoFnojauWLetGA8wzNf4kc4B8nzikjTf54v8fnRjF7W2BvA5BXOVxymUvipUF1Iy6OtSZwfTVcVg5_dYexAq4SR07wuk5kGuA4hI7EMEugDtkuIs_b72c5KnedwVku_y9YPZYii89yJpKasfGlte9048H5gGB4pRsQZ-JX2zdA0wgFs6fBrUH7irkZI9UNOU0wLRueN4XutY0T7R96x2ppuHpRFcY-IOc5bD_6Tw9-8rAL2n1_7E0fbKkVR-mrI_fcD27zaqg8uAQFUnTOHJJwNkKV3gxDitNyBv2kxjFJs1o',
+        },
+      })
       .then(res => {
-        console.log(Address.PRODUCTS_BY_ID_ADDRESS, res.data.data[0]);
-        return res.data.data[0];
+        console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
+        return res.data.data;
       })
       .catch(error => {
         console.log(Address.PRODUCTS_BY_ID_ADDRESS, error.response);

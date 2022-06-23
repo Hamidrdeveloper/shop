@@ -151,6 +151,7 @@ export interface ProductByID {
   productId:number
 }
 export interface ProductVariation {
+  map(arg0: (data: any) => void);
   prices: any;
   numberBasket: number;
   id: number;
@@ -194,4 +195,50 @@ export interface ProductVariation {
   // userVariationPrices: UserVariationPrices[];
   // productVariationCategories: VariationCategory[];
   // productVariationSuppliers: VariationSuppliers[];
+}
+export interface Attribute {
+  id: number;
+  visible: boolean;
+  is_auto_generated: boolean;
+  value: string;
+  attribute_type_id: number;
+  attribute_type_option_id: number;
+  product_variation_id: number;
+  attributeType: AttributeType;
+  attributeTypeOption: AttributeTypeOption;
+}
+
+export interface AttributeTypeOption {
+  id: number;
+  attribute_type_id: number;
+  file_id?: any;
+  sort?: any;
+  file_path?: any;
+  value: string;
+  translate: Translate2[];
+}
+
+export interface Translate2 {
+  attribute_type_option_id: number;
+  locale: string;
+  value: string;
+}
+
+export interface AttributeType {
+  id: number;
+  name: string;
+  title?: any;
+  partner_id: number;
+  subdomain_id: number;
+  position: number;
+  picture_connectable: boolean;
+  selectable_type: string;
+  translate: Translate[];
+}
+
+export interface Translate {
+  attribute_type_id: number;
+  locale: string;
+  name: string;
+  title?: any;
 }

@@ -62,8 +62,8 @@ export default function BasketContextProvider({
       setBasketsExited(dataP);
     }
 
-    setResultPrice(parseInt(resultPrice) + parseInt(product?.prices[0].value));
-    setResultSymbol(product?.prices[0].currency.symbol);
+    setResultPrice(parseInt(resultPrice) + parseInt(product?.productVariationPrices[0].value));
+    setResultSymbol(product?.productVariationPrices[0].price.currency.symbol);
   }
 
   function removeToBasket(product: ProductVariation) {
@@ -85,9 +85,9 @@ export default function BasketContextProvider({
 
       setBasketsExited(dataP);
     }
-    let price = parseInt(resultPrice) - parseInt(product?.prices[0].value);
+    let price = parseInt(resultPrice) - parseInt(product?.productVariationPrices[0].value);
     setResultPrice(price.toString());
-    setResultSymbol(product?.prices[0].currency.symbol);
+    setResultSymbol(product?.productVariationPrices[0].price.currency.symbol);
   }
   function bulkAdd(id) {
     let product = basketsExited.map(value => {

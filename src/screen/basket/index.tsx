@@ -32,11 +32,36 @@ import {
   TextDetailBasket,
   TextPriceBasket,
   TextPriceBasketAbsolute,
+  TextDetailBasketBlack,
 } from './style/Basket.style';
 import NumberFormat from 'react-number-format';
 import {AuthContext} from '../../service/Auth/Auth.context';
 import PopUpLogin from '../../components/popUpLogin';
+import styled from 'styled-components';
 const heightFull = Dimensions.get('screen').height;
+
+const ViewBasketHigh = styled(View)`
+  width: 100%;
+
+  height: ${heightFull - 140};
+`;
+
+const ImageMenu = styled(Image)`
+  width: 30;
+  height: 30;
+`;
+
+const TextBasket = styled(Text)`
+  font-size: 18;
+  color: ${Color.brand.black};
+`;
+
+const MenuView = styled(View)`
+  flex-direction: row;
+  width: 100%;
+  height: 50;
+  padding:15px;
+`;
 
 export default function BasketScreen({navigation}) {
   const [number, setNumber] = useState(1);
@@ -98,7 +123,6 @@ export default function BasketScreen({navigation}) {
         <TouchableOpacity
           onPress={() => {
             if (isLoginOpen) {
-              
               navigation.navigate('DeliveryAddress_SCREEN', {type: 'Basket'});
             } else {
               setShowPopLogin(true);
@@ -130,29 +154,31 @@ export default function BasketScreen({navigation}) {
     return (
       <ItemBasket>
         <View>
-          <ImageSuggest source={{uri: IMAGE_ADDRESS + data.file}} />
+          <ImageSuggest source={{uri: IMAGE_ADDRESS + data.product.file}} />
           <RenderPlus product={data} />
         </View>
 
         <ViewCenter>
           <View style={{height: 110}}>
-            <TextDetailBasket>{data.name}</TextDetailBasket>
+            <TextDetailBasketBlack>{data.name}</TextDetailBasketBlack>
             <Space lineH={10} />
             <TextDetailBasket>{'2 Litre'}</TextDetailBasket>
             <Space lineH={10} />
             <TextDetailBasket>
-              {`Category: ${data.productCategories[0].name}`}
+              {`Category: ${data.productVariationCategories[0].name}`}
             </TextDetailBasket>
           </View>
           <NumberFormat
-            value={parseInt(data?.prices[0].value).toFixed(2)}
+            value={parseInt(data?.productVariationPrices[0].value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
             renderText={(value, props) => {
               return (
                 <TextPriceBasket>
-                  {value + ' ' + data?.prices[0].currency.symbol}
+                  {value +
+                    ' ' +
+                    data?.productVariationPrices[0].price.currency.symbol}
                 </TextPriceBasket>
               );
             }}
@@ -164,32 +190,22 @@ export default function BasketScreen({navigation}) {
   return (
     <>
       <BackgroundView>
-        <View style={{width: `100%`, height: heightFull - 140}}>
+        <ViewBasketHigh>
           <ScrollView>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: `100%`,
-                height: 50,
-                padding: 15,
-                backgroundColor: Color.brand.white,
-              }}>
-              <Image
-                style={{width: 30, height: 30}}
+            <MenuView>
+              <ImageMenu
                 resizeMode="contain"
                 source={require('../../assets/image/menu.png')}
               />
-              <Space lineW={`5%`} />
-              <Text style={{color: Color.brand.black, fontSize: 18}}>
-                {'Basket'}
-              </Text>
-            </View>
+              <Space lineW={'5%'} />
+              <TextBasket>{'Basket'}</TextBasket>
+            </MenuView>
             {basketsExited.map(data => {
               return <_renderItemBasket data={data} />;
             })}
             <Space lineH={50} />
           </ScrollView>
-        </View>
+        </ViewBasketHigh>
         <BottomView />
         <PopUpLogin
           onClick={() => setShowPopLogin(false)}

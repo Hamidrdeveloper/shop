@@ -5,7 +5,7 @@ import {PartnerId, Partners} from './type';
 interface IPartnerContext {
   partner: Partners;
   partnerId: PartnerId;
-  PartnerFn: () => void;
+  PartnerFn: (countryId?: number) => void;
   partnerIdFn: (id: number) => void;
   isLoading: boolean;
 }
@@ -22,8 +22,8 @@ export default function PartnerContextProvider({
   const [partner, setPartner] = useState<Partners>();
   const [partnerId, setPartnerId] = useState<PartnerId>();
 
-  function PartnerFn() {
-    PartnerAc()
+  function PartnerFn(countryId: number) {
+    PartnerAc(countryId)
       .then(is => {
         setPartner(is);
         setLoading(true);

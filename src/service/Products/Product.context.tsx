@@ -3,11 +3,13 @@ import {ProductsArrivalModel, ProductsModel} from './model';
 import * as Ac from './Product.action';
 import {ProductItem} from './types';
 import * as Type from './types';
+import {Attribute} from './types';
 interface IProductContext {
   isProducts: boolean;
   productsItem: ProductItem;
   productsFn: () => void;
   categoriesItem: any;
+  attributeType: undefined;
   categoriesTreeItem: any;
   productByID: Type.ProductVariation;
   categoriesFn: () => void;
@@ -21,6 +23,7 @@ interface IProductContext {
   productByIdFn: (productId: number, navigation: any) => void;
   newProductsFn: () => void;
   newProductsItem: any;
+  productByAttributesFn: (productId: number) => any;
   relatedProductsFn: (id) => void;
   relatedProductsItem: any;
   searchProductsFn: (
@@ -51,6 +54,7 @@ export default function ProductContextProvider({
   const [relatedProductsItem, setRelatedProductsItem] = useState<ProductItem>();
   const [categoryProductsItem, setCategoryProductsItem] = useState<any>();
   const [categoriesTreeItem, setCategoriesTreeItem] = useState<any>();
+  const [attributeType, setAttributeType] = useState<any>([]);
 
   // We can access navigation object via context
   function productsFn() {
@@ -117,9 +121,68 @@ export default function ProductContextProvider({
       setBestSellingFnItem(result);
     });
   }
-  function productByIdFn(productId: number, navigation) {
+  function filterAttributes(data: any, id = 0) {
+    const box = [];
+    const boxFull = [];
+    let array = [];
+    data?.map(data => {
+      array.push(data.attributes);
+    });
+    array.map(value => {
+      return value.map(child => {
+        console.log('attribute', child);
+        if (id == 0) {
+          box.push({
+            id: child.id,
+            name: child?.attributeType?.name,
+            label: child.value,
+            value: child.product_variation_id,
+            product_variation_id: child.product_variation_id,
+            attribute_type_id: child.attribute_type_id,
+            selectable: true,
+          });
+        } else {
+          box.push({
+            id: child.id,
+            name: child?.attributeType?.name,
+            label: child.value,
+            value: child.product_variation_id,
+            product_variation_id: child.product_variation_id,
+            attribute_type_id: child.attribute_type_id,
+            selectable: id === child.product_variation_id ? true : false,
+          });
+        }
+      });
+    });
+
+    let uniqueValues = new Set(box.map(v => v.attribute_type_id));
+
+    uniqueValues.forEach(unique => {
+      let check = [];
+      box.map(value => {
+        if (value.attribute_type_id === unique) {
+          check.push(value);
+        }
+      });
+      boxFull.push(check);
+    });
+    console.log('attribute', boxFull);
+
+    setAttributeType(boxFull);
+  }
+  function productByAttributesFn(productId: number) {
+    return Ac.productByAttributeIdAc(productId).then(res => {
+      console.log('productByAttributesFn', res);
+      filterAttributes(productByID, productId);
+
+      return res;
+    });
+  }
+  function productByIdFn(productId: number) {
     setProductByID(null);
+
     Ac.productByIdAc(productId).then(res => {
+      filterAttributes(res);
       setProductByID(res);
     });
   }
@@ -167,7 +230,9 @@ export default function ProductContextProvider({
         arrivalItem,
         arrivalFn,
         productByIdFn,
+        attributeType,
         productByID,
+        productByAttributesFn,
         cardBottomArrivalFn,
         cardBottomArrivalItem,
         bestSellingFn,
@@ -185,4 +250,7 @@ export default function ProductContextProvider({
       {children}
     </ProductContext.Provider>
   );
+}
+function child(child: any, arg1: (Attribute: any) => void): any {
+  throw new Error('Function not implemented.');
 }

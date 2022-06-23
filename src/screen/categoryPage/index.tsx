@@ -36,6 +36,61 @@ import {
   TextReviewOffer,
   ViewOffer,
 } from '../shop/style/shop.style';
+import styled from 'styled-components';
+
+const TextPrcentOffer = styled(Text)`
+  font-size: 12;
+  color: ${Color.brand.white};
+`;
+
+const ViewPositionRight = styled(View)`
+  position: absolute;
+  right: 10;
+`;
+
+const ViewRowJust = styled(View)`
+  flex-direction: row;
+`;
+
+const TextTopFilter = styled(Text)`
+  font-size: 14;
+`;
+
+const TextNameAndCategory = styled(Text)`
+  font-size: 16;
+`;
+
+const VeiwPostionLine = styled(View)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 90;
+  align-self: center;
+`;
+
+const ViewOfferPlus = styled(ViewOffer)`
+  width: 35;
+  height: 21;
+  border-bottom-right-radius: 4;
+  border-top-right-radius: 4;
+  border-top-left-radius: 4;
+  left: 10;
+  align-items: center;
+  justify-content: center;
+  background-color: ${Color.brand.red};
+`;
+
+const ViewRowPrice = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const ViewImageOffer = styled(View)`
+  width: 144;
+  height: 350;
+  border-radius: 8;
+  padding: 5px;
+`;
 const widthFull = Dimensions.get('screen').width;
 export default function CategoryPageScreen({navigation, route}) {
   const [name, setName] = useState(route.params.data.name);
@@ -64,17 +119,8 @@ export default function CategoryPageScreen({navigation, route}) {
             onPress={() => {
               navigation.navigate('Details_SCREEN');
             }}>
-            <View
-              style={{
-                width: 144,
-                height: 350,
-                borderRadius: 8,
-                padding: 5,
-              }}>
-              <ImageOffer
-               
-                source={{uri: IMAGE_ADDRESS + item.product.file}}
-              />
+            <ViewImageOffer>
+              <ImageOffer source={{uri: IMAGE_ADDRESS + item.product.file}} />
               <ViewOffer>
                 <Rating imageSize={12} style={{paddingVertical: 10}} />
                 <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
@@ -100,8 +146,7 @@ export default function CategoryPageScreen({navigation, route}) {
                 }}
               />
               <Space lineH={5} />
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <ViewRowPrice>
                 <NumberFormat
                   value={parseInt(
                     item?.productVariationPrices[0].value,
@@ -119,34 +164,21 @@ export default function CategoryPageScreen({navigation, route}) {
                     );
                   }}
                 />
-                <ViewOffer
-                  style={{
-                    backgroundColor: Color.brand.red,
-                    width: 35,
-                    height: 21,
-                    borderBottomRightRadius: 4,
-                    borderTopRightRadius: 4,
-                    borderTopLeftRadius: 4,
-                    left: 10,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={{color: Color.brand.white, fontSize: 12}}>
-                    {'30%'}
-                  </Text>
-                </ViewOffer>
-              </View>
+                <ViewOfferPlus>
+                  <TextPrcentOffer>{'30%'}</TextPrcentOffer>
+                </ViewOfferPlus>
+              </ViewRowPrice>
 
               <Space lineH={5} />
               <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
               <Space lineH={5} />
-            </View>
+            </ViewImageOffer>
           </TouchableOpacity>
           <LineW />
 
-          <View style={{position: 'absolute', right: 10}}>
+          <ViewPositionRight>
             <CheckSaveProduct item={item} />
-          </View>
+          </ViewPositionRight>
 
           <ButtonCategoryAddTo
             onPress={() => {
@@ -169,7 +201,7 @@ export default function CategoryPageScreen({navigation, route}) {
           )}
         />
         <Padding>
-          <View style={{flexDirection: 'row'}}>
+          <ViewRowJust>
             <Filter
               size={'medium'}
               onPress={() => {
@@ -182,9 +214,7 @@ export default function CategoryPageScreen({navigation, route}) {
               onPress={() => {
                 navigation.navigate('FilterScreen');
               }}>
-              <Text style={{color: Color.brand.black, fontSize: 14}}>
-                {'Filter'}
-              </Text>
+              <TextTopFilter>{'Filter'}</TextTopFilter>
             </HandleEvent>
             <Space lineW={30} />
             <Swap
@@ -199,20 +229,16 @@ export default function CategoryPageScreen({navigation, route}) {
               onPress={() => {
                 navigation.navigate('SortScreen');
               }}>
-              <Text style={{color: Color.brand.black, fontSize: 14}}>
-                {'Popular'}
-              </Text>
+              <TextTopFilter>{'Popular'}</TextTopFilter>
             </HandleEvent>
-          </View>
+          </ViewRowJust>
           <Space lineH={30} />
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={{color: Color.brand.textGry, fontSize: 16}}>
-              {name}
-            </Text>
-            <Text style={{color: Color.brand.textGry, fontSize: 16}}>
+          <ViewRowPrice>
+            <TextNameAndCategory>{name}</TextNameAndCategory>
+            <TextNameAndCategory>
               {`${categoryProductsItem?.length} Products`}
-            </Text>
-          </View>
+            </TextNameAndCategory>
+          </ViewRowPrice>
           <FlatListCustom
             data={categoryProductsItem}
             renderItem={CategoryProductItem}
@@ -224,16 +250,9 @@ export default function CategoryPageScreen({navigation, route}) {
           {/* {[1,2,3,4,5,6,7,8,9,10,11].map(()=>{
             return
         })} */}
-          <View
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: 90,
-              alignSelf: 'center',
-            }}>
+          <VeiwPostionLine>
             <LineH />
-          </View>
+          </VeiwPostionLine>
         </Padding>
         {/* <Indicator isVisible={categoryLode} /> */}
       </ScrollView>

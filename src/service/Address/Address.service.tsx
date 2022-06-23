@@ -35,7 +35,9 @@ class AddressDataService {
   }
   async removeAddress(address: Type.ContactGroupsContext) {
     try {
-      const res = await http.post(Url.Contact_Groups_ADDRESS);
+      const res = await http.delete(
+        Url.Contact_Groups_ADDRESS + '/' + address?.id,
+      );
       console.log(Url.Contact_Groups_ADDRESS, res.data.data);
       return res.data.data;
     } catch (error) {

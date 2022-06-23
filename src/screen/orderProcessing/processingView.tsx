@@ -15,7 +15,7 @@ import { RelatedProductItem } from './realted';
 
 export default function ProcessingView({navigation}) {
   const {orderSalePadding} = useContext(BasketContext);
-
+  console.log('order-sale', orderSalePadding);
   function RenderListItem(item) {
     console.log('order-sale', item);
 

@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
-import {BottomSheet} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   Call,
@@ -19,11 +18,17 @@ import {
   Swap,
   User,
 } from 'react-native-iconly';
+import BottomSheet from '../../components/bottomSheet';
 import ButtonCircle from '../../components/circleButton';
 import HeaderScComponent from '../../components/header2';
 import LineW from '../../components/lineW';
 import RadioButtonSingle from '../../components/radioButton/radioSingle';
-import {Absolute, BackgroundView, HandleEvent, Padding} from '../../css/main.style';
+import {
+  Absolute,
+  BackgroundView,
+  HandleEvent,
+  Padding,
+} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {AddressContext} from '../../service/Address/Address.context';
@@ -38,12 +43,12 @@ import {
 const height = Dimensions.get('screen').height;
 export default function MyAddressScreen({navigation, route}) {
   //Context
-  const {getAddressFn, addToMainAddressFn, addresses, getAddressSelect} =
+  const {getAddressFn, addToMainAddressFn, addresses, removeAddressFn} =
     useContext(AddressContext);
   //============
 
   const [isVisible, setIsVisible] = useState(false);
-  const [typeScreen, setTypeScreen] = useState(route.params.type);
+  const [typeScreen, setTypeScreen] = useState(route?.params.type);
   const [addressList, setAddressList] = useState([]);
   const [select, setSelect] = useState();
   const [selectMore, setSelectMore] = useState();
@@ -81,52 +86,54 @@ export default function MyAddressScreen({navigation, route}) {
     setAddressList(add);
   }
   function _passSelectAddress() {
-   
     navigation.goBack();
     addToMainAddressFn(select);
   }
-  const renderContent = () => (
-    <>
-      <TouchableOpacity onPress={() => setIsVisible(false)}>
-        <View
-          style={{
-            height: height - 150,
-            width: '100%',
-          }}
-        />
-      </TouchableOpacity>
-
-      <ViewPopUp>
-        <HandleEvent onPress={()=>navigation.navigate("EditAddress_SCREEN",{address:selectMore})}style={{flexDirection: 'row'}}>
-          <IconlyProvider
-            set="broken"
-            size={'medium'}
-            primaryColor={Color.brand.black}
-            secondaryColor={Color.brand.black}>
-            <User primaryColor={`${Color.brand.black}`} />
-          </IconlyProvider>
-          <Space lineW={10} />
-          <Text style={{color: Color.brand.black, fontSize: 16}}>
-            {'Edit address'}
-          </Text>
-        </HandleEvent>
-        <Space lineH={10} />
-        <LineW />
-        <Space lineH={10} />
-        <View style={{flexDirection: 'row'}}>
-          <IconlyProvider
-            set="broken"
-            size={'medium'}
-            primaryColor={Color.brand.textGrey}
-            secondaryColor={Color.brand.textGrey}>
-            <Delete primaryColor={'red'} />
-          </IconlyProvider>
-          <Space lineW={10} />
-          <Text style={{color: 'red', fontSize: 16}}>{'Delete address'}</Text>
-        </View>
-      </ViewPopUp>
-    </>
-  );
+  const RerenderContent = item => {
+    return (
+      <>
+        <ViewPopUp>
+          <HandleEvent
+            onPress={() => {
+              setIsVisible(false);
+              navigation.navigate('EditAddress_SCREEN', {address: selectMore});
+            }}
+            style={{flexDirection: 'row'}}>
+            <IconlyProvider
+              set="broken"
+              size={'medium'}
+              primaryColor={Color.brand.black}
+              secondaryColor={Color.brand.black}>
+              <User primaryColor={`${Color.brand.black}`} />
+            </IconlyProvider>
+            <Space lineW={10} />
+            <Text style={{color: Color.brand.black, fontSize: 16}}>
+              {'Edit address'}
+            </Text>
+          </HandleEvent>
+          <Space lineH={10} />
+          <LineW />
+          <Space lineH={10} />
+          <HandleEvent
+            onPress={() => {
+              setIsVisible(false);
+              removeAddressFn(item);
+            }}
+            style={{flexDirection: 'row'}}>
+            <IconlyProvider
+              set="broken"
+              size={'medium'}
+              primaryColor={Color.brand.textGrey}
+              secondaryColor={Color.brand.textGrey}>
+              <Delete primaryColor={'red'} />
+            </IconlyProvider>
+            <Space lineW={10} />
+            <Text style={{color: 'red', fontSize: 16}}>{'Delete address'}</Text>
+          </HandleEvent>
+        </ViewPopUp>
+      </>
+    );
+  };
 
   function _renderItemAddress(value) {
     console.log(value.isSelected);
@@ -148,7 +155,11 @@ export default function MyAddressScreen({navigation, route}) {
             regex,
             ', ',
           )}`}</TitleAddress>
-          <TouchableOpacity onPress={() =>{setSelectMore(value); setIsVisible(true)}}>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectMore(value);
+              setIsVisible(true);
+            }}>
             <Menu source={require('../../assets/image/menu.png')} />
           </TouchableOpacity>
         </ViewItemAddress>
@@ -204,11 +215,15 @@ export default function MyAddressScreen({navigation, route}) {
             {addressList?.map(value => {
               return _renderItemAddress(value);
             })}
-            <Space lineH={65}/>
+            <Space lineH={65} />
           </Padding>
-          <BottomSheet modalProps={{}} isVisible={isVisible}>
-            {renderContent()}
-          </BottomSheet>
+          <BottomSheet
+            visible={isVisible}
+            onBack={() => {
+              setIsVisible(false);
+            }}
+            ReRender={() => RerenderContent(selectMore)}
+          />
         </ScrollView>
         {typeScreen == 'Basket' ? (
           <Absolute left={15} bottom={30}>

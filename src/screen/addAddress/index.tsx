@@ -23,6 +23,13 @@ import CheckBox from '../../components/checkBox';
 import LineW from '../../components/lineW';
 import {LoadingButton} from '../../components/buttonLoading';
 import ControlledCheckBox from '../../components/controlledCheckBox';
+import styled from "styled-components";
+
+const ViewLoading = styled(View)`
+  height: 50;
+  margin-top: 15;
+  width: 100%;
+`;
 type FormValues = {
   first_name: string;
   last_name: string;
@@ -33,7 +40,7 @@ type FormValues = {
 };
 export default function AddAddressScreen({navigation}) {
   const {...methods} = useForm();
-  const {addAddressFn, isAddToData, isAddToDataLoding} =
+  const {addAddressFn, isAddToData, isAddToDataLodging} =
     useContext(AddressContext);
   let dropDownAlertRef = useRef();
 
@@ -86,7 +93,7 @@ export default function AddAddressScreen({navigation}) {
     }
 
     return;
-  }, [isAddToDataLoding]);
+  }, [isAddToDataLodging]);
   const onError: SubmitErrorHandler<FormValues> = errors => {
     dropDownAlertRef.alertWithType('error', 'All fields must be filled');
 
@@ -209,19 +216,14 @@ export default function AddAddressScreen({navigation}) {
               />
             </FormProvider>
 
-            <View
-              style={{
-                height: 50,
-                marginTop: 15,
-                width: '100%',
-              }}>
+            <ViewLoading>
               <LoadingButton
-                isActive={isAddToDataLoding}
+                isActive={isAddToDataLodging}
                 title={'Submit'}
                 onNext={methods.handleSubmit(onSubmit, onError)}
                 onClose={() => {}}
               />
-            </View>
+            </ViewLoading>
             <Space lineH={80} />
           </Padding>
         </ScrollView>
