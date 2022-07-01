@@ -37,11 +37,9 @@ class ProfileDataService {
   }
 
   //ContactGroups Type as any
-  async userInvoiceAddress(
-    invoice_contact_group_id: number,
-  ): Promise<any> {
+  async userInvoiceAddress(invoice_contact_group_id: number): Promise<any> {
     await http
-      .put('', {
+      .put(Url.CHANGE_INVOICE_CONTACT_GROUP, {
         invoice_contact_group_id,
       })
       .then(res => {

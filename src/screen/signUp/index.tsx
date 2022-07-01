@@ -36,7 +36,7 @@ import {
 import IndicatorStep from '../../components/stepIndicator';
 const heightFull = Dimensions.get('screen').height;
 export default function SignUpScreen({navigation}) {
-  const [index, setIndex] = useState(5);
+  const [index, setIndex] = useState(1);
   function ProcessView() {
     return (
       <View style={{width: '100%'}}>
@@ -97,7 +97,7 @@ export default function SignUpScreen({navigation}) {
         setIndex(index + 1);
         break;
       case 5:
-        navigation.navigate('Bottom_SCREEN');
+        navigation.replace('Bottom_SCREEN');
         break;
     }
   }

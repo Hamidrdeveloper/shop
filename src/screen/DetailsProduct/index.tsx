@@ -47,12 +47,16 @@ export default function DetailsProduct({navigation, route}) {
   const [productByID, setProduct] = useState(route.params.data);
   const imageConst = [{file: productByID.product.file}];
   const {relatedProductsItem, attributeType} = useContext(ProductContext);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-  ]);
+
+  const [itemsAttribute, setItemsAttribute] = useState([]);
+  useEffect(() => {
+    setTimeout(() => {
+      setItemsAttribute(attributeType);
+    }, 100);
+    console.log('====================================');
+    console.log("attributeType",attributeType);
+    console.log('====================================');
+  }, [attributeType]);
   function offerItem({item}) {
     return (
       <>
@@ -73,7 +77,7 @@ export default function DetailsProduct({navigation, route}) {
           <TextProductOffer>{item.name}</TextProductOffer>
           <Space lineH={5} />
           <NumberFormat
-            value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+            value={parseInt(item?.sale_price.value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
@@ -82,14 +86,14 @@ export default function DetailsProduct({navigation, route}) {
                 <TextPriceThroughOffer>
                   {value +
                     ' ' +
-                    item?.productVariationPrices[0].price.currency.symbol}
+                    item?.sale_price?.price?.currency?.symbol}
                 </TextPriceThroughOffer>
               );
             }}
           />
           <Space lineH={5} />
           <NumberFormat
-            value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+            value={parseInt(item?.sale_price.value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
@@ -98,7 +102,7 @@ export default function DetailsProduct({navigation, route}) {
                 <TextPriceOffer>
                   {value +
                     ' ' +
-                    item?.productVariationPrices[0].price.currency.symbol}
+                    item?.sale_price?.price?.currency?.symbol}
                 </TextPriceOffer>
               );
             }}
@@ -176,9 +180,9 @@ export default function DetailsProduct({navigation, route}) {
             <LineW />
             <Space lineH={15} />
             <Space lineH={15} />
-           
-              <AttributeItem setProduct={setProduct} data={attributeType} />
-         
+
+            <AttributeItem setProduct={setProduct} data={itemsAttribute} />
+
             <Space lineH={15} />
             <View style={{height: 400}}>
               <TabShop product={productByID} />

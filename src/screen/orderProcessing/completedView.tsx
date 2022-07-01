@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import RenderListItem from '../../components/picker/components/RenderListItem';
@@ -13,7 +13,10 @@ import { RelatedProductItem } from './realted';
 
 export default function CompletedView({navigation}) {
   const {orderSaleCompleted} = useContext(BasketContext);
-
+  const [search, setSearch] = useState('');
+  const updateSearch = (text: React.SetStateAction<string>) => {
+    setSearch(text);
+  };
   function RenderListItem() {
     return (
       <>
@@ -144,6 +147,8 @@ export default function CompletedView({navigation}) {
         <SearchView
           placeholder="Search On Cleaning"
           searchIcon={() => <Icon color={'gry'} size={30} name="search1" />}
+          onChangeText={(e: any) => updateSearch(e)}
+          value={search}
         />
         <Space lineH={15} />
         <Padding>
@@ -153,7 +158,7 @@ export default function CompletedView({navigation}) {
            {orderSaleCompleted.length==0?
           <>
             <ViewEmpty>
-            <TextEmpty>{'There is no cancelled order!'}</TextEmpty>
+            <TextEmpty>{'There is no completed order!'}</TextEmpty>
           </ViewEmpty>
           <RelatedProductItem navigation={navigation}/>
           </>

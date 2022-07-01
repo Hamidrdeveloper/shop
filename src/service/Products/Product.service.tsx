@@ -6,11 +6,12 @@ import Storage from '../../utils/storeData';
 import * as Type from './types';
 import * as Address from '../../utils/adress.api';
 import {User} from 'react-native-iconly';
+import ErrorManagement from '../../utils/catchError';
 
 class ProductDataService {
   productsSearch(data: Type.Products) {
     console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, data);
-
+    
     return http
       .get(Address.PRODUCTS_VARIATIONS_ADDRESS, {params: data})
       .then(res => {
@@ -36,7 +37,7 @@ class ProductDataService {
   }
   categories() {
     console.log(Address.PRODUCTS_CATEGORIES_ADDRESS, TOKEN.token);
-
+    
     return http
       .get(Address.PRODUCTS_CATEGORIES_ADDRESS)
       .then(res => {

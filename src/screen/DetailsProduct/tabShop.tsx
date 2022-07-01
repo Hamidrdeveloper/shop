@@ -17,6 +17,7 @@ import {
   TextProduct,
 } from './style/DetailsProduct.styles';
 import styled from 'styled-components';
+import {regexHtml} from '../../utils/main';
 
 const TextReViewPlus = styled(TextReviewOffer)`
   font-size: 16;
@@ -91,7 +92,9 @@ export function TabShop({product}) {
 
       <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={{width: '100%'}}>
-          <TextProduct>{product?.description}</TextProduct>
+          <TextProduct>
+            {product?.description?.replace(regexHtml, '')}
+          </TextProduct>
         </TabView.Item>
         <TabView.Item style={{width: '100%'}}>
           <View>

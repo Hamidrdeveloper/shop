@@ -33,18 +33,26 @@ class AuthDataService {
   }
   signIn(data: SignIn) {
     console.log(data);
-    http.defaults.headers.common['Authorization'] = ``;
+    http.defaults.headers.common.Authorization = '';
     return http
       .post(SIGNIN_ADDRESS, data)
       .then(res => {
-        console.log(SIGNIN_ADDRESS, res.data.data.token);
+        console.log(SIGNIN_ADDRESS, res.data.data);
         TOKEN.token = res.data.data.token;
         Storage.storeData('TOKEN', res.data.data.token);
-        return true;
+        return {message: res.data.data.user, status: true};
       })
       .catch(error => {
-        console.log(SIGNIN_ADDRESS, error.response);
-        return false;
+        console.log(SIGNIN_ADDRESS + 'Error', error.response.data);
+
+        if (error.response) {
+          return {message: error.response?.data?.data?.message, status: false};
+        } else if (error.request) {
+          // client never received a response, or request never left
+        } else {
+          // anything else
+        }
+        return {message: '', status: false};
       });
   }
 

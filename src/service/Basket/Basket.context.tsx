@@ -62,8 +62,8 @@ export default function BasketContextProvider({
       setBasketsExited(dataP);
     }
 
-    setResultPrice(parseInt(resultPrice) + parseInt(product?.productVariationPrices[0].value));
-    setResultSymbol(product?.productVariationPrices[0].price.currency.symbol);
+    setResultPrice(parseInt(resultPrice) + parseInt(product?.sale_price.value));
+    setResultSymbol(product?.sale_price?.price?.currency?.symbol);
   }
 
   function removeToBasket(product: ProductVariation) {
@@ -85,9 +85,9 @@ export default function BasketContextProvider({
 
       setBasketsExited(dataP);
     }
-    let price = parseInt(resultPrice) - parseInt(product?.productVariationPrices[0].value);
+    let price = parseInt(resultPrice) - parseInt(product?.sale_price.value);
     setResultPrice(price.toString());
-    setResultSymbol(product?.productVariationPrices[0].price.currency.symbol);
+    setResultSymbol(product?.sale_price?.price?.currency?.symbol);
   }
   function bulkAdd(id) {
     let product = basketsExited.map(value => {
@@ -111,15 +111,9 @@ export default function BasketContextProvider({
     AC.orderSalesAc().then(res => {
       console.log('orderSale', res);
       setListOrderSale(res);
-      res.forEach(element => {
-        switch (element.payment_status) {
-          case 'not_paid':
-            setOrderSalePadding([...orderSalePadding, element]);
-            return;
-          case '':
-            return;
-        }
-      });
+      // res.forEach(element => {
+      //   setOrderSalePadding([...orderSalePadding, element]);
+      // });
     });
   }
 

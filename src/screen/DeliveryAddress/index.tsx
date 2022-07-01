@@ -40,6 +40,7 @@ import {AddressContext} from '../../service/Address/Address.context';
 import DropdownAlert from 'react-native-dropdownalert';
 import {BasketContext} from '../../service/Basket/Basket.context';
 import styled from 'styled-components';
+import {ProfileContext} from '../../service/Profile/Profile.context';
 
 const TextBlue18 = styled(Text)`
   font-size: 18;
@@ -61,6 +62,7 @@ export default function DeliveryAddressScreen({navigation}) {
   const [isVisible, setIsVisible] = useState(false);
   const {getAddressFn, addressSelect, getAddressSelect} =
     useContext(AddressContext);
+  const {showInvoiceAddress} = useContext(ProfileContext);
   const {bulkAdd, resultPrice, resultSymbol} = useContext(BasketContext);
   let dropDownAlertRef = useRef();
   useEffect(() => {
@@ -70,21 +72,51 @@ export default function DeliveryAddressScreen({navigation}) {
 
   //   const sheetRef = React.useRef(null);
   const regex = /(<([^>]+)>)/gi;
-  function _renderItemAddress({title}) {
-    return (
-      <View>
-        <Space lineH={10} />
-        <TitleAddressTitle>{title}</TitleAddressTitle>
-        <Space lineH={10} />
-        <TitleAddress>
-          {addressSelect?.address?.address_complete.replace(regex, ', ')}
-        </TitleAddress>
-        <Space lineH={15} />
-        <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
-        <Space lineH={10} />
-        <LineW />
-      </View>
-    );
+  function _renderItemAddress({title, data}) {
+    console.log('====================================');
+    console.log('_renderItemAddress', data);
+    console.log('====================================');
+    if (title == 'Invoice address') {
+      return (
+        <View>
+          <Space lineH={10} />
+          <TitleAddressTitle>{title}</TitleAddressTitle>
+          <Space lineH={10} />
+          <TitleAddress>
+            {data?.address?.address_complete.replace(regex, ', ')}
+          </TitleAddress>
+          <Space lineH={15} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('MyAddress_SCREEN', {type: 'Invoice'});
+            }}>
+            <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
+          </TouchableOpacity>
+          <Space lineH={10} />
+          <LineW />
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Space lineH={10} />
+          <TitleAddressTitle>{title}</TitleAddressTitle>
+          <Space lineH={10} />
+          <TitleAddress>
+            {addressSelect?.address?.address_complete.replace(regex, ', ')}
+          </TitleAddress>
+          <Space lineH={15} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('MyAddress_SCREEN', {type: 'Deliver'});
+            }}>
+          <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
+          </TouchableOpacity>
+          <Space lineH={10} />
+          <LineW />
+        </View>
+      );
+    }
   }
   const _fetchData = async (text, type) => {
     const response = await fetch('https://httpbin.org/uuid');
@@ -118,9 +150,15 @@ export default function DeliveryAddressScreen({navigation}) {
               </ViewRowJust>
             </TouchableOpacity>
             <Space lineH={30} />
-            <_renderItemAddress title={'Invoice address'} />
+            <_renderItemAddress
+              title={'Invoice address'}
+              data={showInvoiceAddress}
+            />
             <Space lineH={15} />
-            <_renderItemAddress title={'Delivery address'} />
+            <_renderItemAddress
+              title={'Delivery address'}
+              data={showInvoiceAddress}
+            />
             <RadioButton
               flexDirection={'column'}
               items={[
@@ -137,9 +175,7 @@ export default function DeliveryAddressScreen({navigation}) {
                   id: 1,
                 },
               ]}
-              onClick={() => {
-                alert('hi');
-              }}
+              onClick={() => {}}
             />
             <Space lineH={30} />
             <ViewRow>

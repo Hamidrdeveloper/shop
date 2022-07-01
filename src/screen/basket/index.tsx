@@ -169,7 +169,7 @@ export default function BasketScreen({navigation}) {
             </TextDetailBasket>
           </View>
           <NumberFormat
-            value={parseInt(data?.productVariationPrices[0].value).toFixed(2)}
+            value={parseInt(data?.sale_price.value).toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
@@ -178,7 +178,7 @@ export default function BasketScreen({navigation}) {
                 <TextPriceBasket>
                   {value +
                     ' ' +
-                    data?.productVariationPrices[0].price.currency.symbol}
+                    data?.sale_price?.price?.currency?.symbol}
                 </TextPriceBasket>
               );
             }}

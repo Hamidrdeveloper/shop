@@ -94,7 +94,7 @@ const ViewImageOffer = styled(View)`
 const widthFull = Dimensions.get('screen').width;
 export default function CategoryPageScreen({navigation, route}) {
   const [name, setName] = useState(route.params.data.name);
-  const {categoryProductsItem, categoryLode} = useContext(ProductContext);
+  const {categoryProductsItem, categoryLode,nameCategorySelect} = useContext(ProductContext);
   const {addToBasket} = useContext(BasketContext);
 
   const [dataCategory, setDataCategory] = useState([
@@ -129,7 +129,7 @@ export default function CategoryPageScreen({navigation, route}) {
               <TextProductOffer>{item.name}</TextProductOffer>
               <Space lineH={5} />
               <NumberFormat
-                value={parseInt(item?.productVariationPrices[0].value).toFixed(
+                value={parseInt(item?.sale_price.value).toFixed(
                   2,
                 )}
                 displayType={'text'}
@@ -140,7 +140,7 @@ export default function CategoryPageScreen({navigation, route}) {
                     <TextPriceOffer>
                       {value +
                         ' ' +
-                        item?.productVariationPrices[0].price.currency.symbol}
+                        item?.sale_price?.price?.currency?.symbol}
                     </TextPriceOffer>
                   );
                 }}
@@ -149,7 +149,7 @@ export default function CategoryPageScreen({navigation, route}) {
               <ViewRowPrice>
                 <NumberFormat
                   value={parseInt(
-                    item?.productVariationPrices[0].value,
+                    item?.sale_price.value,
                   ).toFixed(2)}
                   displayType={'text'}
                   thousandSeparator={true}
@@ -159,7 +159,7 @@ export default function CategoryPageScreen({navigation, route}) {
                       <TextPriceThroughOffer>
                         {value +
                           ' ' +
-                          item?.productVariationPrices[0].price.symbol}
+                          item?.sale_price?.price?.symbol}
                       </TextPriceThroughOffer>
                     );
                   }}
@@ -229,7 +229,7 @@ export default function CategoryPageScreen({navigation, route}) {
               onPress={() => {
                 navigation.navigate('SortScreen');
               }}>
-              <TextTopFilter>{'Popular'}</TextTopFilter>
+              <TextTopFilter>{nameCategorySelect}</TextTopFilter>
             </HandleEvent>
           </ViewRowJust>
           <Space lineH={30} />

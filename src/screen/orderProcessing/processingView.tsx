@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import RenderListItem from '../../components/picker/components/RenderListItem';
@@ -11,11 +11,15 @@ import styled from 'styled-components';
 import {BasketContext} from '../../service/Basket/Basket.context';
 import NumberFormat from 'react-number-format';
 import {IMAGE_ADDRESS} from '../../utils/adress.api';
-import { RelatedProductItem } from './realted';
+import {RelatedProductItem} from './realted';
 
 export default function ProcessingView({navigation}) {
-  const {orderSalePadding} = useContext(BasketContext);
-  console.log('order-sale', orderSalePadding);
+  const {listOrderSale} = useContext(BasketContext);
+
+  const [search, setSearch] = useState('');
+  const updateSearch = (text: React.SetStateAction<string>) => {
+    setSearch(text);
+  };
   function RenderListItem(item) {
     console.log('order-sale', item);
 
@@ -26,7 +30,9 @@ export default function ProcessingView({navigation}) {
             {'Order No. :#'}
           </Text>
           <Text style={{fontSize: 14, color: Color.brand.black}}>
-            {item?.orderSalePositions[0].order_sale_id}
+            {item?.orderSalePositions.length > 0
+              ? item?.orderSalePositions[0].order_sale_id
+              : '0'}
           </Text>
         </Text>
         <Space lineH={15} />
@@ -34,7 +40,7 @@ export default function ProcessingView({navigation}) {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            width: `100%`,
+            width: '100%',
           }}>
           <Text>
             <Text style={{fontSize: 14, color: Color.brand.textGrey}}>
@@ -68,38 +74,41 @@ export default function ProcessingView({navigation}) {
           style={{
             flexDirection: 'row',
 
-            width: `100%`,
+            width: '100%',
           }}>
           {item.orderSalePositions.map((value, index) => {
-            return (
-              <>
-                <View
-                  style={{
-                    width: 58,
-                    height: 58,
-                    borderColor: Color.brand.gryLight,
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  {index < 3 ? (
-                    <Image
-                      style={{height: 48, width: 35}}
-                      source={{
-                        uri:
-                          IMAGE_ADDRESS + value.productVariation?.product?.file,
-                      }}
-                    />
-                  ) : (
-                    <Text style={{fontSize: 14, color: Color.brand.black}}>
-                      {'+3'}
-                    </Text>
-                  )}
-                </View>
-                <Space lineW={5} />
-              </>
-            );
+            if (index < 4) {
+              return (
+                <>
+                  <View
+                    style={{
+                      width: 58,
+                      height: 58,
+                      borderColor: Color.brand.gryLight,
+                      borderWidth: 1,
+                      borderRadius: 8,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    {index < 3 ? (
+                      <Image
+                        style={{height: 48, width: 35}}
+                        source={{
+                          uri:
+                            IMAGE_ADDRESS +
+                            value.productVariation?.product?.file,
+                        }}
+                      />
+                    ) : (
+                      <Text style={{fontSize: 14, color: Color.brand.black}}>
+                        {'+3'}
+                      </Text>
+                    )}
+                  </View>
+                  <Space lineW={5} />
+                </>
+              );
+            }
           })}
         </View>
         <Space lineH={15} />
@@ -107,11 +116,11 @@ export default function ProcessingView({navigation}) {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-around',
-            width: `100%`,
+            width: '100%',
           }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('OrderDetails',{product:item});
+              navigation.navigate('OrderDetails', {product: item});
             }}>
             <View
               style={{
@@ -130,7 +139,7 @@ export default function ProcessingView({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('OrderDetails',{product:item});
+              navigation.navigate('OrderDetails', {product: item});
             }}>
             <View
               style={{
@@ -171,22 +180,22 @@ export default function ProcessingView({navigation}) {
         <SearchView
           placeholder="Search On Cleaning"
           searchIcon={() => <Icon color={'gry'} size={30} name="search1" />}
+          onChangeText={(e: any) => updateSearch(e)}
+          value={search}
         />
         <Space lineH={15} />
         <Padding>
-          {orderSalePadding.map(value => {
+          {listOrderSale.map(value => {
             return RenderListItem(value);
           })}
-          {orderSalePadding.length==0?
-          <>
-            <ViewEmpty>
-            <TextEmpty>{'There is no processing order!'}</TextEmpty>
-          </ViewEmpty>
-          <RelatedProductItem navigation={navigation}/>
-          </>
-          :null
-          }
-          
+          {listOrderSale.length == 0 ? (
+            <>
+              <ViewEmpty>
+                <TextEmpty>{'There is no Processing order!'}</TextEmpty>
+              </ViewEmpty>
+              <RelatedProductItem navigation={navigation} />
+            </>
+          ) : null}
         </Padding>
       </View>
     </>

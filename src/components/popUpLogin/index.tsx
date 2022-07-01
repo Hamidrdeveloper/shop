@@ -2,25 +2,30 @@ import React, {useState} from 'react';
 import {Modal, View, Text, TouchableOpacity} from 'react-native';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
-export default function PopUpLogin({isVisible, navigation,onClose,onClick}) {
+export default function PopUpLogin({
+  isVisible,
+  navigation,
+  onClose = () => {},
+  onClick = () => {},
+}) {
   const [show, setShow] = useState(isVisible);
   return (
     <>
-      <Modal visible={isVisible} transparent onRequestClose={()=> onClose()}>
+      <Modal visible={isVisible} transparent onRequestClose={() => onClose()}>
         <View
           style={{
-            width: `100%`,
-            height: `100%`,
-            backgroundColor: `rgba(0,0,0,0.2)`,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.2)',
             alignItems: 'center',
             justifyContent: 'center',
             padding: 15,
           }}>
           <View
             style={{
-              width: `102%`,
+              width: '102%',
               height: 250,
-              backgroundColor: `rgba(0,0,0,0.1)`,
+              backgroundColor: 'rgba(0,0,0,0.1)',
               borderRadius: 12,
               alignItems: 'center',
               position: 'absolute',
@@ -28,7 +33,7 @@ export default function PopUpLogin({isVisible, navigation,onClose,onClick}) {
           />
           <View
             style={{
-              width: `100%`,
+              width: '100%',
               height: 245,
               backgroundColor: Color.brand.white,
               borderRadius: 12,
@@ -39,7 +44,7 @@ export default function PopUpLogin({isVisible, navigation,onClose,onClick}) {
               style={{
                 fontSize: 18,
                 color: Color.brand.black,
-                width: `100%`,
+                width: '100%',
                 textAlign: 'center',
               }}>
               {'You have to sign in first for next'}
@@ -47,12 +52,13 @@ export default function PopUpLogin({isVisible, navigation,onClose,onClick}) {
             <Space lineH={70} />
             <TouchableOpacity
               onPress={() => {
-                onClick()
-                  setShow(false) 
-                navigation.navigate('SignInScreen')}}
+                onClick();
+                setShow(false);
+                navigation.navigate('SignInScreen');
+              }}
               style={{
                 height: 50,
-                width: `100%`,
+                width: '100%',
 
                 borderRadius: 10,
                 alignSelf: 'center',
@@ -64,7 +70,7 @@ export default function PopUpLogin({isVisible, navigation,onClose,onClick}) {
               <View
                 style={{
                   height: 50,
-                  width: `100%`,
+                  width: '100%',
                   borderRadius: 10,
                   alignSelf: 'center',
                   justifyContent: 'center',
@@ -82,13 +88,14 @@ export default function PopUpLogin({isVisible, navigation,onClose,onClick}) {
             </TouchableOpacity>
             <Space lineH={15} />
             <TouchableOpacity
-              onPress={() =>{
-                onClick()
-                  setShow(false) 
-                navigation.navigate('SignUpScreen')}}
+              onPress={() => {
+                onClick();
+                setShow(false);
+                navigation.navigate('SignUpScreen');
+              }}
               style={{
                 height: 50,
-                width: `100%`,
+                width: '100%',
 
                 borderRadius: 10,
                 alignSelf: 'center',

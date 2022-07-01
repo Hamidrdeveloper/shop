@@ -21,7 +21,6 @@ export default function PartThree({onChangeValue}) {
   const [isForm, setForm] = useState(false);
   const {isRegister, singUpFn, isLoginOpen, isRegisterOpen} =
     useContext(AuthContext);
-  const {onGetUser} = useContext(MainContext);
   function setPassword() {
     if (passOne == passTwo) {
       SignUpModel.password = passOne;
@@ -29,12 +28,7 @@ export default function PartThree({onChangeValue}) {
       // alert("Not")2
     }
   }
-  useEffect(() => {
-    if (isRegisterOpen) {
-      onGetUser();
-      onChangeValue();
-    }
-  }, [isRegisterOpen]);
+ 
   useEffect(() => {
     if (passOne.length > 5) {
       setPassword();
@@ -46,7 +40,7 @@ export default function PartThree({onChangeValue}) {
 
   function onSign() {
     
-    singUpFn();
+    onChangeValue();
   }
   return (
     <>
@@ -128,7 +122,7 @@ export default function PartThree({onChangeValue}) {
       </BackgroundForm>
       <View>
         <LoadingButton
-          isActive={isRegister}
+          isActive={false}
           onNext={() => onSign()}
           title={'Next'}
           onClose={() => {}}

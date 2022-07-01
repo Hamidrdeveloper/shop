@@ -7,6 +7,7 @@ export const SignUpModel = {
   birth_date: '',
   gender: '',
   password: '',
+  sponsor_id: 0,
 };
 export const SignInModel = {
   username: '',

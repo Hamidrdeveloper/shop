@@ -37,29 +37,28 @@ import PaymentScreen from '../../screen/payment';
 import AddAddressScreen from '../../screen/addAddress';
 import ChatScreen from '../../screen/chat';
 import EditAddressScreen from '../../screen/editAddress';
+import PopUpLogin from '../../components/popUpLogin';
 
 const Slack = createNativeStackNavigator();
+
+
 const NavigationStart = () => {
   return (
     <NavigationContainer>
       <Slack.Navigator screenOptions={{headerShown: false}}>
-      <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
+        <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
 
-      <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
+        <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
 
-      <Slack.Screen name={'SignUpScreen'} component={SignUpScreen} />
+        <Slack.Screen name={'SignUpScreen'} component={SignUpScreen} />
 
-       
         <Slack.Screen name={'MyAddress_SCREEN'} component={MyAddressScreen} />
         <Slack.Screen
           name={'EditAddress_SCREEN'}
           component={EditAddressScreen}
         />
 
-
         <Slack.Screen name={'SignInScreen'} component={SignInScreen} />
-
-      
 
         <Slack.Screen name={'ResetPassword'} component={ResetPassword} />
         <Slack.Screen name={'Profile_SCREEN'} component={ProfileScreen} />

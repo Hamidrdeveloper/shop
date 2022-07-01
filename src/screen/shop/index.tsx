@@ -75,6 +75,7 @@ import {
 import {CommentContext} from '../../service/Comment/Comment.context';
 import SearchPageScreen from './searchScreen';
 import {Animations} from './animations';
+import {PartnerContext} from '../../service/Partner/Partner.context';
 function ShopScreen({navigation}) {
   const {
     productsItem,
@@ -89,6 +90,7 @@ function ShopScreen({navigation}) {
     isProducts,
   } = useContext(ProductContext);
   const {getAllCommentIdFn} = useContext(CommentContext);
+  const {partnerSelectId} = useContext(PartnerContext);
 
   const {addToBasket} = useContext(BasketContext);
   const [search, setSearch] = useState('');
@@ -192,8 +194,6 @@ function ShopScreen({navigation}) {
   }
 
   function offerItem({item, index}: any) {
-    console.log('offerItem', item);
-
     return (
       <View style={{alignItems: 'center'}}>
         <Card
@@ -231,38 +231,34 @@ function ShopScreen({navigation}) {
             <TextProductOffer>{item.name}</TextProductOffer>
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+              value={parseInt(item?.sale_price.value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceThroughOffer>
-                    {value +
-                      ' ' +
-                      item?.productVariationPrices[0].price.currency.symbol}
+                    {value + ' ' + item?.sale_price?.price?.currency?.symbol}
                   </TextPriceThroughOffer>
                 );
               }}
             />
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+              value={parseInt(item?.sale_price.value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value +
-                      ' ' +
-                      item?.productVariationPrices[0].price.currency.symbol}
+                    {value + ' ' + item?.sale_price?.price?.currency?.symbol}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item?.productVariationPrices[0].unit_price}`}</TextPriceUnitOffer>
+            <TextPriceUnitOffer>{`Price  unit : ${item?.sale_price?.unit_price}`}</TextPriceUnitOffer>
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>
@@ -366,38 +362,34 @@ function ShopScreen({navigation}) {
             <TextProductOffer>{item.name}</TextProductOffer>
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+              value={parseInt(item?.sale_price.value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceThroughOffer>
-                    {value +
-                      ' ' +
-                      item?.productVariationPrices[0].price.currency.symbol}
+                    {value + ' ' + item?.sale_price?.price?.currency?.symbol}
                   </TextPriceThroughOffer>
                 );
               }}
             />
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+              value={parseInt(item?.sale_price.value).toFixed(2)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value +
-                      ' ' +
-                      item?.productVariationPrices[0].price.currency.symbol}
+                    {value + ' ' + item?.sale_price?.price?.currency?.symbol}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item?.productVariationPrices[0].unit_price}`}</TextPriceUnitOffer>
+            <TextPriceUnitOffer>{`Price  unit : ${item?.sale_price.unit_price}`}</TextPriceUnitOffer>
             <Space lineH={5} />
           </TouchableOpacity>
         </Card>
@@ -409,9 +401,6 @@ function ShopScreen({navigation}) {
     );
   }
   function renderItemProducts({item, index}) {
-    console.log('====================================');
-    console.log('renderItemProducts', item);
-    console.log('====================================');
     return <FlatList data={item} renderItem={renderItemForSecondList} />;
   }
   const [bounceValue, setBounceValue] = useState(100);
@@ -420,7 +409,7 @@ function ShopScreen({navigation}) {
   }
   return (
     <Background>
-      <Animations open={openPartner} />
+      {partnerSelectId!=null ? <Animations open={openPartner} /> : null}
       {!isSearching ? (
         <Scroll
           scrollEventThrottle={160}

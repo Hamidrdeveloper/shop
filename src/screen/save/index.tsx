@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {Text, View} from 'react-native';
-import {ScrollView,TouchableOpacity} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native';
 import {Rating} from 'react-native-elements';
 import {Delete, IconlyProvider} from 'react-native-iconly';
 import NumberFormat from 'react-number-format';
@@ -8,6 +8,7 @@ import {ViewOffer} from '../../components/bottomDetails/style/BottomDetails.styl
 import {ViewCenter} from '../../components/coustom/itemWelcome/itemWelcome.style';
 import HeaderScComponent from '../../components/header2';
 import LineW from '../../components/lineW';
+import { BackgroundView } from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {AddressContext} from '../../service/Address/Address.context';
@@ -19,16 +20,16 @@ import {
 } from '../shop/style/shop.style';
 
 export default function MySave({navigation}) {
-  const {saveAddresses,deleteAddressFn} = useContext(AddressContext);
+  const {saveProduct, deleteAddressFn} = useContext(AddressContext);
 
   function _renderItemBasket(item): any {
     return (
       <>
-        <View style={{width: `100%`, height: 140, flexDirection: 'row'}}>
+        <View style={{width: '100%', height: 140, flexDirection: 'row'}}>
           <View>
             <ImageSuggest
               style={{width: 105, height: 88}}
-              source={{uri: IMAGE_ADDRESS +item.product.file}}
+              source={{uri: IMAGE_ADDRESS + item.product.file}}
             />
 
             <Space lineH={15} />
@@ -49,14 +50,14 @@ export default function MySave({navigation}) {
                 color: Color.brand.black,
 
                 fontSize: 18,
-                width: `80%`,
+                width: '80%',
               }}>
               {item.name}
             </Text>
             <Space lineH={10} />
             <View style={{flexDirection: 'row'}}>
               <NumberFormat
-                value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+                value={parseInt(item?.sale_price.value).toFixed(2)}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
@@ -68,7 +69,7 @@ export default function MySave({navigation}) {
                         fontSize: 20,
                         width: 100,
                       }}>
-                      {value + ' ' + item?.productVariationPrices[0].price.currency.symbol}
+                      {value + ' ' + item?.sale_price?.price?.currency?.symbol}
                     </Text>
                   );
                 }}
@@ -95,14 +96,22 @@ export default function MySave({navigation}) {
               right: 15,
               bottom: 15,
             }}>
-            <Delete size={'medium'} primaryColor={`${Color.brand.textGrey}`} />
+            <Delete
+              onPress={() => {
+                deleteAddressFn(item);
+              }}
+              size={'medium'}
+              primaryColor={`${Color.brand.textGrey}`}
+            />
 
             <Space lineW={10} />
             <TouchableOpacity
-            onPress={()=>{deleteAddressFn(item)}}>
-            <Text style={{color: Color.brand.textGrey, fontSize: 14}}>
-              {'Delete from list'}
-            </Text>
+              onPress={() => {
+                deleteAddressFn(item);
+              }}>
+              <Text style={{color: Color.brand.textGrey, fontSize: 14}}>
+                {'Delete from list'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -113,27 +122,26 @@ export default function MySave({navigation}) {
     );
   }
   return (
-    <>
+    <BackgroundView>
       <ScrollView>
-        <HeaderScComponent navigation={navigation} title={'My Saved'} />
+        <HeaderScComponent navigation={navigation} title={'My Favorites'} />
         <View
           style={{
-            width: `100%`,
-            height: `100%`,
+            width: '100%',
+            height: '100%',
             paddingLeft: 15,
             paddingRight: 15,
             backgroundColor: Color.brand.white,
           }}>
           <Space lineH={15} />
-          {saveAddresses.map(value => {
+          {saveProduct.map(value => {
             return _renderItemBasket(value);
           })}
         </View>
       </ScrollView>
-    </>
+    </BackgroundView>
   );
 }
 function deleteAddressFn(item: any) {
   throw new Error('Function not implemented.');
 }
-

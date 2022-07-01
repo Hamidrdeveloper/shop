@@ -56,14 +56,14 @@ export function RelatedProductItem({navigation}) {
               <TextProductOffer>{item.name}</TextProductOffer>
               <Space lineH={5} />
               <NumberFormat
-                value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+                value={parseInt(item?.sale_price.value).toFixed(2)}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
                 renderText={(value, props) => {
                   return (
                     <TextPriceOffer>
-                      {value + ' ' + item?.productVariationPrices[0].price.currency.symbol}
+                      {value + ' ' + item?.sale_price?.price?.currency?.symbol}
                     </TextPriceOffer>
                   );
                 }}
@@ -72,14 +72,14 @@ export function RelatedProductItem({navigation}) {
               <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <NumberFormat
-                  value={parseInt(item?.productVariationPrices[0].value).toFixed(2)}
+                  value={parseInt(item?.sale_price.value).toFixed(2)}
                   displayType={'text'}
                   thousandSeparator={true}
                   prefix={''}
                   renderText={(value, props) => {
                     return (
                       <TextPriceThroughOffer>
-                        {value + ' ' + item?.productVariationPrices[0].price.currency.symbol}
+                        {value + ' ' + item?.sale_price?.price?.currency.symbol}
                       </TextPriceThroughOffer>
                     );
                   }}

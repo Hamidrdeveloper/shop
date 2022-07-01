@@ -19,6 +19,9 @@ interface IMainContext {
   token: string;
   onRunAllApi: () => void;
   onGetUser: () => void;
+  onDeleteUser: () => void;
+  catchMessage: string;
+  catchMessageShow: boolean;
 }
 export const MainContext = createContext<IMainContext>({} as IMainContext);
 export default function MainContextProvider({
@@ -41,24 +44,29 @@ export default function MainContextProvider({
     bestSellingFn,
     categoriesTreeFn,
   } = useContext(ProductContext);
+
+  function onDeleteUser() {
+    setLoginOpen(false);
+    Storage.removeData('TOKEN');
+  }
   function onGetUser() {
     Storage.retrieveData('TOKEN').then(res => {
       console.log('MainContext', res);
 
       http.defaults.headers.common.Authorization = `Bearer ${res}`;
-      setToken(res);
-      TOKEN.token = res;
-      PartnerFn();
       profileFn();
+      PartnerFn();
+
       orderSale();
       cardBottomArrivalFn();
-     
+      setToken(res);
+      TOKEN.token = res;
     });
   }
   useEffect(() => {
     onRunAllApi();
-  }, [])
-  
+  }, []);
+
   function onRunAllApi() {
     countriesFn();
     languageFn();
@@ -92,7 +100,7 @@ export default function MainContextProvider({
     });
   }
   return (
-    <MainContext.Provider value={{token, onRunAllApi, onGetUser}}>
+    <MainContext.Provider value={{token, onRunAllApi, onGetUser, onDeleteUser}}>
       {children}
     </MainContext.Provider>
   );

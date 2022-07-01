@@ -5,6 +5,7 @@ import {PartnerId, Partners} from './type';
 interface IPartnerContext {
   partner: Partners;
   partnerId: PartnerId;
+  partnerSelectId: PartnerId;
   PartnerFn: (countryId?: number) => void;
   partnerIdFn: (id: number) => void;
   isLoading: boolean;
@@ -21,19 +22,24 @@ export default function PartnerContextProvider({
 
   const [partner, setPartner] = useState<Partners>();
   const [partnerId, setPartnerId] = useState<PartnerId>();
+  const [partnerSelectId, setPartnerSelectId] = useState<PartnerId>();
 
   function PartnerFn(countryId: number) {
     PartnerAc(countryId)
       .then(is => {
-        setPartner(is);
+        setPartner(
+          is?.map(data => {
+            return {...data, select: false};
+          }),
+        );
         setLoading(true);
       })
       .catch(() => {});
   }
   async function partnerIdFn(id: number) {
-   
     const res = await PartnerIdAc(id);
     setPartnerId(res);
+    setPartnerSelectId(res);
     setLoading(true);
   }
 
@@ -45,6 +51,7 @@ export default function PartnerContextProvider({
         isLoading,
         partnerId,
         partnerIdFn,
+        partnerSelectId
       }}>
       {children}
     </PartnerContext.Provider>

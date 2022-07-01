@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components';
@@ -13,7 +13,10 @@ const widthFull = Dimensions.get('window').width;
 
 export default function CancelledView({navigation}) {
   const {orderSaleCancel} = useContext(BasketContext);
-
+  const [search, setSearch] = useState('');
+  const updateSearch = (text: React.SetStateAction<string>) => {
+    setSearch(text);
+  };
   function RenderListItem() {
     return (
       <>
@@ -128,6 +131,8 @@ export default function CancelledView({navigation}) {
         <SearchView
           placeholder="Search On Cleaning"
           searchIcon={() => <Icon color={'gry'} size={30} name="search1" />}
+          onChangeText={(e: any) => updateSearch(e)}
+          value={search}
         />
         <Space lineH={15} />
         <Padding>

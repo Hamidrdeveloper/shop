@@ -26,19 +26,19 @@ export default function TabOrder({navigation}) {
         case 1:
           return (
             <View style={{width: widthFull}}>
-              <ProcessingView navigation={navigation}/>
+              <ProcessingView navigation={navigation} />
             </View>
           );
         case 2:
           return (
             <View style={{width: widthFull}}>
-              <CompletedView navigation={navigation}/>
+              <CompletedView navigation={navigation} />
             </View>
           );
         case 3:
           return (
             <View style={{width: widthFull}}>
-              <WaitingView navigation={navigation}/>
+              <WaitingView navigation={navigation} />
             </View>
           );
         case 4:
@@ -52,7 +52,13 @@ export default function TabOrder({navigation}) {
   }
   return (
     <>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between',marginLeft:15,marginRight:15}}>
+      {/* <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginLeft: 15,
+          marginRight: 15,
+        }}>
         {itemTab.map((data, i) => {
           return (
             <TouchableOpacity
@@ -86,9 +92,11 @@ export default function TabOrder({navigation}) {
             </TouchableOpacity>
           );
         })}
+      </View> */}
+      <Space lineH={15} />
+      <View style={{width: widthFull}}>
+        <ProcessingView navigation={navigation} />
       </View>
-      <Space lineH={15}/>
-      <TabView/>
     </>
   );
 }

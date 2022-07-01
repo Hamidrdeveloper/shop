@@ -11,7 +11,7 @@ export default function SplashScreen({navigation}) {
   useEffect(() => {
     onRunAllApi();
     setTimeout(() => {
-      navigation.navigate('Bottom_SCREEN');
+      navigation.replace('Bottom_SCREEN');
     }, 2000);
   }, []);
 

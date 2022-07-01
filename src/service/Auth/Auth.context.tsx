@@ -1,5 +1,12 @@
-import React, {createContext, ReactElement, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import Toast from '../../components/toast';
+import {PartnerContext} from '../Partner/Partner.context';
 import {
   singUpAc,
   singInAc,
@@ -8,6 +15,7 @@ import {
   countriesAc,
   linkForgetPasswordAc,
 } from './Auth.action';
+import {SignUpModel} from './model';
 import {LinkForgetPassword} from './types';
 
 interface IAuthContext {
@@ -29,6 +37,8 @@ interface IAuthContext {
   isForm: boolean;
   isLoginApi: boolean;
   isRegisterOpen: boolean;
+  isShowError: boolean;
+  messageError: string;
 }
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 export default function AuthContextProvider({
@@ -44,6 +54,9 @@ export default function AuthContextProvider({
   const [countries, setCountries] = useState([]);
   const [language, setLanguage] = useState([]);
   const [isForm, setForm] = useState(false);
+  const [isShowError, setIsShowError] = useState(false);
+  const [messageError, setMessageError] = useState(null);
+  const {partnerIdFn} = useContext(PartnerContext);
   const [isLoginApi, setLoginApi] = useState(false);
   function activeForm(value: boolean) {
     setForm(value);
@@ -54,16 +67,35 @@ export default function AuthContextProvider({
     setRegisterOpen(false);
     singUpAc().then(is => {
       setRegister(false);
+      if (SignUpModel?.sponsor_id > 0) {
+        partnerIdFn(SignUpModel.sponsor_id);
+      }
+
       setRegisterOpen(is);
     });
   }
   function singInFn() {
     setLoginApi(true);
     setLoginOpen(false);
-    singInAc().then(is => {
-      setLoginOpen(is);
-      setLoginApi(false);
-    });
+    setIsShowError(false);
+    singInAc()
+      .then(is => {
+        if (!is.status) {
+          setMessageError(is.message);
+          setIsShowError(!is.status);
+        } else {
+          if (is.message.sponsor_id) {
+            partnerIdFn(is.message.sponsor_id);
+          }
+
+          setLoginOpen(is.status);
+        }
+        setLoginApi(false);
+      })
+      .catch(() => {
+        alert('hi');
+      });
+    setIsShowError(false);
   }
   function linkForgetPasswordFn(value: LinkForgetPassword) {
     linkForgetPasswordAc(value).then(is => {
@@ -109,6 +141,8 @@ export default function AuthContextProvider({
         linkForgetPasswordFn,
         isForm,
         activeForm,
+        messageError,
+        isShowError,
         isLoginApi,
       }}>
       {children}

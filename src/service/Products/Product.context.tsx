@@ -3,10 +3,11 @@ import {ProductsArrivalModel, ProductsModel} from './model';
 import * as Ac from './Product.action';
 import {ProductItem} from './types';
 import * as Type from './types';
-import {Attribute} from './types';
 interface IProductContext {
   isProducts: boolean;
   productsItem: ProductItem;
+  nameCategorySelect: string;
+  setNameCategorySelect: any;
   productsFn: () => void;
   categoriesItem: any;
   attributeType: undefined;
@@ -55,6 +56,7 @@ export default function ProductContextProvider({
   const [categoryProductsItem, setCategoryProductsItem] = useState<any>();
   const [categoriesTreeItem, setCategoriesTreeItem] = useState<any>();
   const [attributeType, setAttributeType] = useState<any>([]);
+  const [nameCategorySelect, setNameCategorySelect] = useState<any>('Default');
 
   // We can access navigation object via context
   function productsFn() {
@@ -246,6 +248,8 @@ export default function ProductContextProvider({
         categoriesTreeItem,
         categoryProductsItem,
         categoryLode,
+        nameCategorySelect,
+        setNameCategorySelect,
       }}>
       {children}
     </ProductContext.Provider>

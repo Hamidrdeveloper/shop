@@ -13,7 +13,7 @@ interface IFavoriteContext {
   addAllFavoritesFn: (data: Favorite[]) => void;
   removeFavoriteFn: (id: number) => void;
   getAllFavoritesFn: () => void;
-  favorite:Array<Favorite>;
+  favorite: Array<Favorite>;
 }
 export const FavoriteContext = createContext<IFavoriteContext>(
   {} as IFavoriteContext,

@@ -23,7 +23,7 @@ import CheckBox from '../../components/checkBox';
 import LineW from '../../components/lineW';
 import {LoadingButton} from '../../components/buttonLoading';
 import ControlledCheckBox from '../../components/controlledCheckBox';
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const ViewLoading = styled(View)`
   height: 50;
@@ -40,7 +40,7 @@ type FormValues = {
 };
 export default function AddAddressScreen({navigation}) {
   const {...methods} = useForm();
-  const {addAddressFn, isAddToData, isAddToDataLodging} =
+  const {addAddressFn, isAddToData, isAddToDataLodging, getAddressSelect} =
     useContext(AddressContext);
   let dropDownAlertRef = useRef();
 
@@ -87,9 +87,10 @@ export default function AddAddressScreen({navigation}) {
   }
   useEffect(() => {
     if (isAddToDataLodging) {
+      getAddressSelect();
       setTimeout(() => {
         navigation.goBack();
-      }, 2000);
+      }, 3000);
     }
 
     return;
@@ -110,72 +111,72 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="cart_title"
                 label="Cart Title"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'vega'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="company_name"
                 label="Company Name"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'Apple'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="first_name"
                 label="First Name"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'Jordan'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="last_name"
                 label="Last Name"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'Bardon'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="address2"
                 label="Street"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'German no 4'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="house_number"
                 label="House Number"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'12345678'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="postal_code"
                 label="Post Code"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'54000'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="city"
                 label="City"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'Frankfurt'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
               <ControlledInput
                 name="state"
                 label="State"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'DW'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -183,8 +184,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="phone"
                 label="Phone"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'123456789'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -208,8 +209,8 @@ export default function AddAddressScreen({navigation}) {
               <ControlledInput
                 name="address1"
                 label="Address Line"
-                placeholder={'Abcd@1234'}
-                placeholderTextColor={'#000'}
+                placeholder={'German No 4'}
+                placeholderTextColor={'rgba(0,0,0,0.5)'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
                 style={{height: 130, textAlignVertical: 'top'}}

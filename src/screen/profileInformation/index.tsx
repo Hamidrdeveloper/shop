@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, {FunctionComponent, useContext, useState} from 'react';
+import React, {FunctionComponent, useContext, useEffect, useState} from 'react';
 import {Image, Text, View} from 'react-native';
 import {CloseSquare, IconlyProvider} from 'react-native-iconly';
 import {Color} from '../../infrastructuer/theme/colors.style';
@@ -28,12 +28,18 @@ export default function ProfileInformation({route, navigation}) {
   function onSubmit(user: UserProfile) {
     let params: UserProfile = {...userUpdate, ...user};
     profileUpdateFn(params);
-    
   }
 
   const onError: SubmitErrorHandler<UserProfile> = errors => {
     return console.log('errors', errors);
   };
+  useEffect(() => {
+    if (isUpdate) {
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
+    }
+  }, [isUpdate]);
   function RenderEditInformation() {
     switch (typeInformation) {
       case 'Personal':
@@ -43,13 +49,13 @@ export default function ProfileInformation({route, navigation}) {
         return <Birthday />;
 
       case 'Country':
-        return <Country />;
+        return <Country name="country_id" />;
 
       case 'Language':
-        return <Language />;
+        return <Language name="language_id" />;
 
       case 'Gender':
-        return <Gender />;
+        return <Gender name="people.gender" />;
 
       case 'Email':
         return <Email />;
@@ -117,7 +123,11 @@ export default function ProfileInformation({route, navigation}) {
             </Text>
           </HandleEvent>
         </View>
-        <DownAlertToast visible={isUpdate} text={'Test'} type={'success'} />
+        <DownAlertToast
+          visible={isUpdate}
+          text={'Updated successfully'}
+          type={'success'}
+        />
         <Indicator isVisible={isLoading} />
       </View>
     </>

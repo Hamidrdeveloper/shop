@@ -48,7 +48,7 @@ class AddressDataService {
   }
   async getAddress() {
     try {
-      const res = await http.get(Url.Contact_Groups_ADDRESS);
+      const res = await http.get(Url.Contact_Groups_ADDRESS + '?per_page=100');
       console.log(Url.Contact_Groups_ADDRESS, res.data.data);
       return res.data.data;
     } catch (error) {

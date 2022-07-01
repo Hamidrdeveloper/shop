@@ -32,6 +32,7 @@ import {
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {AddressContext} from '../../service/Address/Address.context';
+import {ProfileContext} from '../../service/Profile/Profile.context';
 import {ACTIONS} from '../../utils/actionsType';
 import {
   DetailsAddress,
@@ -45,6 +46,7 @@ export default function MyAddressScreen({navigation, route}) {
   //Context
   const {getAddressFn, addToMainAddressFn, addresses, removeAddressFn} =
     useContext(AddressContext);
+  const {userInvoiceAddressFn} = useContext(ProfileContext);
   //============
 
   const [isVisible, setIsVisible] = useState(false);
@@ -86,8 +88,18 @@ export default function MyAddressScreen({navigation, route}) {
     setAddressList(add);
   }
   function _passSelectAddress() {
+    switch (typeScreen) {
+      case 'Basket':
+        addToMainAddressFn(select);
+        break;
+      case 'Invoice':
+        userInvoiceAddressFn(select);
+        break;
+      case 'Deliver':
+        addToMainAddressFn(select);
+        break;
+    }
     navigation.goBack();
-    addToMainAddressFn(select);
   }
   const RerenderContent = item => {
     return (
@@ -142,7 +154,9 @@ export default function MyAddressScreen({navigation, route}) {
       <View>
         <Space lineH={10} />
         <ViewItemAddress>
-          {typeScreen == 'Basket' ? (
+          {typeScreen == 'Basket' ||
+          typeScreen == 'Invoice' ||
+          typeScreen == 'Deliver' ? (
             <RadioButtonSingle
               id={1}
               flag={value.isSelected}
@@ -225,7 +239,9 @@ export default function MyAddressScreen({navigation, route}) {
             ReRender={() => RerenderContent(selectMore)}
           />
         </ScrollView>
-        {typeScreen == 'Basket' ? (
+        {typeScreen == 'Basket' ||
+        typeScreen == 'Invoice' ||
+        typeScreen == 'Deliver' ? (
           <Absolute left={15} bottom={30}>
             <ButtonCircle onClick={_passSelectAddress} />
           </Absolute>

@@ -4,12 +4,14 @@ export const PROFILE_ADDRESS = 'users/profile';
 export const PROFILE_EDIT_ADDRESS = '/users/profile/edit';
 export const INVOICE_ADDRESS_ADDRESS =
   '/users/profile/change-invoice-contact-group';
-export const PRODUCTS_BY_ID_ADDRESS = 'product-variations';
+export const PRODUCTS_BY_ID_ADDRESS = 'shop/product-variations';
 export const Contact_Groups_ADDRESS = '/contact-groups';
 export const Basket_Bulk_ADDRESS = '/basket/bulk-add';
 export const Basket_OrderSale_ADDRESS = '/order-sale';
 export const COUNTRIES_ADDRESS = '/countries';
 export const LANGUAGE_ADDRESS = '/languages';
+
+export const CHANGE_INVOICE_CONTACT_GROUP= '/users/profile/change-invoice-contact-group'
 export const Basket_CREATE_ORDER_ADDRESS = '/order-sales/basket';
 export const PRODUCTS_ADDRESS = 'products';
 export const PRODUCTS_VARIATIONS_ADDRESS = 'shop/product-variations';
@@ -25,4 +27,4 @@ export const MAP_ADDRESS = 'http://api.mapbox.com/geocoding/v5/mapbox.places/';
 
 export const IMAGE_ADDRESS = 'https://api.solutionsapps.shop';
 export const Partner_ADDRESS = 'shop/partners';
-export const Partner_ADDRESS_ID = 'shop/partner';
+export const Partner_ADDRESS_ID = 'shop/partners';

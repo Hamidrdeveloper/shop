@@ -39,7 +39,7 @@ class BasketDataService {
   }
   orderSale() {
     return http
-      .get(Address.Basket_OrderSale_ADDRESS)
+      .get(Address.Basket_OrderSale_ADDRESS + '?page=1&per_page=30')
       .then(res => {
         console.log(Address.Basket_OrderSale_ADDRESS, res);
         return res.data.data;

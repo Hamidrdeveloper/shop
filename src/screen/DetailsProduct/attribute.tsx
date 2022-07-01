@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {ProductContext} from '../../service/Products/Product.context';
 
 const TextPicker = styled(TextBlack18)`
-  width: 140;
+  width: 30%;
   font-size: 16;
 `;
 interface Type {
@@ -32,7 +32,7 @@ export default function AttributeItem({data, setProduct}: Type) {
     });
     setOpenArray(openData);
     setOpenArrayDefault(openData);
-  }, []);
+  }, [data]);
   useEffect(() => {
     if (value!=null) {
       setValueFn(value);
@@ -76,7 +76,6 @@ export default function AttributeItem({data, setProduct}: Type) {
         <Space lineH={20} />
         <ViewRate>
           <TextPicker>{`${data[index][0]?.name} :`}</TextPicker>
-          <Space lineW={20} />
 
           <Picker
             containerStyle={{width: 220}}

@@ -9,7 +9,7 @@ import {ArrowLeft} from 'react-native-iconly';
 import { AuthContext } from '../../service/Auth/Auth.context';
 import { ForgetPasswordModel } from '../../service/Auth/model';
 import { TextInputSign } from '../signUp/style/signUp.style';
-import Toast from '../../components/toast';
+// import Toast from '../../components/toast';
 
 export default function ForgetPassword({navigation}) {
   const {forgetPasswordFn} = useContext(AuthContext);
@@ -103,7 +103,7 @@ export default function ForgetPassword({navigation}) {
             </Text>
           </View>
           <Space lineH={70} />
-          <Toast
+          {/* <Toast
           text={""}
           show={true}
           renderToggleButton={()=>  <TouchableOpacity  onPress={()=>{
@@ -129,7 +129,7 @@ export default function ForgetPassword({navigation}) {
                 </Text>
               </View>
             </TouchableOpacity>}
-          />
+          /> */}
           
           <Space lineH={80} />
           <View

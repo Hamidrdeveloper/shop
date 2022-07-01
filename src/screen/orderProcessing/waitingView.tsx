@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {Dimensions, Image, Text, View} from 'react-native';
 import {Plus} from 'react-native-iconly';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -14,7 +14,10 @@ import { RelatedProductItem } from './realted';
 
 export default function WaitingView({navigation}) {
   const {orderSaleWhiting} = useContext(BasketContext);
-
+  const [search, setSearch] = useState('');
+  const updateSearch = (text: React.SetStateAction<string>) => {
+    setSearch(text);
+  };
   function RenderListItem() {
     return (
       <>
@@ -145,6 +148,8 @@ export default function WaitingView({navigation}) {
         <SearchView
           placeholder="Search On Cleaning"
           searchIcon={() => <Icon color={'gry'} size={30} name="search1" />}
+          onChangeText={(e: any) => updateSearch(e)}
+          value={search}
         />
         <Space lineH={15} />
         <Padding>

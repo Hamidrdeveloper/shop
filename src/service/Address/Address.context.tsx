@@ -11,7 +11,7 @@ import Storage from '../../utils/storeData/index';
 import {KEY} from '../../utils/storeData/key';
 interface IAddressContext {
   addresses: Array<Type.ContactGroups>;
-  saveAddresses: Array<Type.ContactGroups>;
+  saveProduct: Array<Type.ContactGroups>;
   isAddToData: boolean;
   getAddressFn: () => void;
   loadedSaveAddressFn: () => void;
@@ -38,7 +38,7 @@ export default function AddressContextProvider({
 
   const [isAddToData, setAddToData] = useState(false);
   const [addresses, setAddresses] = useState([]);
-  const [saveAddresses, setSaveAddresses] = useState([]);
+  const [saveProduct, setSaveProduct] = useState([]);
 
   function getAddressSelect() {
     Storage.retrieveData(KEY.AddressSelect).then(res => {
@@ -68,7 +68,7 @@ export default function AddressContextProvider({
     Storage.retrieveData(KEY.MySave).then(res => {
       console.log(KEY.MySave, JSON.parse(res));
 
-      setSaveAddresses(JSON.parse(res));
+      setSaveProduct(JSON.parse(res));
     });
   }
   function addToMainAddressFn(address: Type.ContactGroupsContext) {
@@ -83,7 +83,9 @@ export default function AddressContextProvider({
     setAddToDataLoding(true);
     addAddressAc(address).then(is => {
       getAddressFn();
-      if (is != null) setAddToData(true);
+      if (is != null) {
+        setAddToData(true);
+      }
     });
     setAddToDataLoding(false);
   }
@@ -92,7 +94,9 @@ export default function AddressContextProvider({
     setAddToDataLoding(true);
     editAddressAc(address, id).then(is => {
       getAddressFn();
-      if (is != null) setAddToData(true);
+      if (is != null) {
+        setAddToData(true);
+      }
     });
     setAddToDataLoding(false);
   }
@@ -120,7 +124,7 @@ export default function AddressContextProvider({
         addresses,
         isAddToData,
         loadedSaveAddressFn,
-        saveAddresses,
+        saveProduct,
         deleteAddressFn,
         addressSelect,
         getAddressSelect,

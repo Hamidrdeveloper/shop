@@ -69,7 +69,7 @@ export default function MyReviewsScreen({navigation}) {
   return (
     <>
       <ScrollView>
-        <HeaderScComponent navigation={navigation} title={'My Saved'} />
+        <HeaderScComponent navigation={navigation} title={'My reviews'} />
         <View
           style={{
             width: `100%`,

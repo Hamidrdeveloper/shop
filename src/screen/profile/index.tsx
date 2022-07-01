@@ -20,13 +20,15 @@ import {AddressContext} from '../../service/Address/Address.context';
 import {BasketContext} from '../../service/Basket/Basket.context';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 import {FileContext} from '../../service/File/File.context';
+import { MainContext } from '../../service/Main/Main.context';
 
 export default function ProfileScreen({navigation}) {
   const {user} = useContext(ProfileContext);
   const {loadedSaveAddressFn} = useContext(AddressContext);
   const {orderSale} = useContext(BasketContext);
   const {uploadFileFn} = useContext(FileContext);
-
+  const {onDeleteUser} = useContext(MainContext);
+  
   const [isPicker, setPicker] = useState(false);
   useEffect(() => {
     loadedSaveAddressFn();
@@ -183,8 +185,8 @@ export default function ProfileScreen({navigation}) {
                 icon={<Logout />}
                 text="Sign Out"
                 onClick={() => {
-                  Storage.removeData('TOKEN');
-                  navigation.navigate('SignInScreen');
+                  onDeleteUser();
+                  navigation.replace('SignInScreen');
                 }}
               />
             </View>
