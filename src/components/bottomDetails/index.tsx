@@ -113,11 +113,7 @@ function BottomDetails({item}) {
               thousandSeparator={true}
               prefix={''}
               renderText={(value, props) => {
-                return (
-                  <TextItem>
-                    {value + ' ' + item?.sale_price?.price?.currency?.symbol}
-                  </TextItem>
-                );
+                return <TextItem>{value + ' ' + '€'}</TextItem>;
               }}
             />
             <TextItemOffer>{'38,50 €'}</TextItemOffer>

@@ -128,7 +128,7 @@ export default function VerifyCode({navigation}) {
               alignSelf: 'center',
               justifyContent: 'center',
             }}>
-            <TouchableOpacity  onPress={()=>{navigation.navigate("Bottom_SCREEN")}}>
+            <TouchableOpacity  onPress={()=>{navigation.replace("Bottom_SCREEN")}}>
               <View
                 style={{
                   height: 50,

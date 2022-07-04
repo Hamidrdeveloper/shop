@@ -63,7 +63,7 @@ export function RelatedProductItem({navigation}) {
                 renderText={(value, props) => {
                   return (
                     <TextPriceOffer>
-                      {value + ' ' + item?.sale_price?.price?.currency?.symbol}
+                      {value + ' ' +'€'}
                     </TextPriceOffer>
                   );
                 }}
@@ -79,7 +79,7 @@ export function RelatedProductItem({navigation}) {
                   renderText={(value, props) => {
                     return (
                       <TextPriceThroughOffer>
-                        {value + ' ' + item?.sale_price?.price?.currency.symbol}
+                        {value + ' ' + '€'}
                       </TextPriceThroughOffer>
                     );
                   }}

@@ -46,7 +46,9 @@ const NavigationStart = () => {
   return (
     <NavigationContainer>
       <Slack.Navigator screenOptions={{headerShown: false}}>
+
         <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
+        <Slack.Screen name={'PaymentScreen_SCREEN'} component={PaymentScreen} />
 
         <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
 
@@ -68,7 +70,6 @@ const NavigationStart = () => {
         <Slack.Screen name={'AddAddress_SCREEN'} component={AddAddressScreen} />
         <Slack.Screen name={'Chat_SCREEN'} component={ChatScreen} />
 
-        <Slack.Screen name={'PaymentScreen_SCREEN'} component={PaymentScreen} />
         <Slack.Screen
           name={'DeliveryAddress_SCREEN'}
           component={DeliveryAddressScreen}

@@ -83,6 +83,7 @@ export default function AuthContextProvider({
         if (!is.status) {
           setMessageError(is.message);
           setIsShowError(!is.status);
+          
         } else {
           if (is.message.sponsor_id) {
             partnerIdFn(is.message.sponsor_id);

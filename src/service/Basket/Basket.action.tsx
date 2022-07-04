@@ -1,7 +1,7 @@
 import BasketDataService from './Basket.service';
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import * as Type from './types';
-import { CommentContext } from '../Comment/Comment.context';
+import {CommentContext} from '../Comment/Comment.context';
 export function BasketsAc(data) {
   return BasketDataService.bulkAdd(data);
 }
@@ -10,4 +10,10 @@ export function crateOrderSaleAc(id) {
 }
 export function orderSalesAc() {
   return BasketDataService.orderSale();
+}
+export function paymentMethodsAc() {
+  return BasketDataService.paymentMethods();
+}
+export function couponsAc(code: string) {
+  return BasketDataService.coupons(code);
 }

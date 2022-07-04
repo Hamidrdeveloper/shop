@@ -12,6 +12,7 @@ import {BasketContext} from '../../service/Basket/Basket.context';
 import NumberFormat from 'react-number-format';
 import {IMAGE_ADDRESS} from '../../utils/adress.api';
 import {RelatedProductItem} from './realted';
+import {ViewRow} from '../orderDetails/style/orderDetails.style';
 
 export default function ProcessingView({navigation}) {
   const {listOrderSale} = useContext(BasketContext);
@@ -22,19 +23,45 @@ export default function ProcessingView({navigation}) {
   };
   function RenderListItem(item) {
     console.log('order-sale', item);
-
+    {
+      /* <View
+              style={{
+                borderWidth: 1,
+                borderColor: Color.brand.colorButton,
+                borderRadius: 8,
+              }}>
+              <Text style={{fontSize: 14, color: Color.brand.textGrey}}>
+                {'Order No. :#'}
+              </Text>
+            </View> */
+    }
     return (
       <>
-        <Text>
-          <Text style={{fontSize: 14, color: Color.brand.textGrey}}>
-            {'Order No. :#'}
+        <ViewRow>
+          <Text>
+            <Text style={{fontSize: 14, color: Color.brand.textGrey}}>
+              {'Order No. :#'}
+            </Text>
+            <Text style={{fontSize: 14, color: Color.brand.black}}>
+              {item?.orderSalePositions.length > 0
+                ? item?.orderSalePositions[0].order_sale_id
+                : '0'}
+            </Text>
           </Text>
-          <Text style={{fontSize: 14, color: Color.brand.black}}>
-            {item?.orderSalePositions.length > 0
-              ? item?.orderSalePositions[0].order_sale_id
-              : '0'}
-          </Text>
-        </Text>
+          <View
+            style={{
+              backgroundColor: Color.brand.colorButton,
+              borderRadius: 15,
+              height: 30,
+              width: 120,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={{fontSize: 14, color: Color.brand.white}}>
+              {'Waiting For Payment'}
+            </Text>
+          </View>
+        </ViewRow>
         <Space lineH={15} />
         <View
           style={{
@@ -54,7 +81,7 @@ export default function ProcessingView({navigation}) {
               renderText={(value, props) => {
                 return (
                   <Text style={{fontSize: 14, color: Color.brand.black}}>
-                    {value + ' ' + item.currency.symbol}
+                    {value + ' ' + '€'}
                   </Text>
                 );
               }}

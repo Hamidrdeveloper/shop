@@ -140,7 +140,7 @@ export default function CategoryPageScreen({navigation, route}) {
                     <TextPriceOffer>
                       {value +
                         ' ' +
-                        item?.sale_price?.price?.currency?.symbol}
+                        '€'}
                     </TextPriceOffer>
                   );
                 }}
@@ -159,7 +159,7 @@ export default function CategoryPageScreen({navigation, route}) {
                       <TextPriceThroughOffer>
                         {value +
                           ' ' +
-                          item?.sale_price?.price?.symbol}
+                          '€'}
                       </TextPriceThroughOffer>
                     );
                   }}

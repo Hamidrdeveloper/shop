@@ -30,7 +30,8 @@ export default function MainContextProvider({
   children: ReactElement;
 }) {
   const [token, setToken] = useState('');
-  const {setLoginOpen, countriesFn, languageFn} = useContext(AuthContext);
+  const {setLoginOpen, countriesFn, languageFn, isRegisterOpen, isLoginApi} =
+    useContext(AuthContext);
   const {profileFn} = useContext(ProfileContext);
   const {orderSale} = useContext(BasketContext);
   const {PartnerFn} = useContext(PartnerContext);
@@ -66,24 +67,25 @@ export default function MainContextProvider({
   useEffect(() => {
     onRunAllApi();
   }, []);
-
+  useEffect(() => {
+    onRunAllApi();
+  }, [isRegisterOpen, isLoginApi]);
   function onRunAllApi() {
-    countriesFn();
-    languageFn();
-    productsFn();
-    categoriesFn();
-
-    arrivalFn();
-    cardBottomArrivalFn();
-    bestSellingFn();
-    newProductsFn();
-    categoriesTreeFn();
     Storage.retrieveData('TOKEN').then(res => {
       console.log('MainContext', res);
 
       http.defaults.headers.common.Authorization = `Bearer ${res}`;
       PartnerFn();
+      countriesFn();
+      languageFn();
+      productsFn();
+      categoriesFn();
 
+      arrivalFn();
+      cardBottomArrivalFn();
+      bestSellingFn();
+      newProductsFn();
+      categoriesTreeFn();
       if (res.length > 15) {
         setLoginOpen(true);
       }

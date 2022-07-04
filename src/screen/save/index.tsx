@@ -69,7 +69,7 @@ export default function MySave({navigation}) {
                         fontSize: 20,
                         width: 100,
                       }}>
-                      {value + ' ' + item?.sale_price?.price?.currency?.symbol}
+                      {value + ' ' + '€'}
                     </Text>
                   );
                 }}

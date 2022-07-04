@@ -11,6 +11,8 @@ interface IBasketContext {
   numberBasket: number;
   resultSymbol: string;
   resultPrice: string;
+  totalPrice: number;
+  shipping: number;
   numberProducts: Array<any>;
   bulkAdd: (id) => void;
   listOrderSale: Array<any>;
@@ -19,7 +21,12 @@ interface IBasketContext {
   orderSaleCompleted: Array<any>;
   orderSaleCancel: Array<any>;
   orderSaleWhiting: Array<any>;
+  paymentMethods: Array<any>;
   crateOrderSale: (id) => void;
+  paymentMethodsFn: () => void;
+  couponsFn: (code: string) => void;
+  isCoupons: boolean;
+  codePrice: string;
 }
 export const BasketContext = createContext<IBasketContext>(
   {} as IBasketContext,
@@ -34,12 +41,22 @@ export default function BasketContextProvider({
   const [resultPrice, setResultPrice] = useState('0');
   const [resultSymbol, setResultSymbol] = useState('');
   const [numberProducts, setNumberProducts] = useState<any>([]);
+  const [paymentMethods, setPaymentMethods] = useState<any>([]);
+  const [shipping, setShipping] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [codePrice, setCodePrice] = useState<string>('0');
+  const [isCoupons, setCoupons] = useState<boolean>(false);
+
   const [listOrderSale, setListOrderSale] = useState<any>([]);
   const [orderSalePadding, setOrderSalePadding] = useState<any>([]);
   const [orderSaleCompleted, setOrderSaleCompleted] = useState<any>([]);
   const [orderSaleCancel, setOrderSaleCancel] = useState<any>([]);
   const [orderSaleWhiting, setOrderSaleWhiting] = useState<any>([]);
-
+  function paymentMethodsFn() {
+    AC.paymentMethodsAc().then(res => {
+      setPaymentMethods(res);
+    });
+  }
   function addToBasket(product: ProductVariation) {
     const filter = basketsExited.filter(val => {
       return val.id == product.id;
@@ -61,9 +78,17 @@ export default function BasketContextProvider({
 
       setBasketsExited(dataP);
     }
+    let price = parseInt(resultPrice) + parseInt(product?.sale_price.value);
+    setResultPrice(price.toString());
+    if (price < 20) {
+      setShipping(5);
+      setTotalPrice(price + 5);
+    } else {
+      setShipping(0);
+      setTotalPrice(price);
+    }
 
-    setResultPrice(parseInt(resultPrice) + parseInt(product?.sale_price.value));
-    setResultSymbol(product?.sale_price?.price?.currency?.symbol);
+    setResultSymbol('€');
   }
 
   function removeToBasket(product: ProductVariation) {
@@ -87,7 +112,14 @@ export default function BasketContextProvider({
     }
     let price = parseInt(resultPrice) - parseInt(product?.sale_price.value);
     setResultPrice(price.toString());
-    setResultSymbol(product?.sale_price?.price?.currency?.symbol);
+    if (price < 20) {
+      setShipping(5);
+      setTotalPrice(price + 5);
+    } else {
+      setTotalPrice(price);
+    }
+
+    setResultSymbol('€');
   }
   function bulkAdd(id) {
     let product = basketsExited.map(value => {
@@ -104,6 +136,7 @@ export default function BasketContextProvider({
     AC.crateOrderSaleAc(id).then(res => {
       setBasketsExited([]);
       console.log('bulkAdd', res);
+      setNumberBasket(0);
       orderSale();
     });
   }
@@ -115,6 +148,17 @@ export default function BasketContextProvider({
       //   setOrderSalePadding([...orderSalePadding, element]);
       // });
     });
+  }
+  function couponsFn(code: string) {
+    setCoupons(false);
+    AC.couponsAc(code).then(res => {
+      console.log('couponsFn', res);
+      setCoupons(true);
+      setCodePrice('5%');
+      let offer = totalPrice - 5;
+      setTotalPrice(offer);
+    });
+    setCoupons(false);
   }
 
   return (
@@ -134,7 +178,14 @@ export default function BasketContextProvider({
         orderSaleCancel,
         orderSaleWhiting,
         crateOrderSale,
-        numberProducts
+        numberProducts,
+        paymentMethodsFn,
+        paymentMethods,
+        shipping,
+        totalPrice,
+        couponsFn,
+        isCoupons,
+        codePrice,
       }}>
       {children}
     </BasketContext.Provider>

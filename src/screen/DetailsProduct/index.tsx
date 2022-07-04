@@ -54,7 +54,7 @@ export default function DetailsProduct({navigation, route}) {
       setItemsAttribute(attributeType);
     }, 100);
     console.log('====================================');
-    console.log("attributeType",attributeType);
+    console.log('attributeType', attributeType);
     console.log('====================================');
   }, [attributeType]);
   function offerItem({item}) {
@@ -84,9 +84,7 @@ export default function DetailsProduct({navigation, route}) {
             renderText={(value, props) => {
               return (
                 <TextPriceThroughOffer>
-                  {value +
-                    ' ' +
-                    item?.sale_price?.price?.currency?.symbol}
+                  {value + ' ' + '€'}
                 </TextPriceThroughOffer>
               );
             }}
@@ -98,13 +96,7 @@ export default function DetailsProduct({navigation, route}) {
             thousandSeparator={true}
             prefix={''}
             renderText={(value, props) => {
-              return (
-                <TextPriceOffer>
-                  {value +
-                    ' ' +
-                    item?.sale_price?.price?.currency?.symbol}
-                </TextPriceOffer>
-              );
+              return <TextPriceOffer>{value + ' ' + '€'}</TextPriceOffer>;
             }}
           />
           <Space lineH={5} />

@@ -13,7 +13,7 @@ const WelcomeScreen = ({navigation}) => {
   const _onDone = () => {};
   const onNext = () => {
     if (slideIndex == slides.length - 1) {
-      navigation.navigate("SignUpScreen");
+      navigation.replace("SignUpScreen");
     } else {
       setIndexPage(slideIndex + 1);
     }

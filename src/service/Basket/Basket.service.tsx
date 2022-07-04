@@ -22,9 +22,11 @@ class BasketDataService {
   }
   crateOrderSale(id) {
     let data = {
-      payment_method_id: 1,
-      delivery_contact_group_id: id,
-      invoice_contact_group_id: id,
+      delivery_contact_group_id: 95872,
+      description: '',
+      invoice_contact_group_id: 95872,
+      payment_method_id: 2,
+      shipping_profile_id: 1,
     };
 
     return http
@@ -46,6 +48,42 @@ class BasketDataService {
       })
       .catch(error => {
         console.log(Address.Basket_OrderSale_ADDRESS, error.response);
+      });
+  }
+  basketAdd() {
+    return http
+      .get(Address.Basket_OrderSale_ADDRESS + '?page=1&per_page=30')
+      .then(res => {
+        console.log(Address.Basket_OrderSale_ADDRESS, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.Basket_OrderSale_ADDRESS, error.response);
+      });
+  }
+  paymentMethods() {
+    return http
+      .get(
+        Address.PAYMENT_METHODS +
+          '?page=1&per_page=100&companyCountryId=83&companyCurrencyId=49',
+      )
+      .then(res => {
+        console.log(Address.PAYMENT_METHODS, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.PAYMENT_METHODS, error.response);
+      });
+  }
+  coupons(code: string) {
+    return http
+      .post(Address.COUPONS, {code: code})
+      .then(res => {
+        console.log(Address.PAYMENT_METHODS, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.PAYMENT_METHODS, error.response);
       });
   }
 }

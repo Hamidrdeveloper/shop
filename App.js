@@ -38,6 +38,7 @@ import FileContextProvider from './src/service/File/File.context';
 import './src/core/i18n/config';
 import PartnerContextProvider from './src/service/Partner/Partner.context';
 import MapContextProvider from './src/service/map/Map.context';
+import {AuthContextProvider as Reload} from './src/service/Auth/Auth.context';
 
 const App = () => {
   console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];

@@ -8,8 +8,10 @@ export const PRODUCTS_BY_ID_ADDRESS = 'shop/product-variations';
 export const Contact_Groups_ADDRESS = '/contact-groups';
 export const Basket_Bulk_ADDRESS = '/basket/bulk-add';
 export const Basket_OrderSale_ADDRESS = '/order-sale';
+
 export const COUNTRIES_ADDRESS = '/countries';
 export const LANGUAGE_ADDRESS = '/languages';
+export const PAYMENT_METHODS = '/payment-methods/';
 
 export const CHANGE_INVOICE_CONTACT_GROUP= '/users/profile/change-invoice-contact-group'
 export const Basket_CREATE_ORDER_ADDRESS = '/order-sales/basket';
@@ -24,7 +26,7 @@ export const LINK_FORGET_PASSWORD = 'reset-password/change-password';
 export const PRODUCTS_CATEGORIES_ADDRESS = 'product-categories';
 export const EMAIL_ADDRESS = 'reset-password';
 export const MAP_ADDRESS = 'http://api.mapbox.com/geocoding/v5/mapbox.places/';
-
+export const COUPONS = 'coupons/set';
 export const IMAGE_ADDRESS = 'https://api.solutionsapps.shop';
 export const Partner_ADDRESS = 'shop/partners';
 export const Partner_ADDRESS_ID = 'shop/partners';

@@ -4,7 +4,14 @@ import {View} from 'react-native';
 import AnimateLoadingButton from 'react-native-animate-loading-button';
 import {Color} from '../../infrastructuer/theme/colors.style';
 
-export const LoadingButton = ({onClose, onNext, isActive,title}) => {
+export const LoadingButton = ({
+  onClose,
+  onNext,
+  isActive,
+  title,
+  styleMain,
+  width = 332,
+}) => {
   const loadingButton = useRef();
   const _onPressHandler = () => {
     onNext();
@@ -28,14 +35,17 @@ export const LoadingButton = ({onClose, onNext, isActive,title}) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-      }}>
+      style={[
+        {
+          flex: 1,
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+        },
+        styleMain,
+      ]}>
       <AnimateLoadingButton
         ref={loadingButton}
-        width={332}
+        width={width}
         height={50}
         title={title}
         borderRadius={10}

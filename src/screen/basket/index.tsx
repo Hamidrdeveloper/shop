@@ -60,7 +60,7 @@ const MenuView = styled(View)`
   flex-direction: row;
   width: 100%;
   height: 50;
-  padding:15px;
+  padding: 15px;
 `;
 
 export default function BasketScreen({navigation}) {
@@ -174,13 +174,7 @@ export default function BasketScreen({navigation}) {
             thousandSeparator={true}
             prefix={''}
             renderText={(value, props) => {
-              return (
-                <TextPriceBasket>
-                  {value +
-                    ' ' +
-                    data?.sale_price?.price?.currency?.symbol}
-                </TextPriceBasket>
-              );
+              return <TextPriceBasket>{value + ' ' + '€'}</TextPriceBasket>;
             }}
           />
         </ViewCenter>

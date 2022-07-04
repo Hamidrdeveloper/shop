@@ -21,6 +21,7 @@ import {BasketContext} from '../../service/Basket/Basket.context';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 import {FileContext} from '../../service/File/File.context';
 import { MainContext } from '../../service/Main/Main.context';
+import { BackgroundView } from '../../css/main.style';
 
 export default function ProfileScreen({navigation}) {
   const {user} = useContext(ProfileContext);
@@ -43,12 +44,7 @@ export default function ProfileScreen({navigation}) {
   }
   return (
     <>
-      <View
-        style={{
-          backgroundColor: Color.brand.white,
-          width: '100%',
-          height: '100%',
-        }}>
+      <BackgroundView>
         <ScrollView>
           <View
             style={{
@@ -192,7 +188,7 @@ export default function ProfileScreen({navigation}) {
             </View>
           </View>
         </ScrollView>
-      </View>
+      </BackgroundView>
       <Picker visible={isPicker} onClick={res => onResponse(res)} />
     </>
   );

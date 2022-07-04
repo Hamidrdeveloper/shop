@@ -13,7 +13,7 @@ import Gender from './component/gender';
 import Email from './component/email';
 import {FormProvider, SubmitErrorHandler, useForm} from 'react-hook-form';
 import {User, UserProfile} from '../../service/Profile/types';
-import {HandleEvent} from '../../css/main.style';
+import {BackgroundView, HandleEvent} from '../../css/main.style';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 import DownAlertToast from '../../components/dropDownAlertRef';
 import Indicator from '../../components/lodging/indicator';
@@ -63,12 +63,7 @@ export default function ProfileInformation({route, navigation}) {
   }
   return (
     <>
-      <View
-        style={{
-          backgroundColor: Color.brand.white,
-          width: '100%',
-          height: '100%',
-        }}>
+      <BackgroundView>
         <View
           style={{
             flexDirection: 'row',
@@ -129,7 +124,7 @@ export default function ProfileInformation({route, navigation}) {
           type={'success'}
         />
         <Indicator isVisible={isLoading} />
-      </View>
+      </BackgroundView>
     </>
   );
 }

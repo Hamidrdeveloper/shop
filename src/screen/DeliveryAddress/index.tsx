@@ -22,9 +22,11 @@ import {Space} from '../../infrastructuer/theme/space.style';
 import {
   DetailsAddress,
   Menu,
+  TextCode,
   TitleAddress,
   TitleAddressBlue,
   TitleAddressTitle,
+  TouchCode,
   ViewItemAddress,
   ViewPopUp,
 } from '../DeliveryAddress/style/myAddress.style';
@@ -41,6 +43,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 import {BasketContext} from '../../service/Basket/Basket.context';
 import styled from 'styled-components';
 import {ProfileContext} from '../../service/Profile/Profile.context';
+import EnterCode from './enterCode';
 
 const TextBlue18 = styled(Text)`
   font-size: 18;
@@ -59,11 +62,19 @@ const TextBlack16 = styled(Text)`
   font-size: 16;
 `;
 export default function DeliveryAddressScreen({navigation}) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisibleCode, setIsVisibleCode] = useState(false);
   const {getAddressFn, addressSelect, getAddressSelect} =
     useContext(AddressContext);
   const {showInvoiceAddress} = useContext(ProfileContext);
-  const {bulkAdd, resultPrice, resultSymbol} = useContext(BasketContext);
+  const {
+    bulkAdd,
+    resultPrice,
+    resultSymbol,
+    shipping,
+    totalPrice,
+    isCoupons,
+    codePrice,
+  } = useContext(BasketContext);
   let dropDownAlertRef = useRef();
   useEffect(() => {
     getAddressSelect();
@@ -110,7 +121,7 @@ export default function DeliveryAddressScreen({navigation}) {
             onPress={() => {
               navigation.navigate('MyAddress_SCREEN', {type: 'Deliver'});
             }}>
-          <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
+            <TitleAddressBlue>{'Edit or change address'}</TitleAddressBlue>
           </TouchableOpacity>
           <Space lineH={10} />
           <LineW />
@@ -125,7 +136,9 @@ export default function DeliveryAddressScreen({navigation}) {
   };
   function nextStep() {
     if (addressSelect.address != null) {
-      navigation.navigate('PaymentScreen_SCREEN');
+      navigation.navigate('PaymentScreen_SCREEN', {
+        address: addressSelect.id,
+      });
       bulkAdd(addressSelect.id);
     } else {
       _fetchData('please Add Address', 'error');
@@ -187,18 +200,33 @@ export default function DeliveryAddressScreen({navigation}) {
             <Space lineH={10} />
             <ViewRow>
               <TextGray>{'Shipping'}</TextGray>
-              <TextBlack>{resultPrice + '' + resultSymbol}</TextBlack>
+              <TextBlack>{shipping + '' + resultSymbol}</TextBlack>
+            </ViewRow>
+            <Space lineH={10} />
+            <ViewRow>
+              <TextBlack>{'Discount code'}</TextBlack>
+              {isCoupons ? (
+                <TextBlack>{codePrice}</TextBlack>
+              ) : (
+                <TouchCode
+                  onPress={() => {
+                    setIsVisibleCode(true);
+                  }}>
+                  <TextCode>{'Enter'}</TextCode>
+                </TouchCode>
+              )}
             </ViewRow>
             <Space lineH={10} />
             <ViewRow>
               <TextBlack>{'Bag Total'}</TextBlack>
-              <TextBlack>{resultPrice + '' + resultSymbol}</TextBlack>
+              <TextBlack>{totalPrice + '' + resultSymbol}</TextBlack>
             </ViewRow>
+           
             <Space lineH={100} />
           </Padding>
         </ScrollView>
         <BottomViewBasket
-          resultPrice={resultPrice + '' + resultSymbol}
+          resultPrice={totalPrice + '' + resultSymbol}
           navigation={navigation}
           onClick={nextStep}
         />
@@ -210,6 +238,10 @@ export default function DeliveryAddressScreen({navigation}) {
           }}
         />
       </BackgroundView>
+      <EnterCode
+        visible={isVisibleCode}
+        onChange={() => setIsVisibleCode(false)}
+      />
     </>
   );
 }
