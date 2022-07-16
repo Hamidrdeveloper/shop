@@ -6,8 +6,8 @@ export default axios.create({
   headers: {
     'Accept': 'application/json', 
     'HTTP_ACCEPT_LANGUAGE':'en',
-    'referer': 'https://nslag.com',  
-    'Origin': 'https://nslag.com',
+    'referer': 'https://solutionsapps.shop',  
+    'Origin': 'https://solutionsapps.shop',
     'Content-Type': 'application/json'
   }
 });

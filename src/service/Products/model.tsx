@@ -11,6 +11,7 @@ export const ProductsArrivalModel = {
   page: 0,
   per_page: 12,
   productCategoryIds: '',
+  productCategorySlug: '',
   search: '',
   orderBy: '',
 };

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import RenderListItem from '../../components/picker/components/RenderListItem';
@@ -16,11 +16,87 @@ import {ViewRow} from '../orderDetails/style/orderDetails.style';
 
 export default function ProcessingView({navigation}) {
   const {listOrderSale} = useContext(BasketContext);
-
+  const [orders, setOrders] = useState(listOrderSale);
   const [search, setSearch] = useState('');
+  const debouncedSearchTerm = useDebounce(search, 2000);
+  useEffect(() => {
+    setOrders(listOrderSale);
+  }, [listOrderSale]);
+  function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(
+      () => {
+        // Update debounced value after delay
+        const handler = setTimeout(() => {
+          setDebouncedValue(value);
+          searchProduct(value);
+        }, delay);
+
+        // Cancel the timeout if value changes (also on delay change or unmount)
+        // This is how we prevent debounced value from updating if value is changed ...
+        // .. within the delay period. Timeout gets cleared and restarted.
+        return () => {
+          clearTimeout(handler);
+        };
+      },
+      [value, delay], // Only re-call effect if value or delay changes
+    );
+
+    return debouncedValue;
+  }
   const updateSearch = (text: React.SetStateAction<string>) => {
     setSearch(text);
   };
+  function searchProduct(text: string) {
+    if (text == '' && listOrderSale.length > 0) {
+      setOrders(listOrderSale);
+    } else {
+      const find = listOrderSale?.filter(el => {
+        console.log('==============listOrderSale======================');
+        console.log(
+          Object.values(el).some(val =>
+            String(val).toLowerCase().includes(text),
+          ),
+        );
+        console.log('===============listOrderSale=====================');
+        if (
+          Object.values(el).some(val =>
+            String(val).toLowerCase().includes(text),
+          )
+        ) {
+          return Object.values(el).some(val =>
+            String(val).toLowerCase().includes(text),
+          );
+        } else {
+          const child = el?.orderSalePositions?.filter(xl => {
+            if (xl?.productVariation != null) {
+              console.log('====================================');
+              console.log(
+                Object.values(xl?.productVariation).some(val =>
+                  String(val).toLowerCase().includes(text),
+                ),
+              );
+              console.log('====================================');
+              return Object.values(xl.productVariation).some(val =>
+                String(val).toLowerCase().includes(text),
+              );
+            } else {
+              return false;
+            }
+          });
+          
+          if (child.length>0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      });
+
+      setOrders(find);
+    }
+  }
   function RenderListItem(item) {
     console.log('order-sale', item);
     {
@@ -50,10 +126,10 @@ export default function ProcessingView({navigation}) {
           </Text>
           <View
             style={{
-              backgroundColor: Color.brand.colorButton,
+              backgroundColor: Color.brand.blue,
               borderRadius: 15,
-              height: 30,
-              width: 120,
+              height: 25,
+              width: 180,
               alignItems: 'center',
               justifyContent: 'center',
             }}>
@@ -74,14 +150,15 @@ export default function ProcessingView({navigation}) {
               {'Payment :'}
             </Text>
             <NumberFormat
-              value={parseInt(item.total_price).toFixed(2)}
+              value={item.total_price}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
+              decimalScale={2}
               renderText={(value, props) => {
                 return (
                   <Text style={{fontSize: 14, color: Color.brand.black}}>
-                    {value + ' ' + '€'}
+                    {value?.replace('.', ',') + ' ' + '€'}
                   </Text>
                 );
               }}
@@ -145,23 +222,20 @@ export default function ProcessingView({navigation}) {
             justifyContent: 'space-around',
             width: '100%',
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('OrderDetails', {product: item});
-            }}>
+          <TouchableOpacity>
             <View
               style={{
                 width: 162,
                 height: 40,
                 borderColor: Color.brand.border,
-                borderWidth: 1,
+                borderWidth: 0,
                 borderRadius: 8,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{color: Color.brand.textGrey, fontSize: 14}}>
+              {/* <Text style={{color: Color.brand.textGrey, fontSize: 14}}>
                 {'View detail'}
-              </Text>
+              </Text> */}
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -212,10 +286,10 @@ export default function ProcessingView({navigation}) {
         />
         <Space lineH={15} />
         <Padding>
-          {listOrderSale.map(value => {
+          {orders.map(value => {
             return RenderListItem(value);
           })}
-          {listOrderSale.length == 0 ? (
+          {orders.length == 0 ? (
             <>
               <ViewEmpty>
                 <TextEmpty>{'There is no Processing order!'}</TextEmpty>

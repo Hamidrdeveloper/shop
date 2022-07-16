@@ -12,6 +12,7 @@ import {BackgroundImage} from 'react-native-elements/dist/config';
 import {LoadingButton} from '../../components/buttonLoading';
 import {AuthContext} from '../../service/Auth/Auth.context';
 import {MainContext} from '../../service/Main/Main.context';
+import { widthFullScreen } from '../../utils/main';
 
 export default function PartThree({onChangeValue}) {
   const [passOne, setPassOne] = useState(SignUpModel.password);
@@ -123,6 +124,7 @@ export default function PartThree({onChangeValue}) {
       <View>
         <LoadingButton
           isActive={false}
+          width={widthFullScreen-30}
           onNext={() => onSign()}
           title={'Next'}
           onClose={() => {}}

@@ -140,7 +140,7 @@ export default function ProfileScreen({navigation}) {
                   })
                 }
               />
-              <Space lineH={10} />
+              {/* <Space lineH={10} />
               <ButtonMenuProfile
                 icon={<Chat />}
                 text="Messages"
@@ -151,7 +151,7 @@ export default function ProfileScreen({navigation}) {
                     text: '',
                   })
                 }
-              />
+              /> */}
               <Space lineH={10} />
               <ButtonMenuProfile
                 icon={<EditSquare />}
@@ -164,7 +164,7 @@ export default function ProfileScreen({navigation}) {
                   })
                 }
               />
-              <Space lineH={10} />
+              {/* <Space lineH={10} />
               <ButtonMenuProfile
                 icon={<Notification />}
                 text="Notifications"
@@ -175,7 +175,7 @@ export default function ProfileScreen({navigation}) {
                     text: '',
                   })
                 }
-              />
+              /> */}
               <Space lineH={10} />
               <ButtonMenuProfile
                 icon={<Logout />}

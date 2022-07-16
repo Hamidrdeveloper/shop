@@ -130,6 +130,7 @@ export default function ProductContextProvider({
     data?.map(data => {
       array.push(data.attributes);
     });
+    console.log('filterAttributes', array);
     array.map(value => {
       return value.map(child => {
         console.log('attribute', child);
@@ -168,9 +169,11 @@ export default function ProductContextProvider({
       });
       boxFull.push(check);
     });
-    console.log('attribute', boxFull);
+    console.log('setAttributeType', boxFull);
+    let filter = boxFull.filter(x => x.length > 1);
+    console.log('setAttributeType', filter);
 
-    setAttributeType(boxFull);
+    setAttributeType(filter);
   }
   function productByAttributesFn(productId: number) {
     return Ac.productByAttributeIdAc(productId).then(res => {

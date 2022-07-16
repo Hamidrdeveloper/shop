@@ -4,7 +4,7 @@ import {BackgroundView, Padding} from '../../css/main.style';
 import HeaderScComponent from '../../components/header2';
 import {TextInputSign} from '../signUp/style/signUp.style';
 import {Space} from '../../infrastructuer/theme/space.style';
-import {Text, ScrollView, Button, View, TouchableOpacity} from 'react-native';
+import {Text, ScrollView, Button, View, TouchableOpacity, Modal} from 'react-native';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {
   useForm,
@@ -24,6 +24,8 @@ import LineW from '../../components/lineW';
 import {LoadingButton} from '../../components/buttonLoading';
 import ControlledCheckBox from '../../components/controlledCheckBox';
 import styled from 'styled-components';
+import PickerController from '../../components/pickerController';
+import {AuthContext} from '../../service/Auth/Auth.context';
 
 const ViewLoading = styled(View)`
   height: 50;
@@ -42,6 +44,8 @@ export default function AddAddressScreen({navigation}) {
   const {...methods} = useForm();
   const {addAddressFn, isAddToData, isAddToDataLodging, getAddressSelect} =
     useContext(AddressContext);
+  const {countries} = useContext(AuthContext);
+
   let dropDownAlertRef = useRef();
 
   const [formError, setError] = useState<Boolean>(false);
@@ -100,6 +104,35 @@ export default function AddAddressScreen({navigation}) {
 
     return console.log('errors', errors);
   };
+//   function popupSelectAddress(){
+//     <Modal
+//     transparent
+//     visible={true}>
+//       <View style={{width:`100%`,height:`100%`,backgroundColor:'rgba(0,0,0,0.3)'}}>
+//        <View style={{position:'absolute',bottom:0,width:`100%`,height:250}}>
+// {/* <View style={{flexDirection: 'row', paddingTop: 30}}>
+//                 <ControlledCheckBox
+//                   defaultValue={true}
+//                   name="is_pack_station"
+//                   isCheck={true}
+//                 />
+//                 <Space lineW={10} />
+//                 <Text style={{fontSize: 15}}>{'Pack station'}</Text>
+//                 <Space lineW={50} />
+//                 <ControlledCheckBox
+//                   defaultValue={true}
+//                   name="is_post_office"
+//                   isCheck={true}
+//                 />
+//                 <Text style={{fontSize: 15}}>{'Post office'}</Text>
+//               </View> */}
+//        </View>
+       
+//         </View>
+
+
+//     </Modal>
+//   }
   return (
     <>
       <BackgroundView>
@@ -108,19 +141,28 @@ export default function AddAddressScreen({navigation}) {
 
           <Padding>
             <FormProvider {...methods}>
-              <ControlledInput
-                name="cart_title"
-                label="Cart Title"
-                placeholder={'vega'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
-                rules={{required: 'Password is required!'}}
-                setFormError={setError}
+              <PickerController
+                name={'cart_title'}
+                containerStyle={{width: '100%'}}
+                placeholderStyle={{fontSize: 18}}
+                placeholder={'Cart Title'}
+                style={{
+                  borderColor: Color.brand.border,
+                  backgroundColor: Color.brand.f9,
+                }}
+                items={[
+                  {label: 'Standard', value: 'Standard'},
+                  {label: 'Home', value: 'Home'},
+                  {label: 'Office', value: 'Office'},
+                  {label: 'Other', value: 'Other'},
+                ]}
+                onChange={() => {}}
               />
               <ControlledInput
                 name="company_name"
                 label="Company Name"
                 placeholder={'Apple'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -128,7 +170,7 @@ export default function AddAddressScreen({navigation}) {
                 name="first_name"
                 label="First Name"
                 placeholder={'Jordan'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -136,7 +178,7 @@ export default function AddAddressScreen({navigation}) {
                 name="last_name"
                 label="Last Name"
                 placeholder={'Bardon'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -144,7 +186,7 @@ export default function AddAddressScreen({navigation}) {
                 name="address2"
                 label="Street"
                 placeholder={'German no 4'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -152,7 +194,7 @@ export default function AddAddressScreen({navigation}) {
                 name="house_number"
                 label="House Number"
                 placeholder={'12345678'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
@@ -160,36 +202,53 @@ export default function AddAddressScreen({navigation}) {
                 name="postal_code"
                 label="Post Code"
                 placeholder={'54000'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
-              <ControlledInput
-                name="city"
-                label="City"
-                placeholder={'Frankfurt'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
-                rules={{required: 'Password is required!'}}
-                setFormError={setError}
-              />
-              <ControlledInput
+               <ControlledInput
                 name="state"
                 label="State"
                 placeholder={'DW'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
+               <ControlledInput
+                name="city"
+                label="City"
+                placeholder={'Frankfurt'}
+                placeholderTextColor={'#F9F9F9'}
+                rules={{required: 'Password is required!'}}
+                setFormError={setError}
+              />
+              <Space lineH={10} />
+              <Text style={{color: 'black'}}>{'Country'}</Text>
+              <Space lineH={10} />
+              <PickerController
+                name={'country_id'}
+                containerStyle={{width: '100%'}}
+                placeholderStyle={{fontSize: 18}}
+                placeholder={'country'}
+                style={{
+                  borderColor: Color.brand.border,
+                  backgroundColor: Color.brand.f9,
+                }}
+                items={countries}
+                onChange={() => {}}
+              />
+             
+             
 
               <ControlledInput
                 name="phone"
                 label="Phone"
                 placeholder={'123456789'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
               />
-              <View style={{flexDirection: 'row', paddingTop: 30}}>
+              {/* <View style={{flexDirection: 'row', paddingTop: 30}}>
                 <ControlledCheckBox
                   defaultValue={true}
                   name="is_pack_station"
@@ -204,13 +263,13 @@ export default function AddAddressScreen({navigation}) {
                   isCheck={true}
                 />
                 <Text style={{fontSize: 15}}>{'Post office'}</Text>
-              </View>
+              </View> */}
 
               <ControlledInput
                 name="address1"
                 label="Address Line"
                 placeholder={'German No 4'}
-                placeholderTextColor={'rgba(0,0,0,0.5)'}
+                placeholderTextColor={'#F9F9F9'}
                 rules={{required: 'Password is required!'}}
                 setFormError={setError}
                 style={{height: 130, textAlignVertical: 'top'}}

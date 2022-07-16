@@ -9,14 +9,41 @@ import {User} from 'react-native-iconly';
 import ErrorManagement from '../../utils/catchError';
 
 class ProductDataService {
+  taxCalculation(data: any) {
+    return data.map(res => {
+      let vat =
+        res?.sale_price?.value *
+        res?.product?.min_order_quantity *
+        (1 + res?.product?.default_vat / 100);
+      return {
+        ...res,
+        sale_price: {
+          value: vat,
+        },
+      };
+    });
+  }
+  taxCalculationById(res: any) {
+    let vat =
+      res?.sale_price?.value *
+      res?.product?.min_order_quantity *
+      (1 + res?.product?.default_vat / 100);
+    return {
+      ...res,
+      sale_price: {
+        value: vat,
+      },
+    };
+  }
   productsSearch(data: Type.Products) {
     console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, data);
-    
+
     return http
       .get(Address.PRODUCTS_VARIATIONS_ADDRESS, {params: data})
       .then(res => {
         console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, res);
-        return res.data.data;
+
+        return this.taxCalculation(res.data.data);
       })
       .catch(error => {
         console.log(Address.PRODUCTS_VARIATIONS_ADDRESS, error.response);
@@ -29,7 +56,8 @@ class ProductDataService {
       .get(Address.PRODUCTS_BY_ID_ADDRESS, {params: data})
       .then(res => {
         console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
-        return res.data.data;
+
+        return this.taxCalculation(res.data.data);
       })
       .catch(error => {
         console.log(Address.PRODUCTS_ADDRESS, error.response);
@@ -37,7 +65,7 @@ class ProductDataService {
   }
   categories() {
     console.log(Address.PRODUCTS_CATEGORIES_ADDRESS, TOKEN.token);
-    
+
     return http
       .get(Address.PRODUCTS_CATEGORIES_ADDRESS)
       .then(res => {
@@ -68,10 +96,10 @@ class ProductDataService {
       Address.PRODUCTS_BY_ID_ADDRESS + 'id' + productId,
     );
     return http
-      .get(Address.PRODUCTS_BY_ID_ADDRESS + '/' + productId)
+      .get(Address.PRODUCTS_BY_ID_ADDRESS + '?productId=' + productId)
       .then(res => {
         console.log(Address.PRODUCTS_BY_ID_ADDRESS, res);
-        return res.data.data;
+        return this.taxCalculationById(res.data.data);
       })
       .catch(error => {
         console.log(Address.PRODUCTS_BY_ID_ADDRESS, error.response);
@@ -86,7 +114,7 @@ class ProductDataService {
     );
     return http
       .get(Address.PRODUCTS_BY_ID_ADDRESS, {
-        params: {productVariationId: productId, page: 1, per_page: 10},
+        params: {productId: productId, page: 1, per_page: 10},
         headers: {
           Host: 'api.solutionsapps.shop',
           'X-PANEL': true,

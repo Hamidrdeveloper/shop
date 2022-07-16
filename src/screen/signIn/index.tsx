@@ -98,7 +98,7 @@ export default function SignInScreen({navigation}) {
             <Text style={{color: Color.brand.black}}>{'Email'}</Text>
             <Space lineH={10} />
             <TextInputSign
-              placeholder={'First Name'}
+              placeholder={'Email'}
               placeholderTextColor={'#000'}
               value={emailUser}
               onChangeText={e => {
@@ -222,7 +222,7 @@ export default function SignInScreen({navigation}) {
                 />
               </View>
               <Space lineH={15} />
-              <View
+              {/* <View
                 style={{
                   height: 50,
                   width: '100%',
@@ -247,7 +247,7 @@ export default function SignInScreen({navigation}) {
                   }}>
                   {'Sign up with google'}
                 </Text>
-              </View>
+              </View> */}
             </View>
             <Space lineH={20} />
             <TouchableOpacity

@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useState, useEffect} from 'react';
-import {Pressable} from 'react-native';
+import React, {useState, useEffect, useContext} from 'react';
+import {Linking, Pressable, TouchableOpacity} from 'react-native';
 import {
   AppRegistry,
   StyleSheet,
@@ -22,7 +22,8 @@ import {
 } from 'react-native-iconly';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
-
+import {PartnerContext} from '../../service/Partner/Partner.context';
+import {regexHtml} from '../../utils/main';
 export const Animations = ({open}) => {
   useEffect(() => {
     if (played) {
@@ -31,6 +32,7 @@ export const Animations = ({open}) => {
   }, [open]);
 
   const [animation, setAnimation] = useState(new Animated.Value(1));
+  const {partnerSelectId} = useContext(PartnerContext);
   const [played, setPlayed] = useState(false);
   const openAnimation = () => {
     setPlayed(true);
@@ -90,12 +92,21 @@ export const Animations = ({open}) => {
                 <Space lineW={30} />
                 <View>
                   <Text style={{color: Color.brand.colorButton}}>
-                    {'Iris Balzen '}
+                    {partnerSelectId?.firstName +
+                      ' ' +
+                      partnerSelectId?.lastName}
                   </Text>
                   <Text>{'Independent Cleafin sales partner'}</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      Linking.openURL(
+                        `mailto:${partnerSelectId?.email}?subject=SendMail&body=Description`,
+                      )
+                    }>
                   <Text style={{color: Color.brand.blue}}>
                     {'Contact with partner'}
                   </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
               <Space lineH={15} />
@@ -103,18 +114,16 @@ export const Animations = ({open}) => {
                 <Call primaryColor={Color.brand.grey} size={'small'} />
                 <Space lineW={10} />
                 <Text style={{color: Color.brand.grey}}>
-                  {'+049 152 0459253423'}
+                  {partnerSelectId?.mobile}
                 </Text>
                 <Space lineW={10} />
                 <Message primaryColor={Color.brand.grey} size={'small'} />
                 <Space lineW={10} />
-                <Text>{'tobeclean2@web.de3'}</Text>
+                <Text>{partnerSelectId?.email}</Text>
               </View>
               <Space lineH={10} />
-              <Text>
-                {
-                  'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. '
-                }
+              <Text style={{height: 40, width: 200}}>
+                {partnerSelectId?.address_complete.replace(regexHtml, ',')}
               </Text>
             </>
           ) : (
@@ -123,12 +132,21 @@ export const Animations = ({open}) => {
                 <Space lineW={30} />
                 <View>
                   <Text style={{color: Color.brand.colorButton}}>
-                    {'Iris Balzen '}
+                    {partnerSelectId?.firstName +
+                      ' ' +
+                      partnerSelectId?.lastName}
                   </Text>
                   <Text>{'Independent Cleafin sales partner'}</Text>
-                  <Text style={{color: Color.brand.blue}}>
-                    {'Contact with partner'}
-                  </Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      Linking.openURL(
+                        `mailto:${partnerSelectId?.email}?subject=SendMail&body=Description`,
+                      )
+                    }>
+                    <Text style={{color: Color.brand.blue}}>
+                      {'Contact with partner'}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </>

@@ -60,7 +60,11 @@ export const ButtonColor = styled(Pressable).attrs(
   justify-content: center;
   background-color: ${Color.brand.colorButton};
 `;
-export const ShadowButton = styled(View)`
+export const ShadowButton = styled(View).attrs(
+  ({zIndex = 0}: {zIndex: number}) => ({
+    zIndex: zIndex,
+  }),
+)`
   height: 50;
   width: 100%;
   background-color: rgba(209, 209, 209, 0.5);

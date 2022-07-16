@@ -1,9 +1,9 @@
-MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiaGFtaWRyZGV2ZWxvcGVyIiwiYSI6ImNrOHp3eW4ybTBmamEzZnBydmtybmRrZnAifQ.neIu6a_sJjQycKnNxEdxkA',
-);
+// MapboxGL.setAccessToken(
+//   'pk.eyJ1IjoiaGFtaWRyZGV2ZWxvcGVyIiwiYSI6ImNrOHp3eW4ybTBmamEzZnBydmtybmRrZnAifQ.neIu6a_sJjQycKnNxEdxkA',
+// );
 import React, {useContext, useEffect, useState} from 'react';
 import {View, Image} from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+// import MapboxGL from '@react-native-mapbox-gl/maps';
 import exampleIcon from '../../assets/image/arrow.png';
 import {MapContext} from '../../service/map/Map.context';
 import {MapData} from '../../service/map/types';
@@ -57,7 +57,7 @@ function ShowClick({onChange}: Type) {
 
   return (
     <>
-      <MapboxGL.MapView
+      {/* <MapboxGL.MapView
         style={{width: '100%', height: 310, overflow: 'hidden'}}
         onPress={onPress}>
         <MapboxGL.Camera
@@ -69,7 +69,7 @@ function ShowClick({onChange}: Type) {
           coordinate={[longitude, latitude]}>
           <CustomCalloutView message="test" />
         </MapboxGL.MarkerView>
-      </MapboxGL.MapView>
+      </MapboxGL.MapView> */}
     </>
   );
 }

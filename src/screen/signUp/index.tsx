@@ -58,14 +58,11 @@ export default function SignUpScreen({navigation}) {
       case 3:
         return <PartThree onChangeValue={value => onSignUpButton()} />;
       case 4:
-        return <PartFour onChangeValue={value => onSignUpButton()} />;
-      case 5:
-        return (
-          <PartFive
-            navigation={navigation}
-            onChangeValue={() => onSignUpButton()}
-          />
-        );
+        return   <PartFive
+        navigation={navigation}
+        onChangeValue={() => onSignUpButton()}
+      />;
+      
     }
   }
   function onSignUpButton() {
@@ -94,11 +91,11 @@ export default function SignUpScreen({navigation}) {
         }
         break;
       case 4:
-        setIndex(index + 1);
-        break;
-      case 5:
         navigation.replace('Bottom_SCREEN');
         break;
+      // case 5:
+      //   navigation.replace('Bottom_SCREEN');
+      //   break;
     }
   }
 
@@ -134,7 +131,7 @@ export default function SignUpScreen({navigation}) {
               {index >= 4 ? null : (
                 <>
                   <Space lineH={10} />
-                  <View
+                  {/* <View
                     style={{
                       height: 50,
                       width: '100%',
@@ -160,7 +157,7 @@ export default function SignUpScreen({navigation}) {
                       }}>
                       {'Sign up with google'}
                     </Text>
-                  </View>
+                  </View> */}
                   <Space lineH={15} />
                   <TouchableOpacity
                     onPress={() => {

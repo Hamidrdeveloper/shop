@@ -30,3 +30,5 @@ export const COUPONS = 'coupons/set';
 export const IMAGE_ADDRESS = 'https://api.solutionsapps.shop';
 export const Partner_ADDRESS = 'shop/partners';
 export const Partner_ADDRESS_ID = 'shop/partners';
+export const Favorites = 'users/favorites';
+

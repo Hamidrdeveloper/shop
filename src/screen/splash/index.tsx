@@ -6,13 +6,19 @@ import {MainContext} from '../../service/Main/Main.context';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 
 export default function SplashScreen({navigation}) {
-  const {onRunAllApi} = useContext(MainContext);
+  const {onRunAllApi, token} = useContext(MainContext);
   const [login, setLogin] = useState(true);
   useEffect(() => {
     onRunAllApi();
-    setTimeout(() => {
-      navigation.replace('Bottom_SCREEN');
-    }, 2000);
+    if (token == '') {
+      setTimeout(() => {
+        navigation.replace('WELCOME_SCREEN');
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        navigation.replace('Bottom_SCREEN');
+      }, 4000);
+    }
   }, []);
 
   return (

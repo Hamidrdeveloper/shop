@@ -14,9 +14,16 @@ const TextPicker = styled(TextBlack18)`
 interface Type {
   data: Array<any>;
   setProduct: any;
+  product: any;
+  onChange: (e, i) => void;
 }
 
-export default function AttributeItem({data, setProduct}: Type) {
+export default function AttributeItem({
+  data,
+  setProduct,
+  product,
+  onChange,
+}: Type) {
   const {productByAttributesFn} = useContext(ProductContext);
   const [openArray, setOpenArray] = useState([]);
   const [openArrayDefault, setOpenArrayDefault] = useState([]);
@@ -34,15 +41,22 @@ export default function AttributeItem({data, setProduct}: Type) {
     setOpenArrayDefault(openData);
   }, [data]);
   useEffect(() => {
-    if (value!=null) {
+    if (value != null) {
       setValueFn(value);
     }
   }, [value]);
   const setValueFn = e => {
     console.log('attribute', e);
-    productByAttributesFn(e).then(res => {
-      setProduct(res);
+    let index = 0;
+    const selectAttribute = product.filter((res, i) => {
+      if (res.id == e) {
+        index = i;
+        return true;
+      }
     });
+    if (selectAttribute.length > 0) {
+      onChange(selectAttribute[0], index);
+    }
   };
   const setOpenLanguage = i => {
     let changeData = openArray.map((v, index) => {

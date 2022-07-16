@@ -3,6 +3,7 @@ import Toast from '../../components/toast';
 import {ProductVariation} from '../Products/types';
 import * as AC from './Basket.action';
 import {BasketBulkModel} from './model';
+import {BasketAddForPay} from './types';
 
 interface IBasketContext {
   addToBasket: (product: ProductVariation) => void;
@@ -27,6 +28,9 @@ interface IBasketContext {
   couponsFn: (code: string) => void;
   isCoupons: boolean;
   codePrice: string;
+  favoritesAddFn: (id: number) => void;
+  favoritesFn: () => void;
+  arrayFavorite: undefined;
 }
 export const BasketContext = createContext<IBasketContext>(
   {} as IBasketContext,
@@ -52,6 +56,8 @@ export default function BasketContextProvider({
   const [orderSaleCompleted, setOrderSaleCompleted] = useState<any>([]);
   const [orderSaleCancel, setOrderSaleCancel] = useState<any>([]);
   const [orderSaleWhiting, setOrderSaleWhiting] = useState<any>([]);
+  const [arrayFavorite, setArrayFavorite] = useState<any>([]);
+
   function paymentMethodsFn() {
     AC.paymentMethodsAc().then(res => {
       setPaymentMethods(res);
@@ -78,8 +84,14 @@ export default function BasketContextProvider({
 
       setBasketsExited(dataP);
     }
-    let price = parseInt(resultPrice) + parseInt(product?.sale_price.value);
-    setResultPrice(price.toString());
+    let price = parseFloat(resultPrice) + parseFloat(product?.sale_price.value);
+    console.log('parseFloat', price);
+    console.log('parseFloatresultPrice', resultPrice);
+    console.log(
+      'parseFloatproduct?.sale_price.value',
+      product?.sale_price.value,
+    );
+    setResultPrice(price);
     if (price < 20) {
       setShipping(5);
       setTotalPrice(price + 5);
@@ -110,7 +122,7 @@ export default function BasketContextProvider({
 
       setBasketsExited(dataP);
     }
-    let price = parseInt(resultPrice) - parseInt(product?.sale_price.value);
+    let price = parseFloat(resultPrice) - parseFloat(product?.sale_price.value);
     setResultPrice(price.toString());
     if (price < 20) {
       setShipping(5);
@@ -127,13 +139,15 @@ export default function BasketContextProvider({
     });
     let params = (BasketBulkModel.items = product);
     AC.BasketsAc(params).then(res => {
+      setTotalPrice(0);
+      setResultPrice(0);
       console.log('bulkAdd', res);
       crateOrderSale(id);
       orderSale();
     });
   }
-  function crateOrderSale(id) {
-    AC.crateOrderSaleAc(id).then(res => {
+  function crateOrderSale(data: BasketAddForPay) {
+    AC.crateOrderSaleAc(data).then(res => {
       setBasketsExited([]);
       console.log('bulkAdd', res);
       setNumberBasket(0);
@@ -159,6 +173,18 @@ export default function BasketContextProvider({
       setTotalPrice(offer);
     });
     setCoupons(false);
+  }
+  function favoritesAddFn(id: number) {
+    AC.favoritesAddAc(id).then(res => {
+      console.log('favoritesAddFn', res);
+    });
+  }
+
+  function favoritesFn() {
+    AC.favoritesAc().then(res => {
+      console.log('favoritesFn', res);
+      setArrayFavorite(res);
+    });
   }
 
   return (
@@ -186,6 +212,9 @@ export default function BasketContextProvider({
         couponsFn,
         isCoupons,
         codePrice,
+        favoritesAddFn,
+        arrayFavorite,
+        favoritesFn,
       }}>
       {children}
     </BasketContext.Provider>

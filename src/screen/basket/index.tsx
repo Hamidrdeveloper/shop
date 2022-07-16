@@ -75,12 +75,14 @@ export default function BasketScreen({navigation}) {
   } = useContext(BasketContext);
   const {isLoginOpen} = useContext(AuthContext);
   const [showPopLogin, setShowPopLogin] = useState(false);
+  const [showRule, setShowRule] = useState(false);
   function RenderPlus({product}) {
     return (
       <>
         <ViewPlus>
           <TouchableOpacity
             onPress={() => {
+              setShowRule(false);
               setNumber(number - 1);
               removeToBasket(product);
             }}>
@@ -98,6 +100,7 @@ export default function BasketScreen({navigation}) {
           <NumberPlus>{product.numberBasket}</NumberPlus>
           <TouchableOpacity
             onPress={() => {
+              setShowRule(false);
               setNumber(number + 1);
               addToBasket(product);
             }}>
@@ -123,7 +126,9 @@ export default function BasketScreen({navigation}) {
         <TouchableOpacity
           onPress={() => {
             if (isLoginOpen) {
-              navigation.navigate('DeliveryAddress_SCREEN', {type: 'Basket'});
+              if (basketsExited.length > 0 && !showRule) {
+                navigation.navigate('DeliveryAddress_SCREEN', {type: 'Basket'});
+              }
             } else {
               setShowPopLogin(true);
             }
@@ -133,14 +138,14 @@ export default function BasketScreen({navigation}) {
           </ViewBasket>
         </TouchableOpacity>
         <NumberFormat
-          value={parseInt(resultPrice).toFixed(2)}
+          value={resultPrice}
           displayType={'text'}
-          thousandSeparator={true}
+          decimalScale={2}
           prefix={''}
           renderText={(value, props) => {
             return (
               <TextPriceBasketAbsolute>
-                {value.substring(0, 8) + ' ' + resultSymbol}
+                {value.replace('.', ',') + ' ' + resultSymbol}
               </TextPriceBasketAbsolute>
             );
           }}
@@ -150,11 +155,25 @@ export default function BasketScreen({navigation}) {
   }
   function _renderItemBasket({data}) {
     console.log(data);
-
+    if (data?.min_order_quantity > data?.numberBasket) {
+      setShowRule(true);
+    }
+    if (
+      data?.max_order_quantity < data?.numberBasket &&
+      data?.max_order_quantity != null
+    ) {
+      setShowRule(true);
+    }
+    let imageUrl;
+    if (data?.productVariationFiles.length>0) {
+      imageUrl = data?.productVariationFiles[0].file;
+    } else {
+      imageUrl = data?.product?.file;
+    }
     return (
       <ItemBasket>
         <View>
-          <ImageSuggest source={{uri: IMAGE_ADDRESS + data.product.file}} />
+          <ImageSuggest source={{uri: IMAGE_ADDRESS + imageUrl}} />
           <RenderPlus product={data} />
         </View>
 
@@ -169,15 +188,65 @@ export default function BasketScreen({navigation}) {
             </TextDetailBasket>
           </View>
           <NumberFormat
-            value={parseInt(data?.sale_price.value).toFixed(2)}
+            value={data?.sale_price.value}
             displayType={'text'}
             thousandSeparator={true}
+            decimalScale={2}
             prefix={''}
             renderText={(value, props) => {
-              return <TextPriceBasket>{value + ' ' + '€'}</TextPriceBasket>;
+              return (
+                <TextPriceBasket>
+                  {value.replace('.', ',') + ' ' + '€'}
+                </TextPriceBasket>
+              );
             }}
           />
         </ViewCenter>
+        {data?.max_order_quantity < data?.numberBasket &&
+        data?.max_order_quantity != null ? (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 10,
+              borderColor: Color.brand.red,
+              borderWidth: 1,
+              borderRadius: 5,
+              padding: 5,
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                height: 25,
+                color: Color.brand.red,
+              }}>
+              {`The maximum purchase of this product is ${data?.min_order_quantity} pieces`}
+            </Text>
+          </View>
+        ) : null}
+        {data?.min_order_quantity > data?.numberBasket ? (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              right: 10,
+              borderColor: Color.brand.red,
+              borderWidth: 1,
+              borderRadius: 5,
+              padding: 5,
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                height: 25,
+                color: Color.brand.red,
+              }}>
+              {`The minimum purchase of this product is ${data?.min_order_quantity} pieces`}
+            </Text>
+          </View>
+        ) : null}
       </ItemBasket>
     );
   }

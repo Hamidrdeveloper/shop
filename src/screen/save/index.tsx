@@ -23,13 +23,19 @@ export default function MySave({navigation}) {
   const {saveProduct, deleteAddressFn} = useContext(AddressContext);
 
   function _renderItemBasket(item): any {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
       <>
         <View style={{width: '100%', height: 140, flexDirection: 'row'}}>
           <View>
             <ImageSuggest
               style={{width: 105, height: 88}}
-              source={{uri: IMAGE_ADDRESS + item.product.file}}
+              source={{uri: IMAGE_ADDRESS + imageUrl}}
             />
 
             <Space lineH={15} />
@@ -38,9 +44,12 @@ export default function MySave({navigation}) {
                 type="custom"
                 imageSize={12}
                 ratingBackgroundColor={Color.brand.border}
+                ratingCount={5}
+                readonly
+                startingValue={0}
               />
               <Space lineW={10} />
-              <Text style={{color: Color.brand.textGrey}}>{'(15 review)'}</Text>
+              <Text style={{color: Color.brand.textGrey}}>{'(15 view)'}</Text>
             </View>
           </View>
 
@@ -57,10 +66,11 @@ export default function MySave({navigation}) {
             <Space lineH={10} />
             <View style={{flexDirection: 'row'}}>
               <NumberFormat
-                value={parseInt(item?.sale_price.value).toFixed(2)}
+                value={item?.sale_price.value}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
+                decimalScale={2}
                 renderText={(value, props) => {
                   return (
                     <Text
@@ -69,17 +79,17 @@ export default function MySave({navigation}) {
                         fontSize: 20,
                         width: 100,
                       }}>
-                      {value + ' ' + '€'}
+                      {value?.replace('.', ',') + ' ' + '€'}
                     </Text>
                   );
                 }}
               />
-              <ViewOffer style={{width: 40, height: 25}}>
+              {/* <ViewOffer style={{width: 40, height: 25}}>
                 <Text style={{color: Color.brand.white}}>{'30%'}</Text>
-              </ViewOffer>
+              </ViewOffer> */}
             </View>
 
-            <Text
+            {/* <Text
               style={{
                 textDecorationLine: ' line-through',
                 color: Color.brand.textGrey,
@@ -87,7 +97,7 @@ export default function MySave({navigation}) {
                 width: 200,
               }}>
               {'60,0 €'}
-            </Text>
+            </Text> */}
           </View>
           <View
             style={{

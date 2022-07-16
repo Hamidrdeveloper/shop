@@ -21,6 +21,7 @@ import {Partners} from '../../service/Partner/type';
 import {LocationPartner} from '../loactionPartner';
 import {LoadingButton} from '../../components/buttonLoading';
 import {SignUpModel} from '../../service/Auth/model';
+import { widthFullScreen } from '../../utils/main';
 
 const height = Dimensions.get('screen').height;
 export default function PartFive({navigation, onChangeValue}) {
@@ -152,6 +153,7 @@ export default function PartFive({navigation, onChangeValue}) {
         <Space lineH={10} />
         <LoadingButton
           isActive={isRegister}
+          width={widthFullScreen-30}
           onNext={() => onSign()}
           title={'Submit'}
           onClose={() => {}}

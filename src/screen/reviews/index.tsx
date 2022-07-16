@@ -14,7 +14,7 @@ export default function MyReviewsScreen({navigation}) {
             <View style={{flexDirection: 'row'}}>
               <Image
                 style={{width: 80, height: 60}}
-                source={require('../../assets/image/elektrobürste.png')}
+                source={require('../../assets/image/elektroburste.png')}
               />
                <Space lineH={15} />
                <View>
@@ -36,6 +36,9 @@ export default function MyReviewsScreen({navigation}) {
                    type="custom"
                    imageSize={10}
                    ratingBackgroundColor={Color.brand.border}
+                   ratingCount={5}
+                readonly
+                startingValue={0}
                   
                 />
                  

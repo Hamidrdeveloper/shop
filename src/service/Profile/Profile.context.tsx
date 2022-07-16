@@ -37,7 +37,7 @@ export default function ProfileContextProvider({
   const [isLodUser, setLodUser] = useState('0');
   const [isUpdate, setUpdate] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const {partnerIdFn} = useContext(PartnerContext);
+  const {partnerMeFn,PartnerFn} = useContext(PartnerContext);
   const {addresses} = useContext(AddressContext);
 
   const [showInvoiceAddress, setShowInvoiceAddress] = useState();
@@ -73,9 +73,11 @@ export default function ProfileContextProvider({
     profileAc()
       .then(is => {
         console.log('partnerIdFn', is?.sponsor_id);
-        partnerIdFn(is?.sponsor_id);
+
         getAddressFn();
         setDataUser(is);
+        PartnerFn();
+        partnerMeFn(is?.sponsor_id);
       })
       .catch(() => {
         setLodUser('2');

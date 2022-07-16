@@ -24,16 +24,16 @@ export function productByIdAc(productId: number) {
 }
 export function goToScreenDetails(navigation, product, prFn, cmFn, reFn) {
   navigation.navigate('Details_SCREEN', {data: product});
-  // prFn(product.id, navigation);
+  prFn(product.number, navigation);
 
   cmFn(product.id);
   cmFn(product.id);
   
-  if (product?.productVariationCategories.length > 0) {
-    reFn(product.productVariationCategories[0].id);
-  } else {
-    reFn('');
-  }
+  // if (product?.productVariationCategories.length > 0) {
+  //   reFn(product.productVariationCategories[0].id);
+  // } else {
+  //   reFn('');
+  // }
 }
 export function goToScreenCategory(navigation, product, prFn) {
   navigation.navigate('CategoryPageScreen_SCREEN', {data: product});

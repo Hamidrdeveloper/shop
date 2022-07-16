@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {Modal, ScrollView, Text, View} from 'react-native';
 import {Rating, Card} from 'react-native-elements';
 import NumberFormat from 'react-number-format';
 import BottomDetails from '../../components/bottomDetails';
@@ -33,6 +33,8 @@ import {
 import {TabShop} from './tabShop';
 import styled from 'styled-components';
 import AttributeItem from './attribute';
+import {taxCalculationById} from '../../utils/main';
+import {ZoomableImage} from '../../components/zoomableImage/ZoomableImage';
 
 const TextBlack18 = styled(Text)`
   font-size: 18;
@@ -44,9 +46,15 @@ const ViewRowCenter = styled(View)`
 `;
 
 export default function DetailsProduct({navigation, route}) {
-  const [productByID, setProduct] = useState(route.params.data);
-  const imageConst = [{file: productByID.product.file}];
-  const {relatedProductsItem, attributeType} = useContext(ProductContext);
+  const [productByRoute, setProduct] = useState(route.params.data);
+  const imageConst = [{file: productByRoute.product.file}];
+  const {relatedProductsItem, attributeType, productByID} =
+    useContext(ProductContext);
+  const [isZoom, setZomm] = useState(false);
+  const [indexImage, setIndexImage] = useState(0);
+
+  const [imageSelect, setImageSelect] = useState(null);
+  console.log('productByID', productByID);
 
   const [itemsAttribute, setItemsAttribute] = useState([]);
   useEffect(() => {
@@ -58,6 +66,12 @@ export default function DetailsProduct({navigation, route}) {
     console.log('====================================');
   }, [attributeType]);
   function offerItem({item}) {
+    let imageUrl;
+    if (item?.productVariationFiles.length > 0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
       <>
         <Card
@@ -68,16 +82,18 @@ export default function DetailsProduct({navigation, route}) {
             borderRadius: 8,
             padding: 5,
           }}>
-          <ImageOffer source={{uri: IMAGE_ADDRESS + item.product.file}} />
+          <ImageOffer source={{uri: IMAGE_ADDRESS + imageUrl}} />
           <ViewOffer>
             <Rating imageSize={12} style={{paddingVertical: 10}} />
-            <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
+            <TextReviewOffer>{`(${
+              item?.review_count == null ? 0 : item?.review_count
+            } view)`}</TextReviewOffer>
           </ViewOffer>
           <Space lineH={5} />
           <TextProductOffer>{item.name}</TextProductOffer>
-          <Space lineH={5} />
+          {/* <Space lineH={5} />
           <NumberFormat
-            value={parseInt(item?.sale_price.value).toFixed(2)}
+            value={parseInt(item?.sale_price.value)}
             displayType={'text'}
             thousandSeparator={true}
             prefix={''}
@@ -88,20 +104,25 @@ export default function DetailsProduct({navigation, route}) {
                 </TextPriceThroughOffer>
               );
             }}
-          />
+          /> */}
           <Space lineH={5} />
           <NumberFormat
-            value={parseInt(item?.sale_price.value).toFixed(2)}
+            value={taxCalculationById(item)}
             displayType={'text'}
             thousandSeparator={true}
+            decimalScale={2}
             prefix={''}
             renderText={(value, props) => {
-              return <TextPriceOffer>{value + ' ' + '€'}</TextPriceOffer>;
+              return (
+                <TextPriceOffer>
+                  {value?.replace('.', ',') + ' ' + '€'}
+                </TextPriceOffer>
+              );
             }}
           />
           <Space lineH={5} />
-          <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
-          <Space lineH={5} />
+          {/* <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
+          <Space lineH={5} /> */}
         </Card>
       </>
     );
@@ -110,8 +131,8 @@ export default function DetailsProduct({navigation, route}) {
     return (
       <>
         <ViewRowCenter>
-          {productByID?.productVariationFiles?.map((t, index) => {
-            if (index != productByID?.productVariationFiles?.length) {
+          {productByID?.map((t, index) => {
+            if (index != productByID?.length) {
               return (
                 <View
                   style={{
@@ -137,7 +158,10 @@ export default function DetailsProduct({navigation, route}) {
       </>
     );
   }
-
+  function showImage(e) {
+    setZomm(true);
+    setImageSelect(e);
+  }
   return (
     <>
       <ScrollView>
@@ -155,42 +179,75 @@ export default function DetailsProduct({navigation, route}) {
             }}
             renderPagination={paginationCostume}
             renderItem={({item}) => {
-              return ItemImage(item);
+              let imageUrl;
+              if (item?.productVariationFiles.length > 0) {
+                imageUrl = item?.productVariationFiles[0].file;
+              } else {
+                imageUrl = item?.product?.file;
+              }
+              return (
+                <ItemImage
+                  file={imageUrl}
+                  onShowZoom={e => {
+                    showImage(e);
+                  }}
+                />
+              );
             }}
-            data={productByID?.productVariationFiles}
+            data={productByID}
+            goNextIndex={indexImage}
           />
           <Padding>
-            <TitleStep>{productByID.name}</TitleStep>
+            <TitleStep>{productByRoute.name}</TitleStep>
             <ViewRate>
-              <Rating imageSize={18} style={{paddingVertical: 10}} />
+              <Rating
+                ratingCount={5}
+                readonly
+                startingValue={0}
+                imageSize={18}
+                style={{paddingVertical: 10}}
+              />
               <Space lineW={10} />
               <TextReviewOffer>{'3.8'}</TextReviewOffer>
               <Space lineW={10} />
-              <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
+              <TextReviewOffer>{'(15 view)'}</TextReviewOffer>
             </ViewRate>
             <Space lineH={10} />
             <LineW />
             <Space lineH={15} />
             <Space lineH={15} />
 
-            <AttributeItem setProduct={setProduct} data={itemsAttribute} />
+            <AttributeItem
+              onChange={(e,index)=> {
+                setProduct(e);
+                setIndexImage(index);
+              }}
+              setProduct={setProduct}
+              data={itemsAttribute}
+              product={productByID}
+            />
 
             <Space lineH={15} />
             <View style={{height: 400}}>
-              <TabShop product={productByID} />
+              <TabShop product={productByRoute} />
             </View>
             <TitleStep>{'Related Products'}</TitleStep>
             <Space lineH={15} />
             <FlatListSlide
-              data={relatedProductsItem}
+              data={productByRoute?.crossSellingVariations}
               renderItem={offerItem}
               snap={5}
-              height={400}
+              height={productByRoute?.crossSellingVariations ? 400 : 0}
             />
           </Padding>
         </BackgroundView>
       </ScrollView>
-      <BottomDetails item={productByID} />
+      <BottomDetails item={productByRoute} />
+      <Modal visible={isZoom} onRequestClose={() => setZomm(false)}>
+        <View style={{width: '100%', height: '100%'}}>
+          <ZoomableImage images={imageSelect} />
+        </View>
+      </Modal>
     </>
   );
 }

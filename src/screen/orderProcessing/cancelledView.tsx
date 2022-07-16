@@ -75,7 +75,7 @@ export default function CancelledView({navigation}) {
                     {index<3?
                   <Image
                     style={{height: 48, width: 35}}
-                    source={require('../../assets/image/elektrobürste.png')}
+                    source={require('../../assets/image/elektroburste.png')}
                   />
                 :<Text style={{fontSize:14,color:Color.brand.black}}>{"+3"}</Text> }
                 </View>

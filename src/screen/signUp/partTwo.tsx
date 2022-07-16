@@ -124,7 +124,7 @@ export default function PartTwo({onChangeValue}) {
             {'Next'}
           </Text>
         </ButtonColor>
-        {!isForm ? <ShadowButton /> : null}
+        {!isForm ? <ShadowButton zIndex={-10}/> : null}
       </View>
     </>
   );

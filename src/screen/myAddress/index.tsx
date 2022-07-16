@@ -74,6 +74,7 @@ export default function MyAddressScreen({navigation, route}) {
     console.log(select);
   }, [select]);
   function _onAddAddress(value) {
+   
     setSelect(value);
     let add = addresses.map(res => {
       console.log('_onAddAddress', value.id + ' ' + res.id);
@@ -88,14 +89,17 @@ export default function MyAddressScreen({navigation, route}) {
     setAddressList(add);
   }
   function _passSelectAddress() {
+
     switch (typeScreen) {
       case 'Basket':
+        userInvoiceAddressFn(select);
         addToMainAddressFn(select);
         break;
       case 'Invoice':
         userInvoiceAddressFn(select);
         break;
       case 'Deliver':
+       
         addToMainAddressFn(select);
         break;
     }

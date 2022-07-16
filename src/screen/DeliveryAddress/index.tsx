@@ -44,6 +44,7 @@ import {BasketContext} from '../../service/Basket/Basket.context';
 import styled from 'styled-components';
 import {ProfileContext} from '../../service/Profile/Profile.context';
 import EnterCode from './enterCode';
+import NumberFormat from 'react-number-format';
 
 const TextBlue18 = styled(Text)`
   font-size: 18;
@@ -63,6 +64,9 @@ const TextBlack16 = styled(Text)`
 `;
 export default function DeliveryAddressScreen({navigation}) {
   const [isVisibleCode, setIsVisibleCode] = useState(false);
+  const [idInvoice, setIdInvoice] = useState(0);
+  const [idDelivery, setIdDelivery] = useState(0);
+
   const {getAddressFn, addressSelect, getAddressSelect} =
     useContext(AddressContext);
   const {showInvoiceAddress} = useContext(ProfileContext);
@@ -88,6 +92,7 @@ export default function DeliveryAddressScreen({navigation}) {
     console.log('_renderItemAddress', data);
     console.log('====================================');
     if (title == 'Invoice address') {
+      setIdInvoice(data?.id);
       return (
         <View>
           <Space lineH={10} />
@@ -108,6 +113,7 @@ export default function DeliveryAddressScreen({navigation}) {
         </View>
       );
     } else {
+      setIdDelivery(data?.id);
       return (
         <View>
           <Space lineH={10} />
@@ -136,10 +142,12 @@ export default function DeliveryAddressScreen({navigation}) {
   };
   function nextStep() {
     if (addressSelect.address != null) {
-      navigation.navigate('PaymentScreen_SCREEN', {
+
+      navigation.navigate('Final_SCREEN', {
         address: addressSelect.id,
+        delivery_contact_group_id: idInvoice,
+        invoice_contact_group_id: idDelivery,
       });
-      bulkAdd(addressSelect.id);
     } else {
       _fetchData('please Add Address', 'error');
     }
@@ -172,7 +180,7 @@ export default function DeliveryAddressScreen({navigation}) {
               title={'Delivery address'}
               data={showInvoiceAddress}
             />
-            <RadioButton
+            {/* <RadioButton
               flexDirection={'column'}
               items={[
                 {
@@ -189,18 +197,44 @@ export default function DeliveryAddressScreen({navigation}) {
                 },
               ]}
               onClick={() => {}}
-            />
+            /> */}
             <Space lineH={30} />
             <ViewRow>
               <TextBlack>{'Total'}</TextBlack>
-              <TextBlack>{resultPrice + '' + resultSymbol}</TextBlack>
+              <NumberFormat
+                value={resultPrice}
+                displayType={'text'}
+                thousandSeparator={true}
+                decimalScale={2}
+                prefix={''}
+                renderText={(value, props) => {
+                  return (
+                    <TextBlack>
+                      {value?.replace('.', ',') + ' ' + resultSymbol}
+                    </TextBlack>
+                  );
+                }}
+              />
             </ViewRow>
             <Space lineH={10} />
             <LineW />
             <Space lineH={10} />
             <ViewRow>
               <TextGray>{'Shipping'}</TextGray>
-              <TextBlack>{shipping + '' + resultSymbol}</TextBlack>
+              <NumberFormat
+                value={shipping}
+                displayType={'text'}
+                thousandSeparator={true}
+                decimalScale={2}
+                prefix={''}
+                renderText={(value, props) => {
+                  return (
+                    <TextBlack>
+                      {value?.replace('.', ',') + ' ' + resultSymbol}
+                    </TextBlack>
+                  );
+                }}
+              />
             </ViewRow>
             <Space lineH={10} />
             <ViewRow>
@@ -219,14 +253,28 @@ export default function DeliveryAddressScreen({navigation}) {
             <Space lineH={10} />
             <ViewRow>
               <TextBlack>{'Bag Total'}</TextBlack>
-              <TextBlack>{totalPrice + '' + resultSymbol}</TextBlack>
+              <NumberFormat
+                value={totalPrice}
+                displayType={'text'}
+                thousandSeparator={true}
+                decimalScale={2}
+                prefix={''}
+                renderText={(value, props) => {
+                  return (
+                    <TextBlack>
+                      {value?.replace('.', ',') + ' ' + resultSymbol}
+                    </TextBlack>
+                  );
+                }}
+              />
             </ViewRow>
-           
+
             <Space lineH={100} />
           </Padding>
         </ScrollView>
         <BottomViewBasket
-          resultPrice={totalPrice + '' + resultSymbol}
+          resultPrice={totalPrice}
+          resultSymbol={resultSymbol}
           navigation={navigation}
           onClick={nextStep}
         />

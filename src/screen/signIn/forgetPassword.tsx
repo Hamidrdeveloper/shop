@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
@@ -6,14 +6,14 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {BackgroundView, Padding} from '../../css/main.style';
 import HeaderScComponent from '../../components/header2';
 import {ArrowLeft} from 'react-native-iconly';
-import { AuthContext } from '../../service/Auth/Auth.context';
-import { ForgetPasswordModel } from '../../service/Auth/model';
-import { TextInputSign } from '../signUp/style/signUp.style';
+import {AuthContext} from '../../service/Auth/Auth.context';
+import {ForgetPasswordModel} from '../../service/Auth/model';
+import {TextInputSign} from '../signUp/style/signUp.style';
 // import Toast from '../../components/toast';
 
 export default function ForgetPassword({navigation}) {
   const {forgetPasswordFn} = useContext(AuthContext);
-  const [forgetPassword, setForgetPassword] = useState()
+  const [forgetPassword, setForgetPassword] = useState();
 
   function HeaderScComponent() {
     return (
@@ -21,7 +21,7 @@ export default function ForgetPassword({navigation}) {
         <View
           style={{
             flexDirection: 'row',
-            width: `100%`,
+            width: '100%',
             height: 55,
             padding: 15,
             backgroundColor: Color.brand.white,
@@ -38,7 +38,7 @@ export default function ForgetPassword({navigation}) {
               justifyContent: 'center',
               position: 'absolute',
               alignItems: 'center',
-              width: `100%`,
+              width: '100%',
             }}>
             <Image
               resizeMode="stretch"
@@ -61,26 +61,27 @@ export default function ForgetPassword({navigation}) {
           </Text>
           <Space lineH={10} />
           <Text style={{fontSize: 15, color: Color.brand.black}}>
-            {'We Just Need Your Registered Email Address\nTo Send Your Password Recovery Link'}
+            {
+              'We Just Need Your Registered Email Address\nTo Send Your Password Recovery Link'
+            }
           </Text>
           <Space lineH={60} />
           <Text style={{color: Color.brand.black}}>{'Email'}</Text>
           <Space lineH={10} />
           <TextInputSign
-        placeholder={'abcd@gmail.com'}
-        placeholderTextColor={'#000'}
-        value={forgetPassword}
-        onChangeText={e => {
-          ForgetPasswordModel.email = e;
-          setForgetPassword(e);
-         
-        }}
-      />
+            placeholder={'Email'}
+            placeholderTextColor={'#000'}
+            value={forgetPassword}
+            onChangeText={e => {
+              ForgetPasswordModel.email = e;
+              setForgetPassword(e);
+            }}
+          />
           <Space lineH={20} />
           <View
             style={{
               flexDirection: 'row',
-              width: `100%`,
+              width: '100%',
               justifyContent: 'flex-start',
               alignItems: 'center',
             }}>
@@ -90,14 +91,16 @@ export default function ForgetPassword({navigation}) {
                 fontSize: 14,
                 color: Color.brand.textGry,
               }}>
-              {`Didn't Receive Recovery Link?`}
+              {"Didn't Receive Recovery Link?"}
             </Text>
             <Space lineW={10} />
             <Text
               style={{
                 alignSelf: 'center',
                 fontSize: 14,
-                color: Color.brand.colorButton,
+                color: forgetPassword
+                  ? Color.brand.colorButton
+                  : Color.brand.grey,
               }}>
               {'Send Link Again.'}
             </Text>
@@ -130,12 +133,12 @@ export default function ForgetPassword({navigation}) {
               </View>
             </TouchableOpacity>}
           /> */}
-          
+
           <Space lineH={80} />
           <View
             style={{
               flexDirection: 'row',
-              width: `100%`,
+              width: '100%',
               justifyContent: 'center',
               alignItems: 'center',
             }}>

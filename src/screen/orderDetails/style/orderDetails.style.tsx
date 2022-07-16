@@ -1,5 +1,5 @@
 import { Color } from "../../../infrastructuer/theme/colors.style";
-import {Image,Text,  View} from 'react-native';
+import {Image,Text,  TouchableOpacity,  View} from 'react-native';
 import styled from 'styled-components';
 
 export const ViewRow = styled(View)`
@@ -120,7 +120,7 @@ export const ViewRowItem = styled(View)`
     align-items: center;
     justify-content: center;
   `;
-  export const ButtonPoreItem = styled(View)`
+  export const ButtonPoreItem = styled(TouchableOpacity)`
     width: 48%;
     height: 40;
     border-width: 1;

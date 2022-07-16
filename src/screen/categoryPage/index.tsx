@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -37,6 +37,8 @@ import {
   ViewOffer,
 } from '../shop/style/shop.style';
 import styled from 'styled-components';
+import { goToScreenDetails } from '../../service/Products/Product.action';
+import { CommentContext } from '../../service/Comment/Comment.context';
 
 const TextPrcentOffer = styled(Text)`
   font-size: 12;
@@ -94,9 +96,53 @@ const ViewImageOffer = styled(View)`
 const widthFull = Dimensions.get('screen').width;
 export default function CategoryPageScreen({navigation, route}) {
   const [name, setName] = useState(route.params.data.name);
-  const {categoryProductsItem, categoryLode,nameCategorySelect} = useContext(ProductContext);
+  const {
+    categoryProductsItem,
+    categoryLode,
+    nameCategorySelect,
+    searchProductsFn,
+    productByIdFn,
+    relatedProductsFn,
+  } = useContext(ProductContext);
+  const {getAllCommentIdFn} = useContext(CommentContext);
   const {addToBasket} = useContext(BasketContext);
+  const [search, setSearch] = useState('');
+  function useDebounce(value, delay) {
+    // State and setters for debounced value
+    const [debouncedValue, setDebouncedValue] = useState(value);
 
+    useEffect(
+      () => {
+        // Update debounced value after delay
+        const handler = setTimeout(() => {
+          setDebouncedValue(value);
+        }, delay);
+
+        // Cancel the timeout if value changes (also on delay change or unmount)
+        // This is how we prevent debounced value from updating if value is changed ...
+        // .. within the delay period. Timeout gets cleared and restarted.
+        return () => {
+          clearTimeout(handler);
+        };
+      },
+      [value, delay], // Only re-call effect if value or delay changes
+    );
+
+    return debouncedValue;
+  }
+  const debouncedSearchTerm = useDebounce(search, 500);
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        if (debouncedSearchTerm == '') {
+        } else {
+          searchProductsFn(debouncedSearchTerm, '');
+        }
+      } else {
+      }
+    },
+    [debouncedSearchTerm], // Only call effect if debounced search term changes
+  );
   const [dataCategory, setDataCategory] = useState([
     {data: {flag: false}},
     {data: {flag: false}},
@@ -104,7 +150,9 @@ export default function CategoryPageScreen({navigation, route}) {
     {data: {flag: false}},
     {data: {flag: false}},
   ]);
-
+  const updateSearch = (text: React.SetStateAction<string>) => {
+    setSearch(text);
+  };
   function _onPressHeart(index) {
     let value = [...dataCategory];
     value[index].data.flag = !value[index].data.flag;
@@ -112,45 +160,54 @@ export default function CategoryPageScreen({navigation, route}) {
     setDataCategory(value);
   }
   function CategoryProductItem({item}) {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
       <>
         <View style={{width: widthFull / 2}}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Details_SCREEN');
+              goToScreenDetails(
+                navigation,
+                item,
+                productByIdFn,
+                getAllCommentIdFn,
+                relatedProductsFn,
+              );
             }}>
             <ViewImageOffer>
-              <ImageOffer source={{uri: IMAGE_ADDRESS + item.product.file}} />
+              <ImageOffer source={{uri: IMAGE_ADDRESS + imageUrl}} />
               <ViewOffer>
-                <Rating imageSize={12} style={{paddingVertical: 10}} />
-                <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
+                <Rating imageSize={12} ratingCount={5}
+                readonly
+                startingValue={0} style={{paddingVertical: 10}} />
+                <TextReviewOffer>{`(${
+                  item?.review_count == null ? 0 : item?.review_count
+                } view)`}</TextReviewOffer>
               </ViewOffer>
               <Space lineH={5} />
               <TextProductOffer>{item.name}</TextProductOffer>
               <Space lineH={5} />
               <NumberFormat
-                value={parseInt(item?.sale_price.value).toFixed(
-                  2,
-                )}
+                value={item?.sale_price.value}
                 displayType={'text'}
                 thousandSeparator={true}
+                decimalScale={2}
                 prefix={''}
                 renderText={(value, props) => {
-                  return (
-                    <TextPriceOffer>
-                      {value +
-                        ' ' +
-                        '€'}
-                    </TextPriceOffer>
-                  );
+                  return <TextPriceOffer>{value?.replace('.', ',') + ' ' + '€'}</TextPriceOffer>;
                 }}
               />
               <Space lineH={5} />
-              <ViewRowPrice>
-                <NumberFormat
+              {/* <ViewRowPrice> */}
+              {/* <NumberFormat
                   value={parseInt(
                     item?.sale_price.value,
-                  ).toFixed(2)}
+                  )}
                   displayType={'text'}
                   thousandSeparator={true}
                   prefix={''}
@@ -163,15 +220,15 @@ export default function CategoryPageScreen({navigation, route}) {
                       </TextPriceThroughOffer>
                     );
                   }}
-                />
-                <ViewOfferPlus>
+                /> */}
+              {/* <ViewOfferPlus>
                   <TextPrcentOffer>{'30%'}</TextPrcentOffer>
-                </ViewOfferPlus>
-              </ViewRowPrice>
+                </ViewOfferPlus> */}
+              {/* </ViewRowPrice> */}
 
-              <Space lineH={5} />
-              <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
-              <Space lineH={5} />
+              {/* <Space lineH={5} /> */}
+              {/* <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
+              <Space lineH={5} /> */}
             </ViewImageOffer>
           </TouchableOpacity>
           <LineW />
@@ -196,6 +253,8 @@ export default function CategoryPageScreen({navigation, route}) {
         <Space lineH={35} />
         <SearchView
           placeholder="Search On Cleaning"
+          onChangeText={value => updateSearch(value)}
+          value={search}
           searchIcon={() => (
             <ArrowLeft size={'medium'} primaryColor={Color.brand.textGrey} />
           )}

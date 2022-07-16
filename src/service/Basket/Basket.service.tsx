@@ -7,6 +7,20 @@ import * as Type from './types';
 import * as Address from '../../utils/adress.api';
 
 class BasketDataService {
+  taxCalculation(data: any) {
+    return data.map(res => {
+      let vat =
+        res?.sale_price?.value *
+        res?.product?.min_order_quantity *
+        (1 + res?.product?.default_vat / 100);
+      return {
+        ...res,
+        sale_price: {
+          value: vat,
+        },
+      };
+    });
+  }
   bulkAdd(basket: Type.Baskets) {
     console.log(Address.Basket_Bulk_ADDRESS, basket);
     let data = {items: basket};
@@ -20,15 +34,7 @@ class BasketDataService {
         console.log(Address.Basket_Bulk_ADDRESS, error.response);
       });
   }
-  crateOrderSale(id) {
-    let data = {
-      delivery_contact_group_id: 95872,
-      description: '',
-      invoice_contact_group_id: 95872,
-      payment_method_id: 2,
-      shipping_profile_id: 1,
-    };
-
+  crateOrderSale(data: Type.BasketAddForPay) {
     return http
       .post(Address.Basket_CREATE_ORDER_ADDRESS, JSON.stringify(data))
       .then(res => {
@@ -44,7 +50,7 @@ class BasketDataService {
       .get(Address.Basket_OrderSale_ADDRESS + '?page=1&per_page=30')
       .then(res => {
         console.log(Address.Basket_OrderSale_ADDRESS, res);
-        return res.data.data;
+        return this.taxCalculation(res.data.data);
       })
       .catch(error => {
         console.log(Address.Basket_OrderSale_ADDRESS, error.response);
@@ -84,6 +90,28 @@ class BasketDataService {
       })
       .catch(error => {
         console.log(Address.PAYMENT_METHODS, error.response);
+      });
+  }
+  favorites() {
+    return http
+      .get(Address.Favorites + '?per_page=50')
+      .then(res => {
+        console.log(Address.PAYMENT_METHODS, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.PAYMENT_METHODS, error.response);
+      });
+  }
+  favoritesAdd(id: number) {
+    return http
+      .post(Address.Favorites, {product_variation_ids: [{id}]})
+      .then(res => {
+        console.log(Address.Favorites, res);
+        return res.data.data;
+      })
+      .catch(error => {
+        console.log(Address.Favorites, error.response);
       });
   }
 }

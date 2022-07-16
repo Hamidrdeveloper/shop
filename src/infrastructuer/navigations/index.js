@@ -38,9 +38,9 @@ import AddAddressScreen from '../../screen/addAddress';
 import ChatScreen from '../../screen/chat';
 import EditAddressScreen from '../../screen/editAddress';
 import PopUpLogin from '../../components/popUpLogin';
+import FinalScreen from '../../screen/final';
 
 const Slack = createNativeStackNavigator();
-
 
 const NavigationStart = () => {
   return (
@@ -49,6 +49,7 @@ const NavigationStart = () => {
 
         <Slack.Screen name={'Splash_SCREEN'} component={SplashScreen} />
         <Slack.Screen name={'PaymentScreen_SCREEN'} component={PaymentScreen} />
+        <Slack.Screen name={'Final_SCREEN'} component={FinalScreen} />
 
         <Slack.Screen name={'Bottom_SCREEN'} component={BottomTab} />
 

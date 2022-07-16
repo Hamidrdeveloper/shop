@@ -20,7 +20,7 @@ export default function Country(props: PickerProps) {
   const {field} = useController({name, rules, defaultValue});
   useEffect(() => {
     if (valueCountry) {
-      field.onChange(valueLanguage);
+      field.onChange(valueCountry);
     }
   }, [valueCountry]);
   return (

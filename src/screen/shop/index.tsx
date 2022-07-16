@@ -107,7 +107,15 @@ function ShopScreen({navigation}) {
         const handler = setTimeout(() => {
           setDebouncedValue(value);
         }, delay);
-
+        if (value) {
+          if (value == '') {
+            setIsSearching(false);
+          } else {
+            searchProductsFn(value, '');
+            setIsSearching(true);
+          }
+        } else {
+        }
         // Cancel the timeout if value changes (also on delay change or unmount)
         // This is how we prevent debounced value from updating if value is changed ...
         // .. within the delay period. Timeout gets cleared and restarted.
@@ -123,20 +131,7 @@ function ShopScreen({navigation}) {
   const updateSearch = (text: React.SetStateAction<string>) => {
     setSearch(text);
   };
-  useEffect(
-    () => {
-      if (debouncedSearchTerm) {
-        if (debouncedSearchTerm == '') {
-          setIsSearching(false);
-        } else {
-          setIsSearching(true);
-          searchProductsFn(debouncedSearchTerm, '');
-        }
-      } else {
-      }
-    },
-    [debouncedSearchTerm], // Only call effect if debounced search term changes
-  );
+
   const ratingCompleted = (rating: number) => {
     console.log('Rating is: ' + rating);
   };
@@ -194,12 +189,19 @@ function ShopScreen({navigation}) {
   }
 
   function offerItem({item, index}: any) {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
+
     return (
-      <View style={{alignItems: 'center'}}>
+      <View style={{alignItems: 'center', width: 190, height: 280}}>
         <Card
           containerStyle={{
             width: 180,
-            height: 320,
+            height: 280,
             margin: 8,
             borderRadius: 8,
             padding: 5,
@@ -217,21 +219,30 @@ function ShopScreen({navigation}) {
             }}>
             <ImageOffer
               resizeMode={'stretch'}
-              source={{uri: IMAGE_ADDRESS + item.product.file}}
+              source={{
+                uri:
+                  IMAGE_ADDRESS + imageUrl
+              }}
             />
             <ViewOffer>
               <Rating
                 imageSize={12}
                 onFinishRating={ratingCompleted}
+                defaultRating={1}
+                ratingCount={5}
+                readonly
+                startingValue={0}
                 style={{paddingVertical: 10}}
               />
-              <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
+              <TextReviewOffer>{`(${
+                item?.review_count == null ? 0 : item?.review_count
+              } view)`}</TextReviewOffer>
             </ViewOffer>
             <Space lineH={5} />
             <TextProductOffer>{item.name}</TextProductOffer>
-            <Space lineH={5} />
+            {/* <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.sale_price.value).toFixed(2)}
+              value={parseInt(item?.sale_price.value)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
@@ -242,24 +253,25 @@ function ShopScreen({navigation}) {
                   </TextPriceThroughOffer>
                 );
               }}
-            />
+            /> */}
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.sale_price.value).toFixed(2)}
+              value={item?.sale_price.value}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
+              decimalScale={2}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value + ' ' + '€'}
+                    {value.replace('.', ',') + ' ' + '€'}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item?.sale_price?.unit_price}`}</TextPriceUnitOffer>
-            <Space lineH={5} />
+            {/* <TextPriceUnitOffer>{`Price  unit : ${item?.sale_price?.unit_price}`}</TextPriceUnitOffer>
+            <Space lineH={5} /> */}
           </TouchableOpacity>
         </Card>
         <ButtonAddTo onPress={() => addToBasket(item)}>
@@ -270,16 +282,32 @@ function ShopScreen({navigation}) {
     );
   }
   function SuggestItem({item, index}: any) {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
       <>
         <CardSuggest>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Details_SCREEN', {data: item});
-              productByIdFn(item.id, navigation);
+              goToScreenDetails(
+                navigation,
+                item,
+                productByIdFn,
+                getAllCommentIdFn,
+                relatedProductsFn,
+              );
             }}>
             <ViewSuggest>
-              <ImageSuggest source={{uri: IMAGE_ADDRESS + item.product.file}} />
+              <ImageSuggest
+                source={{
+                  uri:
+                    IMAGE_ADDRESS + imageUrl
+                }}
+              />
               <ViewCenter>
                 <TextReviewSuggest>{item.name}</TextReviewSuggest>
 
@@ -288,6 +316,9 @@ function ShopScreen({navigation}) {
                   imageSize={12}
                   onFinishRating={ratingCompleted}
                   tintColor={Color.brand.suggestColor}
+                  ratingCount={5}
+                  readonly
+                  startingValue={0}
                   ratingBackgroundColor="black"
                   style={{position: 'absolute', bottom: 12}}
                 />
@@ -299,21 +330,38 @@ function ShopScreen({navigation}) {
     );
   }
   function renderItemForSecondList({item, index}: any): any {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
       <ViewProducts>
         <Touchable
           onPress={() => {
-            navigation.navigate('Details_SCREEN', {data: item});
-            productByIdFn(item.id, navigation);
+            goToScreenDetails(
+              navigation,
+              item,
+              productByIdFn,
+              getAllCommentIdFn,
+              relatedProductsFn,
+            );
           }}>
           <ViewSuggest>
-            <ImageSuggest source={{uri: IMAGE_ADDRESS + item.product.file}} />
+            <ImageSuggest
+              source={{
+                uri:
+                  IMAGE_ADDRESS + imageUrl
+              }}
+            />
             <ViewCenter>
               <TextReviewProducts>{item.name}</TextReviewProducts>
               <Space lineH={10} />
               <RowCenter>
                 <TextReviewStock>{`Just ${item.interval_order_quantity} in stock`}</TextReviewStock>
-                <Space lineW={10} />
+                <Space lineW={20} />
+                <Space lineH={10} />
                 <Touchable onPress={() => addToBasket(item)}>
                   <ImagePlus source={require('../../assets/image/plus.png')} />
                 </Touchable>
@@ -326,12 +374,18 @@ function ShopScreen({navigation}) {
   }
 
   function renderItemNewestProducts({item}) {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
-      <View style={{alignItems: 'center'}}>
+      <View style={{alignItems: 'center', height: 290}}>
         <Card
           containerStyle={{
             width: (Dimensions.get('screen').width - 30) / 2,
-            height: 320,
+            height: 280,
             margin: 8,
             borderRadius: 8,
             padding: 5,
@@ -348,21 +402,29 @@ function ShopScreen({navigation}) {
             }}>
             <ImageOffer
               resizeMode={'stretch'}
-              source={{uri: IMAGE_ADDRESS + item.product.file}}
+              source={{
+                uri:
+                  IMAGE_ADDRESS + imageUrl
+              }}
             />
             <ViewOffer>
               <Rating
                 imageSize={12}
                 onFinishRating={ratingCompleted}
                 style={{paddingVertical: 10}}
+                ratingCount={5}
+                readonly
+                startingValue={0}
               />
-              <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
+              <TextReviewOffer>{`(${
+                item?.review_count == null ? 0 : item?.review_count
+              } view)`}</TextReviewOffer>
             </ViewOffer>
             <Space lineH={5} />
             <TextProductOffer>{item.name}</TextProductOffer>
-            <Space lineH={5} />
+            {/* <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.sale_price.value).toFixed(2)}
+              value={parseInt(item?.sale_price.value)}
               displayType={'text'}
               thousandSeparator={true}
               prefix={''}
@@ -373,24 +435,25 @@ function ShopScreen({navigation}) {
                   </TextPriceThroughOffer>
                 );
               }}
-            />
+            /> */}
             <Space lineH={5} />
             <NumberFormat
-              value={parseInt(item?.sale_price.value).toFixed(2)}
+              value={item?.sale_price.value}
               displayType={'text'}
               thousandSeparator={true}
+              decimalScale={2}
               prefix={''}
               renderText={(value, props) => {
                 return (
                   <TextPriceOffer>
-                    {value + ' ' + '€'}
+                    {value?.replace('.', ',') + ' ' + '€'}
                   </TextPriceOffer>
                 );
               }}
             />
             <Space lineH={5} />
-            <TextPriceUnitOffer>{`Price  unit : ${item?.sale_price.unit_price}`}</TextPriceUnitOffer>
-            <Space lineH={5} />
+            {/* <TextPriceUnitOffer>{`Price  unit : ${item?.sale_price.unit_price}`}</TextPriceUnitOffer>
+            <Space lineH={5} /> */}
           </TouchableOpacity>
         </Card>
         <ButtonAddTo style={{width: 150}} onPress={() => addToBasket(item)}>
@@ -409,7 +472,7 @@ function ShopScreen({navigation}) {
   }
   return (
     <Background>
-      {partnerSelectId!=null ? <Animations open={openPartner} /> : null}
+      {partnerSelectId != null ? <Animations open={openPartner} /> : null}
       {!isSearching ? (
         <Scroll
           scrollEventThrottle={160}
@@ -517,6 +580,7 @@ function ShopScreen({navigation}) {
       ) : (
         <SearchPageScreen
           value={search}
+          navigation={navigation}
           onChange={value => updateSearch(value)}
           onShow={() => {
             setIsSearching(false);

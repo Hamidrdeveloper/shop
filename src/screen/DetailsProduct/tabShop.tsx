@@ -124,7 +124,7 @@ export function TabShop({product}) {
           </View>
         </TabView.Item>
         <TabView.Item style={{width: '100%'}}>
-          <Text>Cart</Text>
+          <Text>{product?.technical_data?.replace(regexHtml, '')}</Text>
         </TabView.Item>
       </TabView>
     </>

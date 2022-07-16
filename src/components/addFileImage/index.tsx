@@ -16,8 +16,7 @@ export default function Picker({visible, onClick}) {
     }
   }, []);
   useEffect(() => {
-  
-    if (response != null) {
+    if (response != null && response.assets != null) {
       console.log(response);
       onClick(response.assets[0]);
     }
@@ -49,14 +48,14 @@ export default function Picker({visible, onClick}) {
 }
 const styles = StyleSheet.create({
   shadow: {
-    width: `100%`,
-    height: `100%`,
-    backgroundColor: `rgba(0,0,0,0.2)`,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   container: {
     position: 'absolute',
     bottom: 0,
-    width: `100%`,
+    width: '100%',
     height: 100,
     backgroundColor: Color.brand.white,
   },

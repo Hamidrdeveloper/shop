@@ -19,6 +19,8 @@ import {Link} from '@react-navigation/native';
 import {BasketContext} from '../../service/Basket/Basket.context';
 import NumberFormat from 'react-number-format';
 import {IMAGE_ADDRESS} from '../../utils/adress.api';
+import DropdownAlert from 'react-native-dropdownalert';
+
 export default function PaymentScreen({navigation, route}) {
   const {
     totalPrice,
@@ -30,6 +32,11 @@ export default function PaymentScreen({navigation, route}) {
     codePrice,
   } = useContext(BasketContext);
   const [dataPayment, setDataPayment] = useState([]);
+  const [selectPayment, setSelectPayment] = useState(0);
+  const [error, setError] = useState(false);
+
+  let dropDownAlertRef = React.useRef();
+
   useEffect(() => {
     paymentMethodsFn();
   }, []);
@@ -45,6 +52,13 @@ export default function PaymentScreen({navigation, route}) {
     });
     setDataPayment(array);
   }, [paymentMethods]);
+
+  useEffect(() => {
+    if (error) {
+      dropDownAlertRef.alertWithType('error', 'All fields must be filled');
+      setError(false);
+    }
+  }, [error]);
   return (
     <>
       <BackgroundView>
@@ -64,22 +78,11 @@ export default function PaymentScreen({navigation, route}) {
               flexDirection={'column'}
               isImage={true}
               items={dataPayment}
-              onClick={() => {}}
+              onClick={e => {
+                setSelectPayment(e);
+              }}
             />
             <Space lineH={50} />
-            {/* <ViewRow>
-              <TextGray>{'Subtotal'}</TextGray>
-              <NumberFormat
-                value={parseInt(resultPrice).toFixed(2)}
-                displayType={'text'}
-                thousandSeparator={true}
-                prefix={''}
-                renderText={(value, props) => {
-                  return <TextBlack>{value + ' ' + resultSymbol}</TextBlack>;
-                }}
-              />
-            </ViewRow> */}
-            {/* <Space lineH={10} /> */}
             <ViewRow>
               <TextGray>{'Discount'}</TextGray>
               <TextRed>{codePrice}</TextRed>
@@ -94,42 +97,46 @@ export default function PaymentScreen({navigation, route}) {
             <ViewRow>
               <TextBlack>{'Total'}</TextBlack>
               <NumberFormat
-                value={parseInt(totalPrice).toFixed(2)}
+                value={totalPrice}
                 displayType={'text'}
                 thousandSeparator={true}
                 prefix={''}
+                decimalScale={2}
                 renderText={(value, props) => {
                   return <TextBlack>{value + ' ' + resultSymbol}</TextBlack>;
                 }}
               />
             </ViewRow>
-           
-           
-            {/* <Space lineH={10} /> */}
-            {/* <ViewRow>
-              <TextBlack>{'Bag Total'}</TextBlack>
-              <NumberFormat
-                value={parseInt(totalPrice).toFixed(2)}
-                displayType={'text'}
-                thousandSeparator={true}
-                prefix={''}
-                renderText={(value, props) => {
-                  return <TextBlack>{value + ' ' + resultSymbol}</TextBlack>;
-                }}
-              />
-            </ViewRow> */}
           </Padding>
           <Space lineH={100} />
         </ScrollView>
         <BottomViewBasket
           title={'Pey'}
+          resultPrice={totalPrice}
+          resultSymbol={resultSymbol}
           onClick={() => {
-            bulkAdd(route.params.address);
-            navigation.navigate('OrderProcessingScreen');
-            Linking.openURL('http://paypal.com');
+            if (selectPayment != 0) {
+              let pay = {
+                delivery_contact_group_id:
+                  route.params.delivery_contact_group_id,
+                description: route.params.description,
+                invoice_contact_group_id: route.params.invoice_contact_group_id,
+                payment_method_id: selectPayment,
+                shipping_profile_id: '',
+              };
+              bulkAdd(pay);
+              navigation.navigate('OrderProcessingScreen');
+            }
           }}
         />
       </BackgroundView>
+      <DropdownAlert
+        ref={ref => {
+          if (ref) {
+            dropDownAlertRef = ref;
+          }
+        }}
+      />
     </>
   );
 }

@@ -108,20 +108,23 @@ function BottomDetails({item}) {
         <ViewDataOffer>
           <View>
             <NumberFormat
-              value={parseInt(item?.sale_price?.value).toFixed(2)}
+              value={item?.sale_price?.value}
               displayType={'text'}
               thousandSeparator={true}
+              decimalScale={2}
               prefix={''}
               renderText={(value, props) => {
-                return <TextItem>{value + ' ' + '€'}</TextItem>;
+                return (
+                  <TextItem>{value.replace('.', ',') + ' ' + '€'}</TextItem>
+                );
               }}
             />
-            <TextItemOffer>{'38,50 €'}</TextItemOffer>
+            {/* <TextItemOffer>{'38,50 €'}</TextItemOffer> */}
           </View>
-          <Space lineW={10} />
+          {/* <Space lineW={10} />
           <ViewOffer>
             <Text style={{color: Color.brand.white}}>{'30%'}</Text>
-          </ViewOffer>
+          </ViewOffer> */}
         </ViewDataOffer>
       </ViewBottomDetails>
     </>

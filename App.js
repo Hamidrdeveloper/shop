@@ -39,6 +39,7 @@ import './src/core/i18n/config';
 import PartnerContextProvider from './src/service/Partner/Partner.context';
 import MapContextProvider from './src/service/map/Map.context';
 import {AuthContextProvider as Reload} from './src/service/Auth/Auth.context';
+import FavoriteContextProvider from './src/service/Favorite/Favorite.context';
 
 const App = () => {
   console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
@@ -53,11 +54,13 @@ const App = () => {
                 <FileContextProvider>
                   <ProductContextProvider>
                     <ProfileContextProvider>
-                      <MapContextProvider>
-                        <MainContextProvider>
-                          <NavigationStart />
-                        </MainContextProvider>
-                      </MapContextProvider>
+                      <FavoriteContextProvider>
+                        <MapContextProvider>
+                          <MainContextProvider>
+                            <NavigationStart />
+                          </MainContextProvider>
+                        </MapContextProvider>
+                      </FavoriteContextProvider>
                     </ProfileContextProvider>
                   </ProductContextProvider>
                 </FileContextProvider>

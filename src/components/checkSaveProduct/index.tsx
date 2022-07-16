@@ -3,9 +3,14 @@ import Storage from '../../utils/storeData/index';
 import React, {useContext, useEffect, useState} from 'react';
 import {KEY} from '../../utils/storeData/key';
 import {AddressContext} from '../../service/Address/Address.context';
+import FavoriteService from '../../service/Favorite/Favorite.service';
+import {FavoriteContext} from '../../service/Favorite/Favorite.context';
+import {AuthContext} from '../../service/Auth/Auth.context';
 
 export function CheckSaveProduct({item}) {
   const {loadedSaveAddressFn, saveProduct} = useContext(AddressContext);
+  const {addFavoriteFn, removeFavoriteFn} = useContext(FavoriteContext);
+  const {isLoginOpen} = useContext(AuthContext);
 
   const [state, setState] = useState(false);
 
@@ -20,6 +25,7 @@ export function CheckSaveProduct({item}) {
   }, [saveProduct]);
   const _onSaveProduct = (nameProduct, product: any) => {
     if (state) {
+      removeFavoriteFn(product);
       setState(false);
       Storage.removeData(nameProduct);
       Storage.retrieveData(KEY.MySave).then(res => {
@@ -34,6 +40,7 @@ export function CheckSaveProduct({item}) {
         });
       });
     } else {
+      addFavoriteFn(product);
       setState(true);
       Storage.storeData(nameProduct, JSON.stringify(product));
       Storage.retrieveData(KEY.MySave).then(res => {
@@ -53,10 +60,12 @@ export function CheckSaveProduct({item}) {
   };
   return (
     <>
-      <ButtonHeart
-        set={state ? 'bold' : 'light'}
-        onPress={() => _onSaveProduct(item.name, item)}
-      />
+      {isLoginOpen ? (
+        <ButtonHeart
+          set={state ? 'bold' : 'light'}
+          onPress={() => _onSaveProduct(item.name, item)}
+        />
+      ) : null}
     </>
   );
   // });

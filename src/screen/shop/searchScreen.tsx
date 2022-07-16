@@ -19,6 +19,8 @@ import {Padding} from '../../css/main.style';
 import {Color} from '../../infrastructuer/theme/colors.style';
 import {Space} from '../../infrastructuer/theme/space.style';
 import {BasketContext} from '../../service/Basket/Basket.context';
+import { CommentContext } from '../../service/Comment/Comment.context';
+import { goToScreenDetails } from '../../service/Products/Product.action';
 import {ProductContext} from '../../service/Products/Product.context';
 import {IMAGE_ADDRESS} from '../../utils/adress.api';
 import {
@@ -36,9 +38,20 @@ import {
   ViewOffer,
 } from '../shop/style/shop.style';
 const widthFull = Dimensions.get('screen').width;
-export default function SearchPageScreen({value, onChange,onShow}) {
-  const {categoryProductsItem, categoryLode} = useContext(ProductContext);
+export default function SearchPageScreen({
+  value,
+  onChange,
+  onShow,
+  navigation,
+}) {
+  const {
+    categoryProductsItem,
+    categoryLode,
+    productByIdFn,
+    relatedProductsFn,
+  } = useContext(ProductContext);
   const {addToBasket} = useContext(BasketContext);
+  const {getAllCommentIdFn} = useContext(CommentContext);
 
   const [dataCategory, setDataCategory] = useState([
     {data: {flag: false}},
@@ -55,46 +68,67 @@ export default function SearchPageScreen({value, onChange,onShow}) {
     setDataCategory(value);
   }
   function CategoryProductItem({item}) {
+    let imageUrl;
+    if (item?.productVariationFiles.length>0) {
+      imageUrl = item?.productVariationFiles[0].file;
+    } else {
+      imageUrl = item?.product?.file;
+    }
     return (
       <>
         <View style={{width: widthFull / 2}}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Details_SCREEN');
+              goToScreenDetails(
+                navigation,
+                item,
+                productByIdFn,
+                getAllCommentIdFn,
+                relatedProductsFn,
+              );
             }}>
             <View
               style={{
                 width: 144,
-                height: 350,
+                height: 280,
                 borderRadius: 8,
                 padding: 5,
               }}>
-              <ImageOffer source={{uri: IMAGE_ADDRESS + item?.product?.file}} />
+              <ImageOffer source={{uri: IMAGE_ADDRESS + imageUrl}} />
               <ViewOffer>
-                <Rating imageSize={12} style={{paddingVertical: 10}} />
-                <TextReviewOffer>{'(15 review)'}</TextReviewOffer>
+                <Rating
+                  imageSize={12}
+                  ratingCount={5}
+                  readonly
+                  startingValue={0}
+                  style={{paddingVertical: 10}}
+                />
+                <TextReviewOffer>{`(${
+                  item?.review_count == null ? 0 : item?.review_count
+                } view)`}</TextReviewOffer>
               </ViewOffer>
               <Space lineH={5} />
               <TextProductOffer>{item.name}</TextProductOffer>
               <Space lineH={5} />
               <NumberFormat
-                value={parseInt(item?.sale_price.value).toFixed(2)}
+                value={item?.sale_price.value}
                 displayType={'text'}
                 thousandSeparator={true}
+                decimalScale={2}
                 prefix={''}
-                renderText={(value, props) => { 
+                renderText={(value, props) => {
                   return (
                     <TextPriceOffer>
-                      {value + ' ' + '€'}
+                      {value?.replace('.', ',') + ' ' + '€'}
                     </TextPriceOffer>
                   );
                 }}
               />
-              <Space lineH={5} />
-              <View
+              {/* <Space lineH={5} /> */}
+              {/* <View
                 style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <NumberFormat
-                  value={parseInt(item?.sale_price.value).toFixed(2)}
+                  value={parseInt(item?.sale_price.value)}
                   displayType={'text'}
                   thousandSeparator={true}
                   prefix={''}
@@ -122,11 +156,11 @@ export default function SearchPageScreen({value, onChange,onShow}) {
                     {'30%'}
                   </Text>
                 </ViewOffer>
-              </View>
+              </View> */}
 
               <Space lineH={5} />
-              <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
-              <Space lineH={5} />
+              {/* <TextPriceUnitOffer>{'Price  unit : 3,522'}</TextPriceUnitOffer>
+              <Space lineH={5} /> */}
             </View>
           </TouchableOpacity>
           <LineW />
@@ -154,7 +188,11 @@ export default function SearchPageScreen({value, onChange,onShow}) {
           onChangeText={value => onChange(value)}
           value={value}
           searchIcon={() => (
-            <ArrowLeft size={'medium'} primaryColor={Color.brand.textGrey} onPress={()=>onShow()}/>
+            <ArrowLeft
+              size={'medium'}
+              primaryColor={Color.brand.textGrey}
+              onPress={() => onShow()}
+            />
           )}
         />
         <Padding>
@@ -183,8 +221,8 @@ export default function SearchPageScreen({value, onChange,onShow}) {
             data={categoryProductsItem}
             renderItem={CategoryProductItem}
             numColumns={2}
-             initialNumToRender={5}
-          windowSize={5}
+            initialNumToRender={5}
+            windowSize={5}
           />
           {/* {[1,2,3,4,5,6,7,8,9,10,11].map(()=>{
             return
@@ -201,6 +239,7 @@ export default function SearchPageScreen({value, onChange,onShow}) {
           </View>
         </Padding>
         <Indicator isVisible={categoryLode} />
+        <Space lineH={50} />
       </ScrollView>
     </Background>
   );

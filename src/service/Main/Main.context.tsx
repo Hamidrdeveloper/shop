@@ -55,12 +55,12 @@ export default function MainContextProvider({
       console.log('MainContext', res);
 
       http.defaults.headers.common.Authorization = `Bearer ${res}`;
-      profileFn();
+      setToken(res);
       PartnerFn();
-
+      profileFn();
       orderSale();
       cardBottomArrivalFn();
-      setToken(res);
+     
       TOKEN.token = res;
     });
   }
@@ -73,7 +73,7 @@ export default function MainContextProvider({
   function onRunAllApi() {
     Storage.retrieveData('TOKEN').then(res => {
       console.log('MainContext', res);
-
+      setToken(res);
       http.defaults.headers.common.Authorization = `Bearer ${res}`;
       PartnerFn();
       countriesFn();
@@ -89,7 +89,7 @@ export default function MainContextProvider({
       if (res.length > 15) {
         setLoginOpen(true);
       }
-      setToken(res);
+   
       TOKEN.token = res;
 
       ProductsModel.pagination = {

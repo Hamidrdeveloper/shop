@@ -47,7 +47,6 @@ export const ViewOffer = styled(View).attrs(() => ({}))`
 `;
 export const ViewDataOffer = styled(View).attrs(() => ({}))`
   flex-direction:row;
-  width: 120;
   position:absolute;
   right:15;
 `;
